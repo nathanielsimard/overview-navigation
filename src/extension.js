@@ -1,20 +1,10 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 
-class Logger {
-    constructor(name) {
-        this.name = name;
-    }
-
-    log(message) {
-        global.log(this.name, message);
-    }
-}
-
-const logger = new Logger("[Multi-Monitor-Overview-Navigation]");
-
-let text, button;
+let text, button, logger;
 function init() {
+    logger = new Logger("[Multi-Monitor-Overview-Navigation]");
+    logger.log("Initializing ...");
     button = new St.Bin({
         style_class: 'panel-button',
         reactive: true,
@@ -24,18 +14,19 @@ function init() {
         track_hover: true
     });
 
-    text = new St.Label({ text: "Text" });
+    text = new St.Label({ text: "Texto" });
     button.set_child(text);
     logger.log("Initialized");
-    global.log("[Multi-Monitor-Overview-Navigation]", "DMNA");
 }
 
 function enable() {
+    logger.log("Enabling extension ...");
     Main.panel._rightBox.insert_child_at_index(button, 0);
     logger.log("Enabled");
 }
 
 function disable() {
+    logger.log("Disabling extension ...");
     Main.panel._rightBox.remove_child(button);
     logger.log("Disabled");
 }
