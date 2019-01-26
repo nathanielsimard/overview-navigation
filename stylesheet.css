@@ -1,9 +1,11 @@
 
-.helloworld-label {
-    font-size: 36px;
+.extension-overview-navigation-window-tooltip {
+    color: #fefefe;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(128,128,128,0.40);
+    border-radius: 10px;
+    font-size: 20px;
     font-weight: bold;
-    color: #ffffff;
-    background-color: rgba(10,10,10,0.7);
-    border-radius: 5px;
-    padding: .5em;
+    padding: 2px 8px;
+    -shell-caption-spacing: 4px;
 }
