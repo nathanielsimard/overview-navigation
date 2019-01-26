@@ -1,0 +1,8 @@
+{
+    "name": "Multi Monitors Overview Navigation",
+    "description": "Make multi monitors window navigation fast and easy using overview.",
+    "uuid": "multi-monitors-overview-navigation@nathanielsimard.github.com",
+    "shell-version": [
+        "3.28.3"
+    ]
+}
