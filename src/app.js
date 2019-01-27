@@ -2,16 +2,11 @@ class App {
 
     constructor() {
         this.logger = new Logger('App');
-        this.workspaceManager = new WorkspaceManager();
+        this.wm = new WindowManagement();
 
-        const self = this;
-        this.button = new Button('Multi-Monitors-Overview-Navigation', function () {
-            self.logger.info('ELLLO');
-            const windows = self.workspaceManager.getWindows();
-            self.logger.debug(`Found ${windows.length} windows`);
-            for (let window in windows) {
-                self.logger.info(`Window ${window}`);
-            }
+        this.button = new Button('Multi-Monitors-Overview-Navigation', () => {
+            this.logger.debug('Clicked');
+            this.wm.focusWindow(0, 0);
         });
 
         let monitors = Main.layoutManager.monitors;

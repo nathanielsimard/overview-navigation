@@ -1,6 +1,7 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const AltTab = imports.ui.altTab;
+const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
 
 let app, logger;
 function init() {
