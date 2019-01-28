@@ -1,7 +1,12 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const AltTab = imports.ui.altTab;
-const WorkspaceThumbnail = imports.ui.workspaceThumbnail;
+const Clutter = imports.gi.Clutter;
+const Mainloop = imports.mainloop;
+const Workspace = imports.ui.workspace;
+const WorkspacesView = imports.ui.workspacesView;
+
+
 
 let app, logger;
 function init() {
