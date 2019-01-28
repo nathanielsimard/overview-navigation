@@ -2,7 +2,7 @@ class App {
 
     constructor() {
         this.logger = new Logger('App');
-        this.overview = new Overview(this.wm);
+        this.overview = new Overview();
 
         this.button = new Button('Multi-Monitors-Overview-Navigation', () => {
             this.logger.debug('Clicked');
@@ -11,6 +11,7 @@ class App {
 
     enable() {
         this.button.enable();
+        this.overview.enable();
     }
 
     disable() {

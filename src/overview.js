@@ -20,19 +20,16 @@ function injectToFunction(parent, name, func) {
 
 class Overview {
     constructor() {
-        this.winInjections = {};
-        this.workspaceInjections = {};
-        this.workViewInjections = {};
-        this.createdActors = [];
-        this.connectedSignals = [];
-
         this.resetState();
         this.logger = new Logger('Overview');
-        const logger = this.logger;
-        const self = this;
+    }
 
-        this.selectedWindows = {};
-        this.windowOverlayShowTooltip = Workspace.WindowOverlay.prototype.showTooltip = function () {
+    enable() {
+        let workspaceIndex = -1;
+        let windowIndex = -1;
+
+        const self = this;
+        Workspace.WindowOverlay.prototype.showTooltip = function () {
             this._text.raise_top();
             this._text.show();
             const windowIndex = this._windowClone.slotId;
@@ -71,23 +68,20 @@ class Overview {
             if (global.stage.get_key_focus() == global.stage)
                 global.stage.set_key_focus(this._prevFocusActor);
             this._pickWindow = false;
+            workspaceIndex = -1;
+            windowIndex = -1;
+            self.enableSearch();
             for (let i = 0; i < this._workspaces.length; i++)
                 this._workspaces[i].hideWindowsTooltips();
         }
         this.workViewInjections['_hideTooltips'] = undefined;
 
 
-        let workspaceIndex = -1;
-        let windowIndex = -1;
-
         WorkspacesView.WorkspacesView.prototype._onKeyRelease = function (s, o) {
-            logger.debug('On key release');
+            self.logger.debug('On key release');
             this._prevFocusActor = global.stage.get_key_focus();
             if (o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R) {
                 this._hideTooltips();
-                workspaceIndex = -1;
-                windowIndex = -1;
-                self.enableSearch();
             }
         }
         this.workViewInjections['_onKeyRelease'] = undefined;
@@ -106,25 +100,25 @@ class Overview {
 
 
         WorkspacesView.WorkspacesView.prototype._onKeyPress = function (s, o) {
-            logger.debug('On key press');
+            self.logger.debug('On key press');
             if (Main.overview.viewSelector._activePage != Main.overview.viewSelector._workspacesPage)
                 return false;
 
             let key = binding[o.get_key_symbol()];
-            logger.debug(`Pressed key ${key}`);
+            self.logger.debug(`Pressed key ${key}`);
             if (key != undefined) {
-                logger.debug(`Workspace index : ${workspaceIndex} Window index : ${windowIndex}`);
+                self.logger.debug(`Workspace index : ${workspaceIndex} Window index : ${windowIndex}`);
                 if (workspaceIndex == -1) {
-                    logger.debug(`Choosed workspace #${key}`);
+                    self.logger.debug(`Choosed workspace #${key}`);
                     workspaceIndex = key;
                 } else if (windowIndex == -1) {
                     if (this._workspaces[workspaceIndex].monitorIndex != 0) {
                         return false;
                     }
-                    logger.debug(`Choosed window #${key}`);
+                    self.logger.debug(`Choosed window #${key}`);
                     windowIndex = key;
                 } else {
-                    logger.debug(`Choosed monitor #${key}`);
+                    self.logger.debug(`Choosed monitor #${key}`);
                     if (this._workspaces[workspaceIndex].monitorIndex != 0) {
                         return false;
                     }
@@ -135,9 +129,9 @@ class Overview {
 
                     const time = global.get_current_time();
                     selectedWindow.activate(time);
-                    workspaceIndex = -1;
-                    windowIndex = -1;
-                    self.enableSearch();
+
+
+                    this._hideTooltips();
                     Main.overview.hide();
                     return true;
                 }
@@ -174,7 +168,7 @@ class Overview {
             this._pickWindow = false;
             this._keyPressEventId =
                 global.stage.connect('key-press-event', this._onKeyPress.bind(this));
-            logger.debug(`keypressEvent id ${this._keyPressEventId}`);
+            self.logger.debug(`keypressEvent id ${this._keyPressEventId}`);
             this._keyReleaseEventId =
                 global.stage.connect('key-release-event', this._onKeyRelease.bind(this));
             self.connectedSignals.push({ obj: global.stage, id: this._keyPressEventId });
@@ -193,13 +187,11 @@ class Overview {
     }
 
     disableSearch() {
-        Main.overview._searchEntryBin.hide();
         Main.overview._controls.viewSelector.startSearch = function (event) { };
         Main.overview._controls.viewSelector._onTextChanged = function (se, prop) { };
     }
 
     enableSearch() {
-        Main.overview._searchEntryBin.show();
         Main.overview._controls.viewSelector.startSearch = this.SavedstartSearch;
         Main.overview._controls.viewSelector._onTextChanged = this.SavedonTextChanged;
     }
@@ -221,11 +213,14 @@ class Overview {
 
         this.resetState();
     }
+
     resetState() {
         this.winInjections = {};
         this.workspaceInjections = {};
         this.workViewInjections = {};
         this.createdActors = [];
         this.connectedSignals = [];
+        //For Window selection
+        this.selectedWindows = {};
     }
 }
