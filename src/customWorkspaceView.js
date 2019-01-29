@@ -17,20 +17,21 @@ class CustomWorkspaceView {
     }
 
     enable() {
-        this.workspaceIndex = -1;
-        this.windowIndex = -1;
-
         this._init(this.logger);
         this._onDestroy(this.logger);
-        this._onKeyPress(this.workspaceIndex, this.windowIndex, this.customWindowOverlay, this.disableSearch, this.logger);
+        this._onKeyPress(this.customWindowOverlay, this.logger);
         this._onKeyRelease(this.logger);
-        this._hideTooltips(this.workspaceIndex, this.windowIndex, this.enableSearch, this.logger);
+        this._hideTooltips(this.logger);
+        this._enableSearch(this.logger);
+        this._disableSearch(this.logger);
     }
 
     disable() {
         delete WorkspacesView.WorkspacesView.prototype.onKeyPress;
         delete WorkspacesView.WorkspacesView.prototype.onKeyRelease;
         delete WorkspacesView.WorkspacesView.prototype.hideTooltips;
+        delete WorkspacesView.WorkspacesView.prototype.enableSearch;
+        delete WorkspacesView.WorkspacesView.prototype.disableSearch;
 
         WorkspacesView.WorkspacesView.prototype._init = this.originalInit;
         WorkspacesView.WorkspacesView.prototype._onDestroy = this.originalOnDestroy;
@@ -38,8 +39,10 @@ class CustomWorkspaceView {
 
     _init(logger) {
         this.originalInit = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
-            logger.debug('Initializing ...');
+            logger.info('Initializing ...');
 
+            this.workspaceIndex = -1;
+            this.windowIndex = -1;
             this.keyPressEventId = global.stage.connect('key-press-event', this.onKeyPress.bind(this));
             this.keyReleaseEventId = global.stage.connect('key-release-event', this.onKeyRelease.bind(this));
         });
@@ -47,39 +50,40 @@ class CustomWorkspaceView {
 
     _onDestroy(logger) {
         this.originalOnDestroy = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
-            logger.debug('Destroying ...');
+            logger.info('Destroying ...');
 
             global.stage.disconnect(this.keyPressEventId);
             global.stage.disconnect(this.keyReleaseEventId);
         });
     }
 
-    _onKeyPress(workspaceIndex, windowIndex, customWindowOverlay, disableSearch, logger) {
+    _onKeyPress(customWindowOverlay, logger) {
         WorkspacesView.WorkspacesView.prototype.onKeyPress = function (s, o) {
-            logger.debug('On key press ...');
+            logger.info('On key press ...');
+
             if (Main.overview.viewSelector._activePage != Main.overview.viewSelector._workspacesPage)
                 return false;
 
             let key = KEYS[o.get_key_symbol()];
             logger.debug(`Pressed key ${key}`);
             if (key != undefined) {
-                logger.debug(`Workspace index : ${workspaceIndex} Window index : ${windowIndex}`);
-                if (workspaceIndex == -1) {
+                logger.debug(`Workspace index : ${this.workspaceIndex} Window index : ${this.windowIndex}`);
+                if (this.workspaceIndex == -1) {
                     logger.debug(`Choosed workspace #${key}`);
-                    workspaceIndex = key;
-                } else if (windowIndex == -1) {
-                    if (this._workspaces[workspaceIndex].monitorIndex != 0) {
+                    this.workspaceIndex = key;
+                } else if (this.windowIndex == -1) {
+                    if (this._workspaces[this.workspaceIndex].monitorIndex != 0) {
                         return false;
                     }
                     logger.debug(`Choosed window #${key}`);
-                    windowIndex = key;
+                    this.windowIndex = key;
                 } else {
                     logger.debug(`Choosed monitor #${key}`);
-                    if (this._workspaces[workspaceIndex].monitorIndex != 0) {
+                    if (this._workspaces[this.workspaceIndex].monitorIndex != 0) {
                         return false;
                     }
 
-                    const wTag = `${workspaceIndex}${windowIndex}${key}`;
+                    const wTag = `${this.workspaceIndex}${this.windowIndex}${key}`;
                     const selectedWindow = customWindowOverlay.selectedWindows[wTag];
                     logger.debug(`WWWW for tag ${wTag} - ${selectedWindow}`);
 
@@ -87,14 +91,14 @@ class CustomWorkspaceView {
                     selectedWindow.activate(time);
 
 
-                    this._hideTooltips();
+                    this.hideTooltips();
                     Main.overview.hide();
                     return true;
                 }
             }
 
             if ((o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R)) {
-                disableSearch();
+                this.disableSearch();
                 for (let i = 0; i < this._workspaces.length; i++) {
                     this._workspaces[i].showWindowsTooltips();
                 }
@@ -105,36 +109,49 @@ class CustomWorkspaceView {
 
     _onKeyRelease(logger) {
         WorkspacesView.WorkspacesView.prototype.onKeyRelease = function (s, o) {
-            logger.debug('On key release ...');
+            logger.info('On key release ...');
 
             this._prevFocusActor = global.stage.get_key_focus();
             if (o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R) {
-                this._hideTooltips();
+                this.hideTooltips();
             }
         }
     }
-    _hideTooltips(workspaceIndex, windowIndex, enableSearch, logger) {
+
+    _hideTooltips(logger) {
         WorkspacesView.WorkspacesView.prototype.hideTooltips = function () {
-            logger.debug('Hiding tooltips ...');
+            logger.info('Hiding tooltips ...');
 
             if (global.stage.get_key_focus() == global.stage)
                 global.stage.set_key_focus(this._prevFocusActor);
 
-            workspaceIndex = -1;
-            windowIndex = -1;
-            enableSearch();
+            this.workspaceIndex = -1;
+            this.windowIndex = -1;
+            this.enableSearch();
             for (let i = 0; i < this._workspaces.length; i++)
                 this._workspaces[i].hideWindowsTooltips();
         }
 
     }
-    disableSearch() {
-        Main.overview._controls.viewSelector.startSearch = function (event) { };
-        Main.overview._controls.viewSelector._onTextChanged = function (se, prop) { };
+
+    _disableSearch(logger) {
+        WorkspacesView.WorkspacesView.prototype.disableSearch = function () {
+            logger.info('Disabling search ...');
+
+            this.originalSearch = Main.overview._controls.viewSelector.startSearch;
+            this.originalOnTextChanged = Main.overview._controls.viewSelector._onTextChanged;
+
+            Main.overview._controls.viewSelector.startSearch = function (event) { };
+            Main.overview._controls.viewSelector._onTextChanged = function (se, prop) { };
+        }
     }
 
-    enableSearch() {
-        Main.overview._controls.viewSelector.startSearch = this.SavedstartSearch;
-        Main.overview._controls.viewSelector._onTextChanged = this.SavedonTextChanged;
+    _enableSearch(logger) {
+        WorkspacesView.WorkspacesView.prototype.enableSearch = function () {
+            logger.info('Enabling search ...');
+
+            Main.overview._controls.viewSelector.startSearch = this.originalSearch;
+            Main.overview._controls.viewSelector._onTextChanged = this.originalOnTextChanged;
+        }
     }
 }

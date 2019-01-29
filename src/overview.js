@@ -21,14 +21,15 @@ function injectToFunction(parent, name, func) {
 class Overview {
     constructor() {
         this.customWindowOverlay = new CustomWindowOverlay();
+        this.customWorkspaceView = new CustomWorkspaceView(this.customWindowOverlay);
+
         this.resetState();
         this.logger = new Logger('Overview');
     }
 
     enable() {
         this.customWindowOverlay.enable();
-        let workspaceIndex = -1;
-        let windowIndex = -1;
+        this.customWorkspaceView.enable();
 
         const self = this;
         Workspace.Workspace.prototype.showWindowsTooltips = function () {
@@ -45,145 +46,21 @@ class Overview {
                     this._windowOverlays[i].hideTooltip();
             }
         }
-        this.workspaceInjections['hideWindowsTooltips'] = undefined;
-
-        WorkspacesView.WorkspacesView.prototype._hideTooltips = function () {
-            if (global.stage.get_key_focus() == global.stage)
-                global.stage.set_key_focus(this._prevFocusActor);
-            this._pickWindow = false;
-            workspaceIndex = -1;
-            windowIndex = -1;
-            self.enableSearch();
-            for (let i = 0; i < this._workspaces.length; i++)
-                this._workspaces[i].hideWindowsTooltips();
-        }
-        this.workViewInjections['_hideTooltips'] = undefined;
-
-
-        WorkspacesView.WorkspacesView.prototype._onKeyRelease = function (s, o) {
-            self.logger.debug('On key release');
-            this._prevFocusActor = global.stage.get_key_focus();
-            if (o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R) {
-                this._hideTooltips();
-            }
-        }
-        this.workViewInjections['_onKeyRelease'] = undefined;
-
-        const binding = {};
-        binding[Clutter.KEY_0] = 0;
-        binding[Clutter.KEY_1] = 1;
-        binding[Clutter.KEY_2] = 2;
-        binding[Clutter.KEY_3] = 3;
-        binding[Clutter.KEY_4] = 4;
-        binding[Clutter.KEY_5] = 5;
-        binding[Clutter.KEY_6] = 6;
-        binding[Clutter.KEY_7] = 7;
-        binding[Clutter.KEY_8] = 8;
-        binding[Clutter.KEY_9] = 9;
-
-
-        WorkspacesView.WorkspacesView.prototype._onKeyPress = function (s, o) {
-            self.logger.debug('On key press');
-            if (Main.overview.viewSelector._activePage != Main.overview.viewSelector._workspacesPage)
-                return false;
-
-            let key = binding[o.get_key_symbol()];
-            self.logger.debug(`Pressed key ${key}`);
-            if (key != undefined) {
-                self.logger.debug(`Workspace index : ${workspaceIndex} Window index : ${windowIndex}`);
-                if (workspaceIndex == -1) {
-                    self.logger.debug(`Choosed workspace #${key}`);
-                    workspaceIndex = key;
-                } else if (windowIndex == -1) {
-                    if (this._workspaces[workspaceIndex].monitorIndex != 0) {
-                        return false;
-                    }
-                    self.logger.debug(`Choosed window #${key}`);
-                    windowIndex = key;
-                } else {
-                    self.logger.debug(`Choosed monitor #${key}`);
-                    if (this._workspaces[workspaceIndex].monitorIndex != 0) {
-                        return false;
-                    }
-
-                    const wTag = `${workspaceIndex}${windowIndex}${key}`;
-                    const selectedWindow = self.customWindowOverlay.selectedWindows[wTag];
-                    self.logger.debug(`WWWW for tag ${wTag} - ${selectedWindow}`);
-
-                    const time = global.get_current_time();
-                    selectedWindow.activate(time);
-
-
-                    this._hideTooltips();
-                    Main.overview.hide();
-                    return true;
-                }
-            }
-
-            if ((o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R)) {
-                self.disableSearch();
-                for (let i = 0; i < this._workspaces.length; i++) {
-                    this._workspaces[i].showWindowsTooltips();
-                }
-            }
-            return false;
-        }
-        this.workViewInjections['_onKeyPress'] = undefined;
-
-        this.workViewInjections['_init'] = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
-            this._pickWorkspace = false;
-            this._pickWindow = false;
-            this._keyPressEventId =
-                global.stage.connect('key-press-event', this._onKeyPress.bind(this));
-            self.logger.debug(`keypressEvent id ${this._keyPressEventId}`);
-            this._keyReleaseEventId =
-                global.stage.connect('key-release-event', this._onKeyRelease.bind(this));
-            self.connectedSignals.push({ obj: global.stage, id: this._keyPressEventId });
-            self.connectedSignals.push({ obj: global.stage, id: this._keyReleaseEventId });
-
-        });
-
-        this.workViewInjections['_onDestroy'] = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
-            global.stage.disconnect(this._keyPressEventId);
-            global.stage.disconnect(this._keyReleaseEventId);
-            self.connectedSignals = [];
-        });
-
-        this.SavedstartSearch = Main.overview._controls.viewSelector.startSearch;
-        this.SavedonTextChanged = Main.overview._controls.viewSelector._onTextChanged;
-    }
-
-    disableSearch() {
-        Main.overview._controls.viewSelector.startSearch = function (event) { };
-        Main.overview._controls.viewSelector._onTextChanged = function (se, prop) { };
-    }
-
-    enableSearch() {
-        Main.overview._controls.viewSelector.startSearch = this.SavedstartSearch;
-        Main.overview._controls.viewSelector._onTextChanged = this.SavedonTextChanged;
     }
 
     disable() {
         this.customWindowOverlay.disable();
+        this.customWorkspaceView.disable();
+
         let i;
 
         for (i in this.workspaceInjections)
             removeInjection(Workspace.Workspace.prototype, this.workspaceInjections, i);
-        for (i in this.workViewInjections)
-            removeInjection(WorkspacesView.WorkspacesView.prototype, this.workViewInjections, i);
-
-        for (i of this.connectedSignals)
-            i.obj.disconnect(i.id);
-        for (i of this.createdActors)
-            i.destroy();
 
         this.resetState();
     }
 
     resetState() {
         this.workspaceInjections = {};
-        this.workViewInjections = {};
-        this.createdActors = [];
-        this.connectedSignals = [];
     }
 }
