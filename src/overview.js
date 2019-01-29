@@ -20,34 +20,17 @@ function injectToFunction(parent, name, func) {
 
 class Overview {
     constructor() {
+        this.customWindowOverlay = new CustomWindowOverlay();
         this.resetState();
         this.logger = new Logger('Overview');
     }
 
     enable() {
+        this.customWindowOverlay.enable();
         let workspaceIndex = -1;
         let windowIndex = -1;
 
         const self = this;
-        Workspace.WindowOverlay.prototype.showTooltip = function () {
-            this._text.raise_top();
-            this._text.show();
-            const windowIndex = this._windowClone.slotId;
-            const workspace = this._windowClone._workspace;
-            const monitorIndex = workspace.monitorIndex;
-            const workspaceIndex = workspace.metaWorkspace.index();
-            const text = `${workspaceIndex}${windowIndex}${monitorIndex}`;
-            this._text.text = text;
-            self.selectedWindows[text] = this._windowClone.metaWindow;
-        }
-        this.winInjections['showTooltip'] = undefined;
-
-        Workspace.WindowOverlay.prototype.hideTooltip = function () {
-            if (this._text && this._text.visible)
-                this._text.hide();
-        }
-        this.winInjections['hideTooltip'] = undefined;
-
         Workspace.Workspace.prototype.showWindowsTooltips = function () {
             for (let i in this._windowOverlays) {
                 if (this._windowOverlays[i] != null)
@@ -124,7 +107,7 @@ class Overview {
                     }
 
                     const wTag = `${workspaceIndex}${windowIndex}${key}`;
-                    const selectedWindow = self.selectedWindows[wTag];
+                    const selectedWindow = self.customWindowOverlay.selectedWindows[wTag];
                     self.logger.debug(`WWWW for tag ${wTag} - ${selectedWindow}`);
 
                     const time = global.get_current_time();
@@ -146,22 +129,6 @@ class Overview {
             return false;
         }
         this.workViewInjections['_onKeyPress'] = undefined;
-
-        this.winInjections['_init'] = injectToFunction(Workspace.WindowOverlay.prototype, '_init', function (windowClone, parentActor) {
-            this._id = null;
-            self.createdActors.push(this._text = new St.Label({ style_class: 'extension-windowsNavigator-window-tooltip' }));
-            this._text.hide();
-            parentActor.add_actor(this._text);
-        });
-
-        this.winInjections['relayout'] = injectToFunction(Workspace.WindowOverlay.prototype, 'relayout', function (animate) {
-            let [cloneX, cloneY, cloneWidth, cloneHeight] = this._windowClone.slot;
-
-            let textX = cloneX - 2;
-            let textY = cloneY - 2;
-            this._text.set_position(Math.floor(textX) + 5, Math.floor(textY) + 5);
-            this._text.raise_top();
-        });
 
         this.workViewInjections['_init'] = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
             this._pickWorkspace = false;
@@ -197,12 +164,11 @@ class Overview {
     }
 
     disable() {
+        this.customWindowOverlay.disable();
         let i;
 
         for (i in this.workspaceInjections)
             removeInjection(Workspace.Workspace.prototype, this.workspaceInjections, i);
-        for (i in this.winInjections)
-            removeInjection(Workspace.WindowOverlay.prototype, this.winInjections, i);
         for (i in this.workViewInjections)
             removeInjection(WorkspacesView.WorkspacesView.prototype, this.workViewInjections, i);
 
@@ -215,12 +181,9 @@ class Overview {
     }
 
     resetState() {
-        this.winInjections = {};
         this.workspaceInjections = {};
         this.workViewInjections = {};
         this.createdActors = [];
         this.connectedSignals = [];
-        //For Window selection
-        this.selectedWindows = {};
     }
 }
