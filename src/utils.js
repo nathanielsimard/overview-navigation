@@ -1,3 +1,16 @@
+KEYS = {};
+KEYS[Clutter.KEY_0] = 0;
+KEYS[Clutter.KEY_1] = 1;
+KEYS[Clutter.KEY_2] = 2;
+KEYS[Clutter.KEY_3] = 3;
+KEYS[Clutter.KEY_4] = 4;
+KEYS[Clutter.KEY_5] = 5;
+KEYS[Clutter.KEY_6] = 6;
+KEYS[Clutter.KEY_7] = 7;
+KEYS[Clutter.KEY_8] = 8;
+KEYS[Clutter.KEY_9] = 9;
+
+
 class Override {
     constructor(parent, name, func) {
         this.name = name;

@@ -3,8 +3,10 @@ class App {
     constructor() {
         this.customWorkspace = new CustomWorkspace();
         this.search = new Search()
-        this.customWindowOverlay = new CustomWindowOverlay();
-        this.customWorkspaceView = new CustomWorkspaceView(this.customWindowOverlay, this.search);
+        const windowSelector = new WindowSelector();
+
+        this.customWindowOverlay = new CustomWindowOverlay(windowSelector);
+        this.customWorkspaceView = new CustomWorkspaceView(this.search, windowSelector);
     }
 
     enable() {

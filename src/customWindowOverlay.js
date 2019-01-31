@@ -1,15 +1,15 @@
 class CustomWindowOverlay {
-    constructor() {
+    constructor(windowSelector) {
         this.logger = new Logger('CustomWindowOverlay');
+        this.windowSelector = windowSelector
     }
 
     enable() {
-        this.selectedWindows = {};
         this.labels = [];
 
         this._init(this.labels, this.logger);
         this._reLayout(this.logger);
-        this._showTooltip(this.selectedWindows, this.logger);
+        this._showTooltip(this.windowSelector, this.logger);
         this._hideTooltip(this.logger);
     }
 
@@ -52,7 +52,7 @@ class CustomWindowOverlay {
         this.overrideRelayout.enable();
     }
 
-    _showTooltip(selectedWindows, logger) {
+    _showTooltip(windowSelector, logger) {
         Workspace.WindowOverlay.prototype.showTooltip = function () {
             logger.info('Showing tooltip ...');
 
@@ -60,12 +60,11 @@ class CustomWindowOverlay {
             const workspace = this._windowClone._workspace;
             const monitorIndex = workspace.monitorIndex;
             const workspaceIndex = workspace.metaWorkspace.index();
-            const tag = `${workspaceIndex}${windowIndex}${monitorIndex}`;
+            const name = windowSelector.addWindow(workspaceIndex, windowIndex, monitorIndex, this._windowClone.metaWindow);
 
-            this.label.text = tag;
+            this.label.text = name;
             this.label.raise_top();
             this.label.show();
-            selectedWindows[tag] = this._windowClone.metaWindow;
         }
     }
 

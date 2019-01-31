@@ -7,7 +7,7 @@ const Workspace = imports.ui.workspace;
 const WorkspacesView = imports.ui.workspacesView;
 
 
-const DEBUG = false;
+const DEBUG = true;
 
 
 let app, logger;
