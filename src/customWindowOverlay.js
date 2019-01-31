@@ -21,12 +21,12 @@ class CustomWindowOverlay {
             this.labels[i].destroy();
         }
 
-        Workspace.WindowOverlay.prototype._init = this.originalInit;
-        Workspace.WindowOverlay.prototype.relayout = this.originalRelayout;
+        this.overrideInit.disable();
+        this.overrideRelayout.disable();
     }
 
     _init(labels, logger) {
-        this.originalInit = injectToFunction(Workspace.WindowOverlay.prototype, '_init', function (windowClone, parentActor) {
+        this.overrideInit = new Override(Workspace.WindowOverlay.prototype, '_init', function (windowClone, parentActor) {
             logger.info('Initializing ...');
 
             this.label = new St.Label({ style_class: 'extension-windowsNavigator-window-tooltip' });
@@ -35,10 +35,11 @@ class CustomWindowOverlay {
             labels.push(this.label);
             parentActor.add_actor(this.label);
         });
+        this.overrideInit.enable();
     }
 
     _reLayout(logger) {
-        this.originalRelayout = injectToFunction(Workspace.WindowOverlay.prototype, 'relayout', function (animate) {
+        this.overrideRelayout = new Override(Workspace.WindowOverlay.prototype, 'relayout', function (animate) {
             logger.info('Relayout ...');
 
             let [cloneX, cloneY, cloneWidth, cloneHeight] = this._windowClone.slot;
@@ -48,6 +49,7 @@ class CustomWindowOverlay {
             this.label.set_position(Math.floor(textX) + 5, Math.floor(textY) + 5);
             this.label.raise_top();
         });
+        this.overrideRelayout.enable();
     }
 
     _showTooltip(selectedWindows, logger) {

@@ -30,12 +30,12 @@ class CustomWorkspaceView {
         delete WorkspacesView.WorkspacesView.prototype.onKeyRelease;
         delete WorkspacesView.WorkspacesView.prototype.hideTooltips;
 
-        WorkspacesView.WorkspacesView.prototype._init = this.originalInit;
-        WorkspacesView.WorkspacesView.prototype._onDestroy = this.originalOnDestroy;
+        this.overrideInit.disable();
+        this.overrideOnDestroy.disable();
     }
 
     _init(logger, search) {
-        this.originalInit = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
+        this.overrideInit = new Override(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
             logger.info('Initializing ...');
 
             this.workspaceIndex = -1;
@@ -44,15 +44,17 @@ class CustomWorkspaceView {
             this.keyPressEventId = global.stage.connect('key-press-event', this.onKeyPress.bind(this));
             this.keyReleaseEventId = global.stage.connect('key-release-event', this.onKeyRelease.bind(this));
         });
+        this.overrideInit.enable();
     }
 
     _onDestroy(logger) {
-        this.originalOnDestroy = injectToFunction(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
+        this.overrideOnDestroy = new Override(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
             logger.info('Destroying ...');
 
             global.stage.disconnect(this.keyPressEventId);
             global.stage.disconnect(this.keyReleaseEventId);
         });
+        this.overrideOnDestroy.enable();
     }
 
     _onKeyPress(customWindowOverlay, logger) {

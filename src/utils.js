@@ -1,13 +1,28 @@
-function injectToFunction(parent, name, func) {
-    let origin = parent[name];
-    parent[name] = function () {
-        let ret;
-        ret = origin.apply(this, arguments);
-        if (ret === undefined)
-            ret = func.apply(this, arguments);
-        return ret;
+class Override {
+    constructor(parent, name, func) {
+        this.name = name;
+        this.func = func;
+        this.parent = parent;
+        this.origin = this.parent[name];
     }
-    return origin;
+
+    enable() {
+        const func = this.func;
+        const origin = this.origin;
+
+        this.parent[this.name] = function () {
+            let ret;
+            ret = origin.apply(this, arguments);
+            if (ret === undefined)
+                ret = func.apply(this, arguments);
+            return ret;
+        }
+    }
+
+    disable() {
+        this.parent[this.name] = this.origin;
+    }
+
 }
 
 class Search {
@@ -46,6 +61,8 @@ class Logger {
     }
 
     debug(message) {
+        if (!DEBUG) { return }
+
         this._log('DEBUG', message);
     }
 
