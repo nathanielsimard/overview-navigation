@@ -26,7 +26,9 @@ class CustomWorkspaceView {
         this.overrideInit = new Override(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
             logger.info('Initializing ...');
             this.workspaceManager = global.workspace_manager;
+
             if (!this.workspaceManager) { this.workspaceManager = global.screen }
+            if (!this.display) { this.display = global.screen }
 
             this.search = search;
             this.keyPressEventId = global.stage.connect('key-press-event', this.onKeyPress.bind(this));
@@ -60,7 +62,7 @@ class CustomWorkspaceView {
             }
 
             let activeWorkspaceIndex = this.workspaceManager.get_active_workspace_index();
-            let activeMonitorIndex = global.display.get_primary_monitor();
+            let activeMonitorIndex = 0
             logger.debug(`Active Workspace Index ${activeMonitorIndex} Active Monitor Index ${activeMonitorIndex}`);
 
             if (this._workspaces[activeWorkspaceIndex].monitorIndex != activeMonitorIndex) { return false }
