@@ -8,8 +8,8 @@ KEYS[Clutter.KEY_f] = 'f';
 KEYS[Clutter.KEY_g] = 'g';
 KEYS[Clutter.KEY_h] = 'h';
 KEYS[Clutter.KEY_i] = 'i';
-KEYS[Clutter.KEY_j] = 'j';
-KEYS[Clutter.KEY_k] = 'k';
+//KEYS[Clutter.KEY_j] = 'j';
+//KEYS[Clutter.KEY_k] = 'k';
 KEYS[Clutter.KEY_l] = 'l';
 KEYS[Clutter.KEY_m] = 'm';
 KEYS[Clutter.KEY_n] = 'n';
@@ -33,28 +33,31 @@ class WindowSelector {
         this._initTags();
     }
 
-    select(keySymbol, workspaces) {
+    select(keySymbol) {
         const key = KEYS[keySymbol];
         if (key == undefined) { return false; }
 
         this.selections = this.selections + key;
 
         if (this.selections.length == 1) { return false };
-        if (this.selections.length > 2) { this.reset(); return false }
 
+        this.logger.debug(`Selections ${this.selections}`);
         const selectedWindow = this.selectedWindows[this.selections];
-        const time = global.get_current_time();
 
+        if (!selectedWindow) {
+            this.selections = '';
+            return false
+        }
+
+        const time = global.get_current_time();
         selectedWindow.activate(time);
         return true;
     }
 
 
-    addWindow(workspaceIndex, windowIndex, monitorIndex, window) {
-        const index = Object.keys(this.selectedWindows).length;
-        const tag = this.tags[index];
+    addWindow(window) {
+        const tag = this.tags[this.index++];
         this.selectedWindows[tag] = window;
-        this.logger.debug(`Index ${index} tag ${tag}`);
         return tag;
     }
 
@@ -62,6 +65,7 @@ class WindowSelector {
         this.logger.debug('Resetting ...');
         this.selections = '';
         this.selectedWindows = {};
+        this.index = 0;
     }
 
     _initTags() {

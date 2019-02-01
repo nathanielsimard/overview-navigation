@@ -25,9 +25,9 @@ class CustomWorkspaceView {
     _init(logger, search) {
         this.overrideInit = new Override(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
             logger.info('Initializing ...');
+            this.workspaceManager = global.workspace_manager;
+            if (!this.workspaceManager) { this.workspaceManager = global.screen }
 
-            this.workspaceIndex = -1;
-            this.windowIndex = -1;
             this.search = search;
             this.keyPressEventId = global.stage.connect('key-press-event', this.onKeyPress.bind(this));
             this.keyReleaseEventId = global.stage.connect('key-release-event', this.onKeyRelease.bind(this));
@@ -52,18 +52,26 @@ class CustomWorkspaceView {
             if (Main.overview.viewSelector._activePage != Main.overview.viewSelector._workspacesPage)
                 return false;
 
-            if (windowSelector.select(o.get_key_symbol(), this._workspaces)) {
-                this.hideTooltips();
-                Main.overview.hide();
-                return true;
-            }
-
             if ((o.get_key_symbol() == Clutter.KEY_Alt_L || o.get_key_symbol() == Clutter.KEY_Alt_R)) {
                 this.search.disable();
                 for (let i = 0; i < this._workspaces.length; i++) {
                     this._workspaces[i].showWindowsTooltips();
                 }
             }
+
+            let activeWorkspaceIndex = this.workspaceManager.get_active_workspace_index();
+            let activeMonitorIndex = global.display.get_primary_monitor();
+            logger.debug(`Active Workspace Index ${activeMonitorIndex} Active Monitor Index ${activeMonitorIndex}`);
+
+            if (this._workspaces[activeWorkspaceIndex].monitorIndex != activeMonitorIndex) { return false }
+
+            if (windowSelector.select(o.get_key_symbol())) {
+                this.hideTooltips();
+                windowSelector.reset();
+                Main.overview.hide();
+                return true;
+            }
+
             return false;
         }
     }

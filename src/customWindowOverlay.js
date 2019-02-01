@@ -55,12 +55,7 @@ class CustomWindowOverlay {
     _showTooltip(windowSelector, logger) {
         Workspace.WindowOverlay.prototype.showTooltip = function () {
             logger.info('Showing tooltip ...');
-
-            const windowIndex = this._windowClone.slotId;
-            const workspace = this._windowClone._workspace;
-            const monitorIndex = workspace.monitorIndex;
-            const workspaceIndex = workspace.metaWorkspace.index();
-            const name = windowSelector.addWindow(workspaceIndex, windowIndex, monitorIndex, this._windowClone.metaWindow);
+            const name = windowSelector.addWindow(this._windowClone.metaWindow);
 
             this.label.text = name;
             this.label.raise_top();
