@@ -1,6 +1,13 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
+
+const Utils = OverviewNavigation.imports.utils;
+
+const Workspace = imports.ui.workspace;
+
 class CustomWorkspace {
     constructor() {
-        this.logger = new Logger('CustomWorkspace');
+        this.logger = new Utils.Logger('CustomWorkspace');
     }
 
     enable() {

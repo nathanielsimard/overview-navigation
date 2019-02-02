@@ -1,6 +1,16 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
+
+const Utils = OverviewNavigation.imports.utils;
+
+const WorkspacesView = imports.ui.workspacesView;
+const Main = imports.ui.main;
+const Clutter = imports.gi.Clutter;
+
+
 class CustomWorkspaceView {
     constructor(search, windowSelector) {
-        this.logger = new Logger('CustomWorkspaceView');
+        this.logger = new Utils.Logger('CustomWorkspaceView');
         this.search = search;
         this.windowSelector = windowSelector;
     }
@@ -23,7 +33,7 @@ class CustomWorkspaceView {
     }
 
     _init(logger, search) {
-        this.overrideInit = new Override(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
+        this.overrideInit = new Utils.Override(WorkspacesView.WorkspacesView.prototype, '_init', function (width, height, x, y, workspaces) {
             logger.info('Initializing ...');
             this.workspaceManager = global.workspace_manager;
 
@@ -38,7 +48,7 @@ class CustomWorkspaceView {
     }
 
     _onDestroy(logger) {
-        this.overrideOnDestroy = new Override(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
+        this.overrideOnDestroy = new Utils.Override(WorkspacesView.WorkspacesView.prototype, '_onDestroy', function () {
             logger.info('Destroying ...');
 
             global.stage.disconnect(this.keyPressEventId);

@@ -1,20 +1,17 @@
-const St = imports.gi.St;
-const Main = imports.ui.main;
-const AltTab = imports.ui.altTab;
-const Clutter = imports.gi.Clutter;
-const Mainloop = imports.mainloop;
-const Workspace = imports.ui.workspace;
-const WorkspacesView = imports.ui.workspacesView;
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
 
-
-const DEBUG = true;
+const App = OverviewNavigation.imports.app;
+const Utils = OverviewNavigation.imports.utils;
 
 
 let app, logger;
 function init() {
     try {
-        logger = new Logger('Main');
-        app = new App();
+        logger = new Utils.Logger('Entension');
+        logger.debug("HELLO");
+        app = new App.App();
+        logger.debug(`App ${app}`);
         logger.info("Initialized");
     } catch (err) {
         logger.error(err);

@@ -1,6 +1,14 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
+
+const Utils = OverviewNavigation.imports.utils;
+
+const St = imports.gi.St;
+const Workspace = imports.ui.workspace;
+
 class CustomWindowOverlay {
     constructor(windowSelector) {
-        this.logger = new Logger('CustomWindowOverlay');
+        this.logger = new Utils.Logger('CustomWindowOverlay');
         this.windowSelector = windowSelector
     }
 
@@ -26,7 +34,7 @@ class CustomWindowOverlay {
     }
 
     _init(labels, logger) {
-        this.overrideInit = new Override(Workspace.WindowOverlay.prototype, '_init', function (windowClone, parentActor) {
+        this.overrideInit = new Utils.Override(Workspace.WindowOverlay.prototype, '_init', function (windowClone, parentActor) {
             logger.info('Initializing ...');
 
             this.label = new St.Label({ style_class: 'extension-windowsNavigator-window-tooltip' });
@@ -39,7 +47,7 @@ class CustomWindowOverlay {
     }
 
     _reLayout(logger) {
-        this.overrideRelayout = new Override(Workspace.WindowOverlay.prototype, 'relayout', function (animate) {
+        this.overrideRelayout = new Utils.Override(Workspace.WindowOverlay.prototype, 'relayout', function (animate) {
             logger.info('Relayout ...');
 
             let [cloneX, cloneY, cloneWidth, cloneHeight] = this._windowClone.slot;

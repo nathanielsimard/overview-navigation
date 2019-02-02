@@ -1,3 +1,10 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
+
+const Utils = OverviewNavigation.imports.utils;
+
+const Clutter = imports.gi.Clutter;
+
 const KEYS = {};
 KEYS[Clutter.KEY_a] = 'a';
 KEYS[Clutter.KEY_b] = 'b';
@@ -28,7 +35,7 @@ KEYS[Clutter.KEY_z] = 'z';
 
 class WindowSelector {
     constructor() {
-        this.logger = new Logger('WindowSelector');
+        this.logger = new Utils.Logger('WindowSelector');
         this.reset();
         this._initTags();
     }

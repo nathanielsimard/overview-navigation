@@ -1,3 +1,33 @@
+const Main = imports.ui.main;
+
+const DEBUG = true;
+
+
+class Logger {
+    constructor(name) {
+        this.name = name;
+        this.extensionName = 'Multi Monitors Overview Navigation';
+    }
+
+    info(message) {
+        this._log('INFO', message);
+    }
+
+    error(message) {
+        this._log('ERROR', message);
+    }
+
+    debug(message) {
+        if (!DEBUG) { return }
+
+        this._log('DEBUG', message);
+    }
+
+    _log(tag, message) {
+        global.log(`${tag} - [${this.extensionName} - ${this.name}]`, message);
+    }
+}
+
 class Override {
     constructor(parent, name, func) {
         this.name = name;
@@ -33,40 +63,16 @@ class Search {
     }
 
     disable() {
-        logger.info('Disabling search ...');
+        this.logger.info('Disabling search ...');
 
         Main.overview._controls.viewSelector.startSearch = function (event) { };
         Main.overview._controls.viewSelector._onTextChanged = function (se, prop) { };
     }
 
     enable() {
-        logger.info('Enabling search ...');
+        this.logger.info('Enabling search ...');
 
         Main.overview._controls.viewSelector.startSearch = this.originalSearch;
         Main.overview._controls.viewSelector._onTextChanged = this.originalOnTextChanged;
-    }
-}
-class Logger {
-    constructor(name) {
-        this.name = name;
-        this.extensionName = 'Multi Monitors Overview Navigation';
-    }
-
-    info(message) {
-        this._log('INFO', message);
-    }
-
-    error(message) {
-        this._log('ERROR', message);
-    }
-
-    debug(message) {
-        if (!DEBUG) { return }
-
-        this._log('DEBUG', message);
-    }
-
-    _log(tag, message) {
-        global.log(`${tag} - [${this.extensionName} - ${this.name}]`, message);
     }
 }

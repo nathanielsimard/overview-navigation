@@ -1,12 +1,21 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const OverviewNavigation = ExtensionUtils.getCurrentExtension();
+
+const Utils = OverviewNavigation.imports.utils;
+const WindowSelector = OverviewNavigation.imports.windowSelector;
+const CustomWorkspace = OverviewNavigation.imports.customWorkspace;
+const CustomWindowOverlay = OverviewNavigation.imports.customWindowOverlay;
+const CustomWorkspaceView = OverviewNavigation.imports.customWorkspaceView;
+
 class App {
 
     constructor() {
-        this.customWorkspace = new CustomWorkspace();
-        this.search = new Search()
-        const windowSelector = new WindowSelector();
+        this.customWorkspace = new CustomWorkspace.CustomWorkspace();
+        this.search = new Utils.Search()
 
-        this.customWindowOverlay = new CustomWindowOverlay(windowSelector);
-        this.customWorkspaceView = new CustomWorkspaceView(this.search, windowSelector);
+        const windowSelector = new WindowSelector.WindowSelector();
+        this.customWindowOverlay = new CustomWindowOverlay.CustomWindowOverlay(windowSelector);
+        this.customWorkspaceView = new CustomWorkspaceView.CustomWorkspaceView(this.search, windowSelector);
     }
 
     enable() {
