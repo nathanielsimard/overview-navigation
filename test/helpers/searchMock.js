@@ -1,13 +1,14 @@
+/* global spyOn */
 class Search {
-    disable() { }
-    enable() { }
+  disable () {}
+  enable () {}
 }
 
-function create() {
-    const search = new Search();
-    spyOn(search, 'disable');
-    spyOn(search, 'enable');
-    return search;
+function create () {
+  const search = new Search()
+  spyOn(search, 'disable')
+  spyOn(search, 'enable')
+  return search
 }
 
-module.exports = { create };
+module.exports = { create }

@@ -1,8 +1,8 @@
 {
-    "name": "Overview Navigation",
-    "description": "Make window navigation fast and easy using overview.",
-    "uuid": "overview-navigation@nathanielsimard.github.com",
-    "shell-version": [
-        "3.28.3"
-    ]
+  "name": "Overview Navigation",
+  "description": "Make window navigation fast and easy using overview.",
+  "uuid": "overview-navigation@nathanielsimard.github.com",
+  "settings-schema": "org.gnome.shell.extensions.overview-navigation",
+  "version": "0.1.0",
+  "shell-version": ["3.30", "3.28"]
 }

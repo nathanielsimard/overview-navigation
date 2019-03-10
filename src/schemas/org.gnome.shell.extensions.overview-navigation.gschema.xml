@@ -1,0 +1,23 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.overview-navigation" path="/org/gnome/shell/extensions/overview-navigation/">
+
+    <key name="show-overview-when-change-workspace" type="b">
+      <default>false</default>
+      <summary>Show Overview when changing Workspace</summary>
+      <description>Show the Overview when changing Workspace allowing to see and select window.</description>
+    </key>
+
+    <key name="show-window-selector-when-show-overview" type="b">
+      <default>false</default>
+      <summary>Show Window Selector when Show Overview</summary>
+      <description>Show Window Selector when Show Overview without using keybinding.</description>
+    </key>
+
+    <key name="debug" type="b">
+      <default>false</default>
+      <summary>Set extension in debug mode</summary>
+      <description>Set extension in debug mode makes output more verbose.</description>
+    </key>
+
+  </schema>
+</schemalist>

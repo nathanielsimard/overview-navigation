@@ -1,82 +1,133 @@
-require("./helpers/core");
+/* global describe */
+/* global beforeEach */
+/* global it */
+/* global expect */
+require('./helpers/core')
 
-const loggerMock = require("./helpers/loggerMock");
-const searchMock = require("./helpers/searchMock");
-const stageMock = require("./helpers/stageMock");
-const overviewMock = require("./helpers/overviewMock");
-const windowSelectorMock = require("./helpers/windowSelectorMock");
+const searchMock = require('./helpers/searchMock')
+const stageMock = require('./helpers/stageMock')
+const overviewMock = require('./helpers/overviewMock')
+const windowSelectorMock = require('./helpers/windowSelectorMock')
+const settingsStub = require('./helpers/settingsStub.js')
+const workspaceMock = require('./helpers/workspaceMock.js')
 
-const cwv = require("../src/customWorkspaceView");
+const log = require('../src/utils')
+const cwv = require('../src/customWorkspaceView')
 
-describe("Custom Workspace View", function () {
+describe('Custom Workspace View', function () {
+  let logger
+  let search
+  let windowSelector
+  let stage
+  let workspaces
+  let workspaceManager
+  let keys
+  let overview
+  let keySymbols
+  let ignoredKeySymbols
+  let settings
+  let customWorkspaceView
 
-    let logger;
-    let search;
-    let windowSelector;
-    let stage;
-    let overview;
+  beforeEach(function () {
+    logger = new log.TestLogger('CustomWorkspaceViewTest', false)
+    search = searchMock.create()
+    windowSelector = windowSelectorMock.create()
+    stage = stageMock.create()
+    overview = overviewMock.create()
+    workspaces = [workspaceMock.create()]
+    workspaceManager = {}
+    keys = {}
+    keySymbols = {}
+    ignoredKeySymbols = {}
+    settings = settingsStub.create()
 
-    beforeEach(function () {
-        logger = loggerMock.create();
-        search = searchMock.create();
-        windowSelector = windowSelectorMock.create();
-        stage = stageMock.create();
-        overview = overviewMock.create();
-    });
+    customWorkspaceView = new cwv.CustomWorkspaceView(
+      logger,
+      search,
+      windowSelector,
+      stage,
+      workspaces,
+      workspaceManager,
+      keys,
+      overview,
+      keySymbols,
+      ignoredKeySymbols,
+      settings
+    )
+  })
 
-    describe("when initializing", function () {
+  describe("with settings 'Show Window Selector When Show Overview'=true", () => {
+    beforeEach(() => (settings.showWindowSelectorWhenShowOverview = true))
 
-        let customWorkspaceView;
+    describe('when initializing', () => {
+      beforeEach(() => customWorkspaceView._init())
 
-        beforeEach(function () {
-            customWorkspaceView = new cwv.CustomWorkspaceView(logger,
-                search,
-                windowSelector,
-                stage,
-                [],
-                null,
-                null,
-                overview,
-                null,
-                null);
-            customWorkspaceView._init()
-        });
+      it('disables search', () => {
+        expect(search.disable).toHaveBeenCalled()
+      })
 
-        it("disables search", function () {
-            expect(search.disable).toHaveBeenCalled();
-        });
+      it('shows tooltips', () => {
+        workspaces.forEach(workspace => {
+          expect(workspace.showWindowsTooltips).toHaveBeenCalled()
+        })
+      })
+    })
+  })
 
-        it("binds stage key event", function () {
-            expect(stage.connect).toHaveBeenCalledTimes(2);
-        });
-    });
+  describe("with settings 'Show Window Selector When Show Overview'=false", () => {
+    beforeEach(() => (settings.showWindowSelectorWhenShowOverview = false))
 
-    describe("when destroying", function () {
+    describe('when initializing', () => {
+      beforeEach(() => customWorkspaceView._init())
 
-        beforeEach(function () {
-            customWorkspaceView = new cwv.CustomWorkspaceView(logger,
-                search,
-                windowSelector,
-                stage,
-                [],
-                null,
-                null,
-                overview,
-                null,
-                null);
-            customWorkspaceView._onDestroy();
-        });
+      it('enables search', function () {
+        expect(search.enable).toHaveBeenCalled()
+      })
 
-        it("enables search", function () {
-            expect(search.enable).toHaveBeenCalled();
-        });
+      it('hides tooltips', () => {
+        workspaces.forEach(workspace => {
+          expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
+        })
+      })
+    })
+  })
 
-        it("resets window selector", function () {
-            expect(windowSelector.reset).toHaveBeenCalled();
-        });
+  describe('when initializing', () => {
+    beforeEach(() => customWorkspaceView._init())
 
-        it("unbinds stage key event", function () {
-            expect(stage.disconnect).toHaveBeenCalledTimes(2);
-        });
-    });
-});
+    it('binds stage key event', function () {
+      expect(stage.connect).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  describe('when destroying', function () {
+    beforeEach(() => {
+      customWorkspaceView = new cwv.CustomWorkspaceView(
+        logger,
+        search,
+        windowSelector,
+        stage,
+        workspaces,
+        workspaceManager,
+        keys,
+        overview,
+        keySymbols,
+        ignoredKeySymbols,
+        settings
+      )
+      customWorkspaceView._onDestroy()
+    })
+
+    it('enables search', function () {
+      expect(search.enable).toHaveBeenCalled()
+    })
+
+    it('resets window selector', function () {
+      expect(windowSelector.reset).toHaveBeenCalled()
+    })
+
+    it('unbinds stage key event', function () {
+      expect(stage.disconnect).toHaveBeenCalledTimes(2)
+    })
+  })
+})

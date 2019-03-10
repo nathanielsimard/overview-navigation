@@ -1,80 +1,84 @@
 class Inject {
-    constructor(parent, name, func) {
-        this.name = name;
-        this.func = func;
-        this.parent = parent;
-        this.origin = this.parent[name];
+  constructor (parent, name, func) {
+    this.name = name
+    this.func = func
+    this.parent = parent
+    this.origin = this.parent[name]
+  }
+
+  enable () {
+    if (this.origin === undefined) {
+      this._injectNewFunc()
+    } else {
+      this._injectExistingFunc(this.func, this.origin)
     }
+  }
 
-    enable() {
-        if (this.origin === undefined) {
-            this._injectNewFunc();
-        } else {
-            this._injectExistingFunc(this.func, this.origin);
-        }
+  _injectNewFunc () {
+    this.parent[this.name] = this.func
+  }
+
+  _injectExistingFunc (func, origin) {
+    this.parent[this.name] = function () {
+      const originRet = origin.apply(this, arguments)
+      const newRet = func.apply(this, arguments)
+
+      if (originRet === undefined) {
+        return newRet
+      }
+
+      return originRet
     }
+  }
 
-    _injectNewFunc() {
-        this.parent[this.name] = this.func;
-    }
-
-    _injectExistingFunc(func, origin) {
-        this.parent[this.name] = function () {
-            const originRet = origin.apply(this, arguments);
-            const newRet = func.apply(this, arguments);
-
-            if (originRet === undefined) {
-                return newRet;
-            }
-
-            return originRet;
-        }
-    }
-
-    disable() {
-        this.parent[this.name] = this.origin;
-    }
+  disable () {
+    this.parent[this.name] = this.origin
+  }
 }
 
 class Injector {
-    constructor(logger) {
-        this.logger = logger;
-        this.injected = [];
-    }
+  constructor (logger) {
+    this.logger = logger
+    this.injected = []
+  }
 
-    inject(classToInjecte, classToBeInjected, factoryFunction) {
-        const methodsToInject = this._findMethods(classToInjecte);
-        const logger = this.logger;
-        logger.info(`Injecting class ${classToInjecte.name}`);
-        logger.info(`Injecting ${methodsToInject}`);
-        const injected = methodsToInject.map((method) => {
-            return new Inject(classToBeInjected.prototype, method, function () {
-                if (!this[classToInjecte.name]) {
-                    this[classToInjecte.name] = factoryFunction(this);
-                }
+  inject (classToInjecte, classToBeInjected, factoryFunction) {
+    const methodsToInject = this._findMethods(classToInjecte)
+    const logger = this.logger
 
-                this[classToInjecte.name][method](arguments);
-            });
-        });
+    logger.debug(`Injecting class ${classToInjecte.name}`)
+    logger.debug(`Injecting ${methodsToInject}`)
 
-        this.injected.push(...injected);
-    }
+    const injected = methodsToInject.map(method => {
+      return new Inject(classToBeInjected.prototype, method, function () {
+        if (!this[classToInjecte.name]) {
+          this[classToInjecte.name] = factoryFunction(this)
+        }
 
-    enable() {
-        this.injected.forEach((i) => i.enable());
-    }
+        this[classToInjecte.name][method](arguments)
+      })
+    })
 
-    disable() {
-        this.injected.forEach((i) => i.disable());
-    }
+    this.injected.push(...injected)
+  }
 
-    _findMethods(object) {
-        return Object.getOwnPropertyNames(object.prototype).filter((propertie) => {
-            return typeof object.prototype[propertie] === 'function';
-        }).filter((methodName) => methodName != "constructor");
-    }
+  enable () {
+    this.injected.forEach(i => i.enable())
+  }
+
+  disable () {
+    this.injected.forEach(i => i.disable())
+  }
+
+  _findMethods (object) {
+    return Object.getOwnPropertyNames(object.prototype)
+      .filter(propertie => {
+        return typeof object.prototype[propertie] === 'function'
+      })
+      .filter(methodName => methodName !== 'constructor')
+  }
 }
 
 if (global.overviewNavigationTesting) {
-    module.exports = { Injector }
+  module.exports = { Injector }
 }

@@ -1,11 +1,12 @@
+/* global spyOn */
 class Overview {
-    show() { }
+  show () {}
 }
 
-function create() {
-    const overview = new Overview();
-    spyOn(overview, 'show');
-    return overview;
+function create () {
+  const overview = new Overview()
+  spyOn(overview, 'show')
+  return overview
 }
 
-module.exports = { create };
+module.exports = { create }

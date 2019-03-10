@@ -1,96 +1,101 @@
-require("./helpers/core");
+/* global describe */
+/* global beforeEach */
+/* global beforeAll */
+/* global it */
+/* global expect */
+require('./helpers/core')
 
-const loggerMock = require("./helpers/loggerMock");
-const ii = require("../src/injector");
+const loggerMock = require('./helpers/loggerMock')
+const ii = require('../src/injector')
 
-describe("Injector", () => {
+describe('Injector', () => {
+  let aClassSameMethodNameCalled
+  let anotherClassSameMethodNameCalled
+  let anotherClassDifferentMethodNameCalled
 
-    let aClassSameMethodNameCalled;
-    let anotherClassSameMethodNameCalled;
-    let anotherClassDifferentMethodNameCalled;
-
-    class AClass {
-        constructor() {
-            aClassSameMethodNameCalled = false;
-            anotherClassSameMethodNameCalled = false;
-            anotherClassDifferentMethodNameCalled = false;
-        }
-        sameMethodName() { aClassSameMethodNameCalled = true; }
+  class AClass {
+    constructor () {
+      aClassSameMethodNameCalled = false
+      anotherClassSameMethodNameCalled = false
+      anotherClassDifferentMethodNameCalled = false
     }
-
-    class AnotherClass {
-        sameMethodName() { anotherClassSameMethodNameCalled = true }
-        differentMethodName() { anotherClassDifferentMethodNameCalled = true }
+    sameMethodName () {
+      aClassSameMethodNameCalled = true
     }
+  }
 
-    describe("given AClass injected into AnotherClass", () => {
+  class AnotherClass {
+    sameMethodName () {
+      anotherClassSameMethodNameCalled = true
+    }
+    differentMethodName () {
+      anotherClassDifferentMethodNameCalled = true
+    }
+  }
 
-        let injector;
+  describe('given AClass injected into AnotherClass', () => {
+    let injector
 
-        beforeAll(() => {
-            injector = new ii.Injector(loggerMock.create());
-            injector.inject(AnotherClass, AClass, () => new AnotherClass());
-        });
+    beforeAll(() => {
+      injector = new ii.Injector(loggerMock.create())
+      injector.inject(AnotherClass, AClass, () => new AnotherClass())
+    })
 
-        describe("when call aClass.sameMethodName() while injector is enabled", () => {
+    describe('when call aClass.sameMethodName() while injector is enabled', () => {
+      beforeEach(() => {
+        injector.enable()
+        const aClass = new AClass()
+        aClass.sameMethodName()
+      })
 
-            beforeEach(() => {
-                injector.enable();
-                const aClass = new AClass();
-                aClass.sameMethodName();
-            });
+      it('then AClass.sameMethodName() is called', () => {
+        expect(aClassSameMethodNameCalled).toBe(true)
+      })
 
-            it("then AClass.sameMethodName() is called", () => {
-                expect(aClassSameMethodNameCalled).toBe(true);
-            });
+      it('then AnotherClass.sameMethodName() is not called', () => {
+        expect(anotherClassSameMethodNameCalled).toBe(true)
+      })
+    })
 
-            it("then AnotherClass.sameMethodName() is not called", () => {
-                expect(anotherClassSameMethodNameCalled).toBe(true);
-            });
-        });
+    describe('when call aClass.differentMethodName() while injector is enabled', () => {
+      beforeEach(() => {
+        injector.enable()
+        const aClass = new AClass()
+        aClass.differentMethodName()
+      })
 
-        describe("when call aClass.differentMethodName() while injector is enabled", () => {
+      it('then AClass.differentMethodName() is called', () => {
+        expect(anotherClassDifferentMethodNameCalled).toBe(true)
+      })
+    })
 
-            beforeEach(() => {
-                injector.enable();
-                const aClass = new AClass();
-                aClass.differentMethodName();
-            });
+    describe('when call aClass.sameMethodName() while injector is disabled', () => {
+      beforeEach(() => {
+        injector.disable()
+        const aClass = new AClass()
+        aClass.sameMethodName()
+      })
 
-            it("then AClass.differentMethodName() is called", () => {
-                expect(anotherClassDifferentMethodNameCalled).toBe(true);
-            });
-        });
+      it('then AClass.sameMethodName() is called', () => {
+        expect(aClassSameMethodNameCalled).toBe(true)
+      })
 
-        describe("when call aClass.sameMethodName() while injector is disabled", () => {
+      it('then AnotherClass.sameMethodName() is not called', () => {
+        expect(anotherClassSameMethodNameCalled).toBe(false)
+      })
+    })
 
-            beforeEach(() => {
-                injector.disable();
-                const aClass = new AClass();
-                aClass.sameMethodName();
-            });
+    describe('when create aClass while injector is disabled', () => {
+      let aClass
 
-            it("then AClass.sameMethodName() is called", () => {
-                expect(aClassSameMethodNameCalled).toBe(true);
-            });
+      beforeEach(() => {
+        injector.disable()
+        aClass = new AClass()
+      })
 
-            it("then AnotherClass.sameMethodName() is not called", () => {
-                expect(anotherClassSameMethodNameCalled).toBe(false);
-            });
-        });
-
-        describe("when create aClass while injector is disabled", () => {
-
-            let aClass;
-
-            beforeEach(() => {
-                injector.disable();
-                aClass = new AClass();
-            });
-
-            it("then AClass.differentMethodName() is undefined", () => {
-                expect(aClass.differentMethodName).toBeUndefined();
-            });
-        });
-    });
-});
+      it('then AClass.differentMethodName() is undefined', () => {
+        expect(aClass.differentMethodName).toBeUndefined()
+      })
+    })
+  })
+})
