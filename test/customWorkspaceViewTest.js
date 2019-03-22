@@ -9,6 +9,7 @@ const stageMock = require('./helpers/stageMock')
 const overviewMock = require('./helpers/overviewMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const settingsStub = require('./helpers/settingsStub.js')
+const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
 const workspaceMock = require('./helpers/workspaceMock.js')
 
 const log = require('../src/utils')
@@ -35,7 +36,7 @@ describe('Custom Workspace View', function () {
     stage = stageMock.create()
     overview = overviewMock.create()
     workspaces = [workspaceMock.create()]
-    workspaceManager = {}
+    workspaceManager = workspaceManagerStub.create()
     keys = {}
     keySymbols = {}
     ignoredKeySymbols = {}
@@ -128,6 +129,38 @@ describe('Custom Workspace View', function () {
 
     it('unbinds stage key event', function () {
       expect(stage.disconnect).toHaveBeenCalledTimes(2)
+    })
+
+    describe('on first window', function () {
+      beforeEach(() => {
+        customWorkspaceView = new cwv.CustomWorkspaceView(
+          logger,
+          search,
+          windowSelector,
+          stage,
+          workspaces,
+          workspaceManager,
+          keys,
+          overview,
+          keySymbols,
+          ignoredKeySymbols,
+          settings
+        )
+        workspaceManager.active_workspace_index = 0
+        workspaces[0].monitorIndex = 0
+      })
+
+      describe("when on key press with 'k'", () => {
+        beforeEach(() =>
+          customWorkspaceView.onKeyPress('', {
+            get_key_symbol: () => 'k'
+          })
+        )
+
+        it('selects using window selector', () => {
+          expect(windowSelector.select).toHaveBeenCalledWith('k')
+        })
+      })
     })
   })
 })

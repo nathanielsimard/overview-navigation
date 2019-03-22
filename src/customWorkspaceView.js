@@ -85,10 +85,7 @@ class CustomWorkspaceView {
   }
 
   isShowTooltipsKeySymbol (keySymbol) {
-    return (
-      //      keySymbol === this.keys.KEY_Alt_L || keySymbol === this.keys.KEY_Alt_R
-      keySymbol === this.keys.KEY_space
-    )
+    return keySymbol === this.keys.KEY_space
   }
 
   isOnFirstMonitor () {
