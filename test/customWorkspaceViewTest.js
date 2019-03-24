@@ -9,10 +9,13 @@ const stageMock = require('./helpers/stageMock')
 const overviewMock = require('./helpers/overviewMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const settingsStub = require('./helpers/settingsStub.js')
+const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
 const workspaceMock = require('./helpers/workspaceMock.js')
 
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
+
+const META_KEY = 'metaKey'
 
 describe('Custom Workspace View', function () {
   let logger
@@ -24,7 +27,6 @@ describe('Custom Workspace View', function () {
   let keys
   let overview
   let keySymbols
-  let ignoredKeySymbols
   let settings
   let customWorkspaceView
 
@@ -35,10 +37,11 @@ describe('Custom Workspace View', function () {
     stage = stageMock.create()
     overview = overviewMock.create()
     workspaces = [workspaceMock.create()]
-    workspaceManager = {}
-    keys = {}
+    workspaceManager = workspaceManagerStub.create()
+    keys = {
+      KEY_space: META_KEY
+    }
     keySymbols = {}
-    ignoredKeySymbols = {}
     settings = settingsStub.create()
 
     customWorkspaceView = new cwv.CustomWorkspaceView(
@@ -51,7 +54,6 @@ describe('Custom Workspace View', function () {
       keys,
       overview,
       keySymbols,
-      ignoredKeySymbols,
       settings
     )
   })
@@ -112,7 +114,6 @@ describe('Custom Workspace View', function () {
         keys,
         overview,
         keySymbols,
-        ignoredKeySymbols,
         settings
       )
       customWorkspaceView._onDestroy()
@@ -128,6 +129,80 @@ describe('Custom Workspace View', function () {
 
     it('unbinds stage key event', function () {
       expect(stage.disconnect).toHaveBeenCalledTimes(2)
+    })
+
+    describe('on first window', function () {
+      beforeEach(() => {
+        customWorkspaceView = new cwv.CustomWorkspaceView(
+          logger,
+          search,
+          windowSelector,
+          stage,
+          workspaces,
+          workspaceManager,
+          keys,
+          overview,
+          keySymbols,
+          settings
+        )
+        workspaceManager.active_workspace_index = 0
+        workspaces[0].monitorIndex = 0
+      })
+
+      describe("when on key press with 'a'", () => {
+        beforeEach(() =>
+          customWorkspaceView.onKeyPress('', {
+            get_key_symbol: () => 'a'
+          })
+        )
+
+        it('selects using window selector', () => {
+          expect(windowSelector.select).toHaveBeenCalledWith('a')
+        })
+      })
+
+      describe('when on key release one time with the meta key', () => {
+        beforeEach(() =>
+          customWorkspaceView.onKeyRelease('', {
+            get_key_symbol: () => META_KEY
+          })
+        )
+
+        it('hides tooltips', () => {
+          workspaces.forEach(workspace =>
+            expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
+          )
+        })
+
+        it('enables search', function () {
+          expect(search.enable).toHaveBeenCalled()
+        })
+
+        it('resets window selector', function () {
+          expect(windowSelector.reset).toHaveBeenCalled()
+        })
+      })
+
+      describe('when on key release two times with the meta key', () => {
+        beforeEach(() => {
+          customWorkspaceView.onKeyRelease('', {
+            get_key_symbol: () => META_KEY
+          })
+          customWorkspaceView.onKeyRelease('', {
+            get_key_symbol: () => META_KEY
+          })
+        })
+
+        it('shows tooltips', () => {
+          workspaces.forEach(workspace =>
+            expect(workspace.showWindowsTooltips).toHaveBeenCalled()
+          )
+        })
+
+        it('disable search', function () {
+          expect(search.disable).toHaveBeenCalled()
+        })
+      })
     })
   })
 })

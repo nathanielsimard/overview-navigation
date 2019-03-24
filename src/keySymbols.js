@@ -1,9 +1,5 @@
 class KeysSymbols {
   constructor (keys) {
-    this.ignoredKeySymbols = {}
-    this.ignoredKeySymbols[keys.KEY_j] = 'j'
-    this.ignoredKeySymbols[keys.KEY_k] = 'k'
-
     this.keySymbols = {}
     this.keySymbols[keys.KEY_a] = 'a'
     this.keySymbols[keys.KEY_b] = 'b'
@@ -31,14 +27,6 @@ class KeysSymbols {
     this.keySymbols[keys.KEY_x] = 'x'
     this.keySymbols[keys.KEY_y] = 'y'
     this.keySymbols[keys.KEY_z] = 'z'
-    this._removeIngoreKeys()
-  }
-
-  _removeIngoreKeys () {
-    const keys = Object.keys(this.ignoredKeySymbols)
-    for (let i = 0; i < keys.length; i++) {
-      delete this.keySymbols[keys[i]]
-    }
   }
 }
 
