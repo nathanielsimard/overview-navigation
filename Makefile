@@ -1,5 +1,6 @@
 TARGET_LOCATION=~/.local/share/gnome-shell/extensions/overview-navigation@nathanielsimard.github.com
 BUILD_DIR=build
+PACKAGE_NAME=package.zip
 
 
 build: clean
@@ -11,16 +12,19 @@ build: clean
 
 
 package: build
-	zip -rj package.zip ${BUILD_DIR}
+	cd ${BUILD_DIR}; zip -r ../${PACKAGE_NAME} *
 	rm -rf ${BUILD_DIR}
 
 
-install: build
-	mkdir -p ${TARGET_LOCATION}
-	cp -r ${BUILD_DIR}/* ${TARGET_LOCATION}
+install: package
+	rm -rf ${TARGET_LOCATION}
+	mkdir ${TARGET_LOCATION}
+	cp ${PACKAGE_NAME} ${TARGET_LOCATION}
+	cd ${TARGET_LOCATION}; unzip ${PACKAGE_NAME}
 
 
 clean:
+	rm -rf ${PACKAGE_NAME}
 	rm -rf ${BUILD_DIR}
 
 
