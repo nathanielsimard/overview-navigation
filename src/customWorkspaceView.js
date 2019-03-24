@@ -9,7 +9,6 @@ class CustomWorkspaceView {
     keys,
     overview,
     keySymbols,
-    ignoredKeySymbols,
     settings
   ) {
     this.logger = logger
@@ -21,7 +20,6 @@ class CustomWorkspaceView {
     this.keys = keys
     this.overview = overview
     this.keySymbols = keySymbols
-    this.ignoredKeySymbols = ignoredKeySymbols
     this.settings = settings
   }
 
@@ -67,14 +65,11 @@ class CustomWorkspaceView {
   onKeyRelease (s, o) {
     this.logger.debug('On key release ...')
 
-    const keySymbol = o.get_key_symbol()
+    if (!this.isShowTooltipsKeySymbol(o.get_key_symbol())) return
 
-    if (this.searching && this.isShowTooltipsKeySymbol(keySymbol)) {
+    if (this.searching) {
       this.showTooltips()
-      return
-    }
-
-    if (!this.searching && this.isShowTooltipsKeySymbol(keySymbol)) {
+    } else {
       this.hideTooltips()
     }
   }
@@ -152,7 +147,6 @@ if (!global.overviewNavigationTesting) {
           Clutter,
           Main.overview,
           keySymbols.keySymbols,
-          keySymbols.ignoredKeySymbols,
           settings
         )
       }
