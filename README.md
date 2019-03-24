@@ -1,8 +1,13 @@
 # Overview Navigation
 
 [![Build Status](https://travis-ci.org/nathanielsimard/overview-navigation.svg?branch=master)](https://travis-ci.org/nathanielsimard/overview-navigation)
+![](https://img.shields.io/badge/Licence-GPL--2.0-blue.svg)
 
 This extension aims to make Gnome Shell easier to navigate using only the keyboard. It is inspired by the vim plugins of Firefox and Chrome.
+
+<a href="https://extensions.gnome.org/extension/1702/overview-navigation/">
+<img src="assets/Gnome_logo.svg" alt="drawing" width="120px" />
+</a>
 
 ## Usage
 
