@@ -61,8 +61,8 @@ describe('Custom Workspace View', function () {
   describe("with settings 'Show Window Selector When Show Overview'=true", () => {
     beforeEach(() => (settings.showWindowSelectorWhenShowOverview = true))
 
-    describe('when initializing', () => {
-      beforeEach(() => customWorkspaceView._init())
+    describe('when animate to overview', () => {
+      beforeEach(() => customWorkspaceView.animateToOverview())
 
       it('disables search', () => {
         expect(search.disable).toHaveBeenCalled()
@@ -79,8 +79,8 @@ describe('Custom Workspace View', function () {
   describe("with settings 'Show Window Selector When Show Overview'=false", () => {
     beforeEach(() => (settings.showWindowSelectorWhenShowOverview = false))
 
-    describe('when initializing', () => {
-      beforeEach(() => customWorkspaceView._init())
+    describe('when animate to overview', () => {
+      beforeEach(() => customWorkspaceView.animateToOverview())
 
       it('enables search', function () {
         expect(search.enable).toHaveBeenCalled()
@@ -94,8 +94,8 @@ describe('Custom Workspace View', function () {
     })
   })
 
-  describe('when initializing', () => {
-    beforeEach(() => customWorkspaceView._init())
+  describe('when animate to overview', () => {
+    beforeEach(() => customWorkspaceView.animateToOverview())
 
     it('binds stage key event', function () {
       expect(stage.connect).toHaveBeenCalledTimes(2)

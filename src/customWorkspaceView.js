@@ -23,17 +23,22 @@ class CustomWorkspaceView {
     this.settings = settings
   }
 
-  _init () {
-    this.logger.info('Initializing ...')
+  animateToOverview () {
+    this.logger.info('Animate to overview ...')
 
-    this.keyPressEventId = this.stage.connect(
-      'key-press-event',
-      this.onKeyPress.bind(this)
-    )
-    this.keyReleaseEventId = this.stage.connect(
-      'key-release-event',
-      this.onKeyRelease.bind(this)
-    )
+    if (!this.keyPressEventId) {
+      this.keyPressEventId = this.stage.connect(
+        'key-press-event',
+        this.onKeyPress.bind(this)
+      )
+    }
+
+    if (!this.keyReleaseEventId) {
+      this.keyReleaseEventId = this.stage.connect(
+        'key-release-event',
+        this.onKeyRelease.bind(this)
+      )
+    }
 
     if (this.settings.isShowWindowSelectorWhenShowOverview()) {
       this.showTooltips()
