@@ -1,9 +1,13 @@
 {
   "name": "Overview Navigation",
-  "description": "Make window navigation fast and easy using overview.",
+  "description": "This extension aims to make Gnome Shell easier to navigate using only the keyboard. It is inspired by the vim plugins of Firefox and Chrome.",
   "uuid": "overview-navigation@nathanielsimard.github.com",
   "settings-schema": "org.gnome.shell.extensions.overview-navigation",
   "version": "0.1.0",
   "url": "https://github.com/nathanielsimard/overview-navigation",
-  "shell-version": ["3.30", "3.28"]
+  "shell-version": [
+    "3.32",
+    "3.30",
+    "3.28"
+  ]
 }
