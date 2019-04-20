@@ -64,7 +64,7 @@ class CustomWorkspaceView {
 
     if (!this.isOnFirstMonitor()) return
     if (this.searching) return
-    if (this.windowSelector.select(keySymbol)) this.closeOverview()
+    this._selectWindow(keySymbol)
   }
 
   onKeyRelease (s, o) {
@@ -77,11 +77,6 @@ class CustomWorkspaceView {
     } else {
       this.hideTooltips()
     }
-  }
-
-  closeOverview () {
-    this.windowSelector.reset()
-    this.overview.hide()
   }
 
   isShowTooltipsKeySymbol (keySymbol) {
@@ -114,6 +109,12 @@ class CustomWorkspaceView {
     this.windowSelector.resetSelection()
     this.search.enable()
     this.searching = true
+  }
+  _selectWindow (keySymbol) {
+    const selectedWindow = this.windowSelector.select(keySymbol)
+    if (selectedWindow) {
+      selectedWindow.activate()
+    }
   }
 }
 

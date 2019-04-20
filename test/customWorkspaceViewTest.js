@@ -11,6 +11,7 @@ const windowSelectorMock = require('./helpers/windowSelectorMock')
 const settingsStub = require('./helpers/settingsStub.js')
 const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
 const workspaceMock = require('./helpers/workspaceMock.js')
+const selectedWindowMock = require('./helpers/selectedWindowMock')
 
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
@@ -150,14 +151,22 @@ describe('Custom Workspace View', function () {
       })
 
       describe("when on key press with 'a'", () => {
-        beforeEach(() =>
+        let selectedWindow
+
+        beforeEach(() => {
+          selectedWindow = selectedWindowMock.create()
+          windowSelector.select.and.returnValue(selectedWindow)
           customWorkspaceView.onKeyPress('', {
             get_key_symbol: () => 'a'
           })
-        )
+        })
 
         it('selects using window selector', () => {
           expect(windowSelector.select).toHaveBeenCalledWith('a')
+        })
+
+        it('activate selected window', () => {
+          expect(selectedWindow.activate).toHaveBeenCalled()
         })
       })
 
