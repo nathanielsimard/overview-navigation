@@ -64,6 +64,7 @@ class CustomWorkspaceView {
 
     if (!this.isOnFirstMonitor()) return
     if (this.searching) return
+
     this._selectWindow(keySymbol)
   }
 

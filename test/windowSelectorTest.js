@@ -6,6 +6,8 @@
 require('./helpers/core')
 const { WindowSelector } = require('../src/windowSelector')
 const { TestLogger } = require('../src/utils')
+const { Factory } = require('../src/selectedWindow')
+const overviewMock = require('./helpers/overviewMock')
 
 describe('WindowSelector', () => {
   const UKNOWN_KEY_SYMBOL = 'x076'
@@ -14,18 +16,30 @@ describe('WindowSelector', () => {
   const KEY = 'a'
   const OTHER_KEY = 'b'
 
-  let keySymbols
+  let focusKeySymbols
+  let closeKeySymbols
   let logger
   let windowSelector
   let window
+  let overview
 
   beforeEach(() => {
+    overview = overviewMock.create()
     window = {}
-    keySymbols = {}
-    keySymbols[KNOWM_KEY_SYMBOL] = KEY
-    keySymbols[OTHER_KNOWM_KEY_SYMBOL] = OTHER_KEY
+    focusKeySymbols = {}
+    focusKeySymbols[KNOWM_KEY_SYMBOL] = KEY
+    focusKeySymbols[OTHER_KNOWM_KEY_SYMBOL] = OTHER_KEY
+    closeKeySymbols = {}
+    closeKeySymbols['A'] = 'A'
+    closeKeySymbols['B'] = 'B'
     logger = new TestLogger('Window Selector Test', true)
-    windowSelector = new WindowSelector(keySymbols, logger)
+    windowSelector = new WindowSelector(
+      focusKeySymbols,
+      closeKeySymbols,
+      logger,
+      overview,
+      new Factory()
+    )
   })
 
   describe('when select', () => {
@@ -39,11 +53,7 @@ describe('WindowSelector', () => {
       })
 
       it('tag should be first key symbol', () => {
-        expect(windowFocusedTag).toBe(KEY)
-      })
-
-      it('should has a tag of length of one', () => {
-        expect(windowFocusedTag.length).toBe(1)
+        expect(windowFocusedTag).toBe(`Focus ${KEY} Close ${KEY.toUpperCase()}`)
       })
 
       describe('With a knowm key symbol', () => {
@@ -79,15 +89,17 @@ describe('WindowSelector', () => {
       })
 
       it('first tag should be two times first symbol', () => {
-        expect(firstTag).toBe(KEY + KEY)
-        expect(secondTag).toBe(KEY + OTHER_KEY)
-        expect(thirdTag).toBe(OTHER_KEY + KEY)
-      })
-
-      it('should has a tag of length of two', () => {
-        expect(firstTag.length).toBe(2)
-        expect(secondTag.length).toBe(2)
-        expect(thirdTag.length).toBe(2)
+        expect(firstTag).toBe(
+          `Focus ${KEY + KEY} Close ${KEY.toUpperCase() + KEY.toUpperCase()}`
+        )
+        expect(secondTag).toBe(
+          `Focus ${KEY + OTHER_KEY} Close ${KEY.toUpperCase() +
+            OTHER_KEY.toUpperCase()}`
+        )
+        expect(thirdTag).toBe(
+          `Focus ${OTHER_KEY + KEY} Close ${OTHER_KEY.toUpperCase() +
+            KEY.toUpperCase()}`
+        )
       })
 
       describe('With a knowm key symbol', () => {
