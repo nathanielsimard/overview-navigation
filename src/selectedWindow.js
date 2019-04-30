@@ -6,7 +6,7 @@ class SelectedWindow {
   }
 
   updateTag (tag) {
-    const name = `Focus ${tag} Close ${tag.toUpperCase()}`
+    const name = `[Focus: ${tag} ][Close: ${tag.toUpperCase()} ]`
     this.updateLabelCallback(name)
   }
 
