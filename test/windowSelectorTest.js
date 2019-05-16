@@ -53,7 +53,7 @@ describe('WindowSelector', () => {
       })
 
       it('tag should be first key symbol', () => {
-        expect(windowFocusedTag).toBe(`Focus ${KEY} Close ${KEY.toUpperCase()}`)
+        expect(windowFocusedTag).toBe(KEY)
       })
 
       describe('With a knowm key symbol', () => {
@@ -89,17 +89,9 @@ describe('WindowSelector', () => {
       })
 
       it('first tag should be two times first symbol', () => {
-        expect(firstTag).toBe(
-          `Focus ${KEY + KEY} Close ${KEY.toUpperCase() + KEY.toUpperCase()}`
-        )
-        expect(secondTag).toBe(
-          `Focus ${KEY + OTHER_KEY} Close ${KEY.toUpperCase() +
-            OTHER_KEY.toUpperCase()}`
-        )
-        expect(thirdTag).toBe(
-          `Focus ${OTHER_KEY + KEY} Close ${OTHER_KEY.toUpperCase() +
-            KEY.toUpperCase()}`
-        )
+        expect(firstTag).toBe(KEY + KEY)
+        expect(secondTag).toBe(KEY + OTHER_KEY)
+        expect(thirdTag).toBe(OTHER_KEY + KEY)
       })
 
       describe('With a knowm key symbol', () => {
