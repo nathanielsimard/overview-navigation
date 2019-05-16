@@ -63,6 +63,8 @@ class CustomWorkspaceView {
     const keySymbol = o.get_key_symbol()
 
     if (!this.isOnFirstMonitor()) return
+    if (this.showWindowsTooltipsClosing(o.get_key_symbol())) return
+
     if (this.searching) return
 
     this._selectWindow(keySymbol)
@@ -71,6 +73,7 @@ class CustomWorkspaceView {
   onKeyRelease (s, o) {
     this.logger.debug('On key release ...')
 
+    if (this.hideWindowsTooltipsClosing(o.get_key_symbol())) return
     if (!this.isShowTooltipsKeySymbol(o.get_key_symbol())) return
 
     if (this.searching) {
@@ -80,8 +83,32 @@ class CustomWorkspaceView {
     }
   }
 
+  hideWindowsTooltipsClosing (keySymbol) {
+    if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
+
+    for (let i = 0; i < this.workspaces.length; i++) {
+      this.workspaces[i].hideWindowsTooltipsClosing()
+    }
+    return true
+  }
+
+  showWindowsTooltipsClosing (keySymbol) {
+    if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
+
+    for (let i = 0; i < this.workspaces.length; i++) {
+      this.workspaces[i].showWindowsTooltipsClosing()
+    }
+    return true
+  }
+
   isShowTooltipsKeySymbol (keySymbol) {
     return keySymbol === this.keys.KEY_space
+  }
+
+  isTooltipsClosingKeySymbol (keySymbol) {
+    return (
+      keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
+    )
   }
 
   isOnFirstMonitor () {

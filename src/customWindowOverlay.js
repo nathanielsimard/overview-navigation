@@ -41,6 +41,22 @@ class CustomWindowOverlay {
     this.label.show()
   }
 
+  showTooltipClosing () {
+    this.label.set_style_class_name(
+      'extension-overview-navigation-window-tooltip-closing'
+    )
+
+    this.label.text = this.label.text.toUpperCase()
+  }
+
+  hideTooltipClosing () {
+    this.label.set_style_class_name(
+      'extension-overview-navigation-window-tooltip'
+    )
+
+    this.label.text = this.label.text.toLowerCase()
+  }
+
   hideTooltip () {
     this.logger.debug('Hiding tooltip ...')
     this.label.hide()
@@ -56,9 +72,8 @@ if (!global.overviewNavigationTesting) {
   function initialize(injector, windowSelector, logger) {
     /* eslint-enable */
     injector.inject(CustomWindowOverlay, Workspace.WindowOverlay, parent => {
-      const label = new St.Label({
-        style_class: 'extension-overview-navigation-window-tooltip'
-      })
+      const label = new St.Label({})
+      label.set_style_class_name('extension-overview-navigation-window-tooltip')
       return new CustomWindowOverlay(
         logger,
         windowSelector,
