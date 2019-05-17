@@ -16,7 +16,8 @@ const selectedWindowMock = require('./helpers/selectedWindowMock')
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
 
-const META_KEY = 'metaKey'
+const FOCUS_KEY = 'focusKey'
+const CLOSING_KEY = 'closingKey'
 
 describe('Custom Workspace View', function () {
   let logger
@@ -40,7 +41,8 @@ describe('Custom Workspace View', function () {
     workspaces = [workspaceMock.create()]
     workspaceManager = workspaceManagerStub.create()
     keys = {
-      KEY_space: META_KEY
+      KEY_space: FOCUS_KEY,
+      KEY_Shift_L: CLOSING_KEY
     }
     keySymbols = {}
     settings = settingsStub.create()
@@ -170,10 +172,10 @@ describe('Custom Workspace View', function () {
         })
       })
 
-      describe('when on key release one time with the meta key', () => {
+      describe('when on key release one time with the focus key', () => {
         beforeEach(() =>
           customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => META_KEY
+            get_key_symbol: () => FOCUS_KEY
           })
         )
 
@@ -192,13 +194,13 @@ describe('Custom Workspace View', function () {
         })
       })
 
-      describe('when on key release two times with the meta key', () => {
+      describe('when on key release two times with the focus key', () => {
         beforeEach(() => {
           customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => META_KEY
+            get_key_symbol: () => FOCUS_KEY
           })
           customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => META_KEY
+            get_key_symbol: () => FOCUS_KEY
           })
         })
 
@@ -210,6 +212,34 @@ describe('Custom Workspace View', function () {
 
         it('disable search', function () {
           expect(search.disable).toHaveBeenCalled()
+        })
+      })
+
+      describe('when on key release with the closing key', () => {
+        beforeEach(() =>
+          customWorkspaceView.onKeyRelease('', {
+            get_key_symbol: () => CLOSING_KEY
+          })
+        )
+
+        it('hides tooltips closing', () => {
+          workspaces.forEach(workspace =>
+            expect(workspace.hideWindowsTooltipsClosing).toHaveBeenCalled()
+          )
+        })
+      })
+
+      describe('when on key press with the closing key', () => {
+        beforeEach(() =>
+          customWorkspaceView.onKeyPress('', {
+            get_key_symbol: () => CLOSING_KEY
+          })
+        )
+
+        it('show tooltips closing', () => {
+          workspaces.forEach(workspace =>
+            expect(workspace.showWindowsTooltipsClosing).toHaveBeenCalled()
+          )
         })
       })
     })
