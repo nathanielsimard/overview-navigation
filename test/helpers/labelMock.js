@@ -5,6 +5,7 @@ class Label {
   set_position (x, y) {}
   raise_top () {}
   show () {}
+  set_style_class_name (className) {}
 }
 
 function create () {
@@ -13,6 +14,7 @@ function create () {
   spyOn(label, 'set_position')
   spyOn(label, 'raise_top')
   spyOn(label, 'show')
+  spyOn(label, 'set_style_class_name')
   return label
 }
 

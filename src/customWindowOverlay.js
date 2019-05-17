@@ -1,3 +1,7 @@
+const CLOSING_WINDOW_STYLE =
+  'extension-overview-navigation-window-tooltip-closing'
+const FOCUS_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip'
+
 class CustomWindowOverlay {
   constructor (
     logger,
@@ -42,17 +46,13 @@ class CustomWindowOverlay {
   }
 
   showTooltipClosing () {
-    this.label.set_style_class_name(
-      'extension-overview-navigation-window-tooltip-closing'
-    )
+    this.label.set_style_class_name(CLOSING_WINDOW_STYLE)
 
     this.label.text = this.label.text.toUpperCase()
   }
 
   hideTooltipClosing () {
-    this.label.set_style_class_name(
-      'extension-overview-navigation-window-tooltip'
-    )
+    this.label.set_style_class_name(FOCUS_WINDOW_STYLE)
 
     this.label.text = this.label.text.toLowerCase()
   }
@@ -73,7 +73,7 @@ if (!global.overviewNavigationTesting) {
     /* eslint-enable */
     injector.inject(CustomWindowOverlay, Workspace.WindowOverlay, parent => {
       const label = new St.Label({})
-      label.set_style_class_name('extension-overview-navigation-window-tooltip')
+      label.set_style_class_name(FOCUS_WINDOW_STYLE)
       return new CustomWindowOverlay(
         logger,
         windowSelector,
@@ -86,5 +86,9 @@ if (!global.overviewNavigationTesting) {
     })
   }
 } else {
-  module.exports = { CustomWindowOverlay }
+  module.exports = {
+    CustomWindowOverlay,
+    CLOSING_WINDOW_STYLE,
+    FOCUS_WINDOW_STYLE
+  }
 }
