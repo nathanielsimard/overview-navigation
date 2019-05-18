@@ -4,7 +4,8 @@ class WindowSelector {
     closeKeySymbols,
     logger,
     overview,
-    selectedWindowFactory
+    selectedWindowFactory,
+    MODE
   ) {
     this.focusKeySymbols = focusKeySymbols
     this.closeKeySymbols = closeKeySymbols
@@ -12,10 +13,11 @@ class WindowSelector {
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
     this.keys = Object.keys(focusKeySymbols)
+    this.MODE = MODE
     this.reset()
   }
 
-  select (keySymbol) {
+  select (keySymbol, mode) {
     this.logger.debug(`Selecting a window ${keySymbol}`)
 
     let key = this.focusKeySymbols[keySymbol]
@@ -37,23 +39,25 @@ class WindowSelector {
     }
 
     this.logger.debug(`Selections ${this.selections}`)
-    let selectedWindow = this.selectedWindows[this.selections]
+
+    let selectedWindow = this.selectedWindows[this.selections.toUpperCase()]
     if (!selectedWindow) {
-      const newSelection = this.selections.toLowerCase()
-      this.logger.debug(`does not work, retry with ${newSelection}`)
-      selectedWindow = this.selectedWindows[newSelection]
-      if (!selectedWindow) {
-        this.logger.debug(`Event with close`)
-        this.resetSelection()
-        return
-      }
-      selectedWindow.toBeClose()
+      selectedWindow = this.selectedWindows[this.selections.toLowerCase()]
+    }
+
+    if (!selectedWindow) {
+      this.logger.debug(`Event with close`)
       this.resetSelection()
-      return selectedWindow
+      return
     }
 
     this.logger.debug(`Selecting window ${this.selections} ...`)
-    selectedWindow.toBeFocus()
+    if (this.MODE.Closing === mode) {
+      selectedWindow.toBeClose()
+    } else {
+      selectedWindow.toBeFocus()
+    }
+
     this.resetSelection()
     return selectedWindow
   }
@@ -136,6 +140,7 @@ if (global.overviewNavigationTesting) {
   const ExtensionUtils = imports.misc.extensionUtils
   const OverviewNavigation = ExtensionUtils.getCurrentExtension()
   const SelectedWindow = OverviewNavigation.imports.selectedWindow
+  const Mode = OverviewNavigation.imports.mode
 
   function create(focusKeySymbols, closeKeySymbols, logger) {
     /* eslint-enable */
@@ -144,7 +149,8 @@ if (global.overviewNavigationTesting) {
       closeKeySymbols,
       logger,
       Main.overview,
-      new SelectedWindow.Factory()
+      new SelectedWindow.Factory(),
+      Mode.MODE
     )
   }
 }

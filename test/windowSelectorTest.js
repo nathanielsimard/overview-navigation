@@ -7,6 +7,7 @@ require('./helpers/core')
 const { WindowSelector } = require('../src/windowSelector')
 const { TestLogger } = require('../src/utils')
 const { Factory } = require('../src/selectedWindow')
+const MODE = require('../src/mode')
 const overviewMock = require('./helpers/overviewMock')
 
 describe('WindowSelector', () => {
@@ -38,7 +39,8 @@ describe('WindowSelector', () => {
       closeKeySymbols,
       logger,
       overview,
-      new Factory()
+      new Factory(),
+      MODE
     )
   })
 
@@ -56,23 +58,49 @@ describe('WindowSelector', () => {
         expect(windowFocusedTag).toBe(KEY)
       })
 
-      describe('With a knowm key symbol', () => {
+      describe('With Closing Mode', () => {
+        let mode
+
         beforeEach(() => {
-          selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL)
+          mode = MODE.Closing
         })
 
-        it('Should return selected window', () => {
-          expect(selectedWindow).toBeDefined()
-        })
-      })
+        describe('With a knowm key symbol', () => {
+          beforeEach(() => {
+            selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL, mode)
+          })
 
-      describe('With a an unknown key symbol', () => {
-        beforeEach(() => {
-          selectedWindow = windowSelector.select(UKNOWN_KEY_SYMBOL)
+          it('Should return closable window', () => {
+            expect(selectedWindow.activate).toBe(selectedWindow.close)
+          })
         })
 
-        it('should not return any window', () => {
-          expect(selectedWindow).toBeUndefined()
+        describe('With Focussing Mode', () => {
+          let mode
+
+          beforeEach(() => {
+            mode = MODE.Focussing
+          })
+
+          describe('With a knowm key symbol', () => {
+            beforeEach(() => {
+              selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL, mode)
+            })
+
+            it('Should return focusable window ', () => {
+              expect(selectedWindow.activate).toBe(selectedWindow.focus)
+            })
+          })
+        })
+
+        describe('With a an unknown key symbol', () => {
+          beforeEach(() => {
+            selectedWindow = windowSelector.select(UKNOWN_KEY_SYMBOL)
+          })
+
+          it('should not return any window', () => {
+            expect(selectedWindow).toBeUndefined()
+          })
         })
       })
     })

@@ -13,6 +13,7 @@ const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
 const workspaceMock = require('./helpers/workspaceMock.js')
 const selectedWindowMock = require('./helpers/selectedWindowMock')
 
+const MODE = require('../src/mode')
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
 
@@ -42,7 +43,8 @@ describe('Custom Workspace View', function () {
     workspaceManager = workspaceManagerStub.create()
     keys = {
       KEY_space: FOCUS_KEY,
-      KEY_Shift_L: CLOSING_KEY
+      KEY_Shift_L: CLOSING_KEY,
+      KEY_Shift_R: CLOSING_KEY
     }
     keySymbols = {}
     settings = settingsStub.create()
@@ -57,7 +59,8 @@ describe('Custom Workspace View', function () {
       keys,
       overview,
       keySymbols,
-      settings
+      settings,
+      MODE
     )
   })
 
@@ -117,7 +120,8 @@ describe('Custom Workspace View', function () {
         keys,
         overview,
         keySymbols,
-        settings
+        settings,
+        MODE
       )
       customWorkspaceView._onDestroy()
     })
@@ -133,114 +137,116 @@ describe('Custom Workspace View', function () {
     it('unbinds stage key event', function () {
       expect(stage.disconnect).toHaveBeenCalledTimes(2)
     })
+  })
 
-    describe('on first window', function () {
+  describe('on first window', function () {
+    beforeEach(() => {
+      customWorkspaceView = new cwv.CustomWorkspaceView(
+        logger,
+        search,
+        windowSelector,
+        stage,
+        workspaces,
+        workspaceManager,
+        keys,
+        overview,
+        keySymbols,
+        settings,
+        MODE
+      )
+      workspaceManager.active_workspace_index = 0
+      workspaces[0].monitorIndex = 0
+    })
+
+    describe("when on key press with 'a'", () => {
+      let selectedWindow
+
       beforeEach(() => {
-        customWorkspaceView = new cwv.CustomWorkspaceView(
-          logger,
-          search,
-          windowSelector,
-          stage,
-          workspaces,
-          workspaceManager,
-          keys,
-          overview,
-          keySymbols,
-          settings
+        selectedWindow = selectedWindowMock.create()
+        windowSelector.select.and.returnValue(selectedWindow)
+
+        customWorkspaceView.onKeyPress('', {
+          get_key_symbol: () => 'a'
+        })
+      })
+
+      it('selects using window selector', () => {
+        expect(windowSelector.select).toHaveBeenCalledWith('a', MODE.Focussing)
+      })
+
+      it('activate selected window', () => {
+        expect(selectedWindow.activate).toHaveBeenCalled()
+      })
+    })
+
+    describe('when on key release one time with the focus key', () => {
+      beforeEach(() =>
+        customWorkspaceView.onKeyRelease('', {
+          get_key_symbol: () => FOCUS_KEY
+        })
+      )
+
+      it('hides tooltips', () => {
+        workspaces.forEach(workspace =>
+          expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
         )
-        workspaceManager.active_workspace_index = 0
-        workspaces[0].monitorIndex = 0
       })
 
-      describe("when on key press with 'a'", () => {
-        let selectedWindow
+      it('enables search', function () {
+        expect(search.enable).toHaveBeenCalled()
+      })
 
-        beforeEach(() => {
-          selectedWindow = selectedWindowMock.create()
-          windowSelector.select.and.returnValue(selectedWindow)
-          customWorkspaceView.onKeyPress('', {
-            get_key_symbol: () => 'a'
-          })
+      it('Should reset selection of window selector', function () {
+        expect(windowSelector.resetSelection).toHaveBeenCalled()
+      })
+    })
+
+    describe('when on key release two times with the focus key', () => {
+      beforeEach(() => {
+        customWorkspaceView.onKeyRelease('', {
+          get_key_symbol: () => FOCUS_KEY
         })
-
-        it('selects using window selector', () => {
-          expect(windowSelector.select).toHaveBeenCalledWith('a')
-        })
-
-        it('activate selected window', () => {
-          expect(selectedWindow.activate).toHaveBeenCalled()
+        customWorkspaceView.onKeyRelease('', {
+          get_key_symbol: () => FOCUS_KEY
         })
       })
 
-      describe('when on key release one time with the focus key', () => {
-        beforeEach(() =>
-          customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => FOCUS_KEY
-          })
+      it('shows tooltips', () => {
+        workspaces.forEach(workspace =>
+          expect(workspace.showWindowsTooltips).toHaveBeenCalled()
         )
-
-        it('hides tooltips', () => {
-          workspaces.forEach(workspace =>
-            expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
-          )
-        })
-
-        it('enables search', function () {
-          expect(search.enable).toHaveBeenCalled()
-        })
-
-        it('resets window selector', function () {
-          expect(windowSelector.reset).toHaveBeenCalled()
-        })
       })
 
-      describe('when on key release two times with the focus key', () => {
-        beforeEach(() => {
-          customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => FOCUS_KEY
-          })
-          customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => FOCUS_KEY
-          })
-        })
-
-        it('shows tooltips', () => {
-          workspaces.forEach(workspace =>
-            expect(workspace.showWindowsTooltips).toHaveBeenCalled()
-          )
-        })
-
-        it('disable search', function () {
-          expect(search.disable).toHaveBeenCalled()
-        })
+      it('disable search', function () {
+        expect(search.disable).toHaveBeenCalled()
       })
+    })
 
-      describe('when on key release with the closing key', () => {
-        beforeEach(() =>
-          customWorkspaceView.onKeyRelease('', {
-            get_key_symbol: () => CLOSING_KEY
-          })
+    describe('when on key release with the closing key', () => {
+      beforeEach(() =>
+        customWorkspaceView.onKeyRelease('', {
+          get_key_symbol: () => CLOSING_KEY
+        })
+      )
+
+      it('hides tooltips closing', () => {
+        workspaces.forEach(workspace =>
+          expect(workspace.hideWindowsTooltipsClosing).toHaveBeenCalled()
         )
-
-        it('hides tooltips closing', () => {
-          workspaces.forEach(workspace =>
-            expect(workspace.hideWindowsTooltipsClosing).toHaveBeenCalled()
-          )
-        })
       })
+    })
 
-      describe('when on key press with the closing key', () => {
-        beforeEach(() =>
-          customWorkspaceView.onKeyPress('', {
-            get_key_symbol: () => CLOSING_KEY
-          })
-        )
-
-        it('show tooltips closing', () => {
-          workspaces.forEach(workspace =>
-            expect(workspace.showWindowsTooltipsClosing).toHaveBeenCalled()
-          )
+    describe('when on key press with the closing key', () => {
+      beforeEach(() =>
+        customWorkspaceView.onKeyPress('', {
+          get_key_symbol: () => CLOSING_KEY
         })
+      )
+
+      it('show tooltips closing', () => {
+        workspaces.forEach(workspace =>
+          expect(workspace.showWindowsTooltipsClosing).toHaveBeenCalled()
+        )
       })
     })
   })

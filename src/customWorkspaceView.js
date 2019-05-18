@@ -9,7 +9,8 @@ class CustomWorkspaceView {
     keys,
     overview,
     keySymbols,
-    settings
+    settings,
+    MODE
   ) {
     this.logger = logger
     this.search = search
@@ -21,6 +22,8 @@ class CustomWorkspaceView {
     this.overview = overview
     this.keySymbols = keySymbols
     this.settings = settings
+    this.MODE = MODE
+    this.current_mode = this.MODE.Focussing
   }
 
   animateToOverview () {
@@ -89,6 +92,7 @@ class CustomWorkspaceView {
     for (let i = 0; i < this.workspaces.length; i++) {
       this.workspaces[i].hideWindowsTooltipsClosing()
     }
+    this.current_mode = this.MODE.Focussing
     return true
   }
 
@@ -98,6 +102,7 @@ class CustomWorkspaceView {
     for (let i = 0; i < this.workspaces.length; i++) {
       this.workspaces[i].showWindowsTooltipsClosing()
     }
+    this.current_mode = this.MODE.Closing
     return true
   }
 
@@ -139,7 +144,11 @@ class CustomWorkspaceView {
     this.searching = true
   }
   _selectWindow (keySymbol) {
-    const selectedWindow = this.windowSelector.select(keySymbol)
+    console.log(this.current_mode)
+    const selectedWindow = this.windowSelector.select(
+      keySymbol,
+      this.current_mode
+    )
     if (selectedWindow) {
       selectedWindow.activate()
     }
@@ -151,6 +160,9 @@ if (!global.overviewNavigationTesting) {
   const Clutter = imports.gi.Clutter
   const WorkspacesView = imports.ui.workspacesView
   const Main = imports.ui.main
+  const ExtensionUtils = imports.misc.extensionUtils
+  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
+  const Mode = OverviewNavigation.imports.mode
 
   /*eslint-disable */
   function initialize(
@@ -181,7 +193,8 @@ if (!global.overviewNavigationTesting) {
           Clutter,
           Main.overview,
           keySymbols.keySymbols,
-          settings
+          settings,
+          Mode.MODE
         )
       }
     )
