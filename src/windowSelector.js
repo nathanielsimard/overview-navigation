@@ -4,8 +4,11 @@ class WindowSelector {
     this.overview = overview
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
-    this.keys = Object.keys(keySymbols)
     this.MODE = MODE
+
+    const values = Object.values(this.keySymbols)
+    this.numberOfDifferentKeys = [...new Set(values)].length
+    this.keys = Object.keys(keySymbols)
     this.reset()
   }
 
@@ -50,7 +53,7 @@ class WindowSelector {
   registerWindow (window, callback) {
     this.logger.debug('Registering a window ...')
 
-    if (this.index === this.keys.length) {
+    if (this.index === this.numberOfDifferentKeys) {
       this._updateSelectedWindowsToNewTagsSize()
     }
 
@@ -77,8 +80,8 @@ class WindowSelector {
   }
 
   _generateTag (index) {
-    const div = Math.floor(index / this.keys.length)
-    const mod = index % this.keys.length
+    const div = Math.floor(index / this.numberOfDifferentKeys)
+    const mod = index % this.numberOfDifferentKeys
 
     if (div === 0) {
       const tag = `${this.keySymbols[this.keys[index]]}`
@@ -94,7 +97,7 @@ class WindowSelector {
   }
 
   _calculateTagLength () {
-    if (Math.floor(this.index / this.keys.length) === 0) {
+    if (Math.floor(this.index / this.numberOfDifferentKeys) === 0) {
       return 1
     } else {
       return 2
