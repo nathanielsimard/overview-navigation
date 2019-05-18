@@ -48,6 +48,10 @@ class SettingsWidget extends Widget {
     behaviorPage.add(showWindowSelectorToggleButton)
     behaviorPage.add(debugToggleButton)
     behaviorPage.register(this.notebook)
+
+    const helpPage = new NotebookPage('Help')
+    helpPage.add(new HelpWidget())
+    helpPage.register(this.notebook)
   }
 }
 
@@ -91,6 +95,59 @@ class ToggleButtonWidget extends Widget {
 
   bind (property) {
     this.settings.bind(property, this.gSwitch, 'active')
+  }
+}
+class HelpWidget extends Widget {
+  constructor (name, settings) {
+    super(
+      new Gtk.VBox({
+        'margin-left': 10,
+        'margin-right': 10,
+        spacing: 10
+      })
+    )
+    this.name = 'Help'
+
+    const activationTitle = this.createTitle(`Activation`)
+    const activationDescription = this.createTextDescription(
+      `In the overview, you can press SPACE and letters are going to pop in the corner of every window.` +
+        `The search will be disabled and the user will be able to focus or close windows.`
+    )
+
+    const focusTitle = this.createTitle(`Focus a Window`)
+    const focusDescription = this.createTextDescription(
+      `When the activation is done, to focus a particular window, you have to press its letters one after the other.`
+    )
+
+    const closeTitle = this.createTitle(`Close a Window`)
+    const closeDescription = this.createTextDescription(
+      `It is also possible to close a window in the same way, but while keeping SHIFT pressed.`
+    )
+
+    this.parent.add(activationTitle)
+    this.parent.add(activationDescription)
+
+    this.parent.add(focusTitle)
+    this.parent.add(focusDescription)
+
+    this.parent.add(closeTitle)
+    this.parent.add(closeDescription)
+  }
+  createTitle (text) {
+    const label = new Gtk.Label({
+      halign: Gtk.Align.START
+    })
+    label.set_markup(`<b>${text}</b>`)
+    return label
+  }
+
+  createTextDescription (text) {
+    const label = new Gtk.Label({
+      label: text,
+      halign: Gtk.Align.START
+    })
+    label.set_line_wrap(true)
+    return label
   }
 }
 

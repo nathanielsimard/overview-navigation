@@ -8,13 +8,13 @@ const loggerMock = require('./helpers/loggerMock')
 const windowOverlayMock = require('./helpers/windowOverlayMock')
 const CustomWorkspace = require('../src/customWorkspace')
 
-describe('Custom Workspace', function () {
+describe('Custom Workspace', () => {
   let windowOverlay
   let otherWindowOverlay
   let logger
   let customWorkspace
 
-  beforeEach(function () {
+  beforeEach(() => {
     logger = loggerMock.create()
     windowOverlay = windowOverlayMock.create()
     otherWindowOverlay = windowOverlayMock.create()
@@ -24,25 +24,47 @@ describe('Custom Workspace', function () {
     ])
   })
 
-  describe('when show windows tooltips', function () {
-    beforeEach(function () {
+  describe('when show windows tooltips', () => {
+    beforeEach(() => {
       customWorkspace.showWindowsTooltips()
     })
 
-    it('should show window overlay tooltip', function () {
+    it('should show window overlay tooltip', () => {
       expect(windowOverlay.showTooltip).toHaveBeenCalled()
       expect(otherWindowOverlay.showTooltip).toHaveBeenCalled()
     })
   })
 
-  describe('when hide windows tooltips', function () {
-    beforeEach(function () {
+  describe('when hide windows tooltips', () => {
+    beforeEach(() => {
       customWorkspace.hideWindowsTooltips()
     })
 
-    it('should hide windows overlay tooltip', function () {
+    it('should hide windows overlay tooltip', () => {
       expect(windowOverlay.hideTooltip).toHaveBeenCalled()
       expect(otherWindowOverlay.hideTooltip).toHaveBeenCalled()
+    })
+  })
+
+  describe('when show windows tooltips closing', () => {
+    beforeEach(() => {
+      customWorkspace.showWindowsTooltipsClosing()
+    })
+
+    it('should show windows overlay tooltip closing', () => {
+      expect(windowOverlay.showTooltipClosing).toHaveBeenCalled()
+      expect(otherWindowOverlay.showTooltipClosing).toHaveBeenCalled()
+    })
+  })
+
+  describe('when hide windows tooltips closing', () => {
+    beforeEach(() => {
+      customWorkspace.hideWindowsTooltipsClosing()
+    })
+
+    it('should hide windows overlay tooltip closing', () => {
+      expect(windowOverlay.hideTooltipClosing).toHaveBeenCalled()
+      expect(otherWindowOverlay.hideTooltipClosing).toHaveBeenCalled()
     })
   })
 })

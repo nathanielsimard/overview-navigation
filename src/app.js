@@ -17,7 +17,7 @@ class Main {
   constructor () {
     const keySymbols = KeySymbols.initialize()
     const settings = Settings.initialize()
-    const windowSelector = new WindowSelector.WindowSelector(
+    const windowSelector = WindowSelector.create(
       keySymbols.keySymbols,
       new Utils.Logger('WindowSelector', settings)
     )

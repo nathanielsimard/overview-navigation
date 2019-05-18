@@ -1,49 +1,67 @@
 class WindowSelector {
-  constructor (keySymbols, logger) {
+  constructor (keySymbols, logger, overview, selectedWindowFactory, MODE) {
     this.keySymbols = keySymbols
+    this.overview = overview
     this.logger = logger
+    this.selectedWindowFactory = selectedWindowFactory
     this.keys = Object.keys(keySymbols)
+    this.MODE = MODE
     this.reset()
   }
 
-  select (keySymbol) {
-    const key = this.keySymbols[keySymbol]
+  select (keySymbol, mode) {
+    this.logger.debug(`Selecting a window ${keySymbol}`)
+
+    let key = this.keySymbols[keySymbol]
+
+    this.logger.debug(`Key is window ${key}`)
     if (key === undefined) {
-      return false
+      return
     }
 
     this.selections = this.selections + key
 
-    if (this.selections.length < this._calculateTagLenght()) {
-      return false
+    this.logger.debug(`Selection is  ${this.selections}`)
+    if (this.selections.length < this._calculateTagLength()) {
+      return
     }
 
     this.logger.debug(`Selections ${this.selections}`)
-    const selectedWindow = this.selectedWindows[this.selections]
+
+    let selectedWindow = this.selectedWindows[this.selections]
 
     if (!selectedWindow) {
-      this.logger.debug(
-        `No window found for selections ${
-          this.selections
-        }, resetting selection ...`
-      )
+      this.logger.debug(`Event with close`)
       this.resetSelection()
-      return false
+      return
     }
 
     this.logger.debug(`Selecting window ${this.selections} ...`)
-    selectedWindow.activate()
-    return true
+    if (this.MODE.Closing === mode) {
+      selectedWindow.toBeClose()
+    } else {
+      selectedWindow.toBeFocus()
+    }
+
+    this.resetSelection()
+    return selectedWindow
   }
 
   registerWindow (window, callback) {
+    this.logger.debug('Registering a window ...')
+
     if (this.index === this.keys.length) {
       this._updateSelectedWindowsToNewTagsSize()
     }
 
     const tag = this._generateTag(this.index++)
-    this.selectedWindows[tag] = new SelectedWindow(window, callback)
-    callback(tag)
+    const selectedWindow = this.selectedWindowFactory.create(
+      window,
+      callback,
+      this.overview
+    )
+    this.selectedWindows[tag] = selectedWindow
+    selectedWindow.updateTag(tag)
   }
 
   reset () {
@@ -63,7 +81,10 @@ class WindowSelector {
     const mod = index % this.keys.length
 
     if (div === 0) {
-      return `${this.keySymbols[this.keys[index]]}`
+      const tag = `${this.keySymbols[this.keys[index]]}`
+
+      this.logger.debug(`Generating tag : ${tag}`)
+      return tag
     } else {
       this.logger.debug(`div: ${div - 1} mod: ${mod}`)
       return `${this.keySymbols[this.keys[div - 1]]}${
@@ -72,7 +93,7 @@ class WindowSelector {
     }
   }
 
-  _calculateTagLenght () {
+  _calculateTagLength () {
     if (Math.floor(this.index / this.keys.length) === 0) {
       return 1
     } else {
@@ -89,29 +110,31 @@ class WindowSelector {
       const newTag = this._generateTag(this.index++)
 
       newSelectedWindows[newTag] = selectedWindow
-      selectedWindow.updateName(newTag)
+      selectedWindow.updateTag(newTag)
     }
 
     this.selectedWindows = newSelectedWindows
   }
 }
 
-class SelectedWindow {
-  constructor (window, updateLabelCallback) {
-    this.window = window
-    this.updateLabelCallback = updateLabelCallback
-  }
-
-  updateName (name) {
-    this.updateLabelCallback(name)
-  }
-
-  activate () {
-    const time = global.get_current_time()
-    this.window.activate(time)
-  }
-}
-
 if (global.overviewNavigationTesting) {
-  module.export = { WindowSelector }
+  module.exports = { WindowSelector }
+} else {
+  /*eslint-disable */
+  const Main = imports.ui.main
+  const ExtensionUtils = imports.misc.extensionUtils
+  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
+  const SelectedWindow = OverviewNavigation.imports.selectedWindow
+  const Mode = OverviewNavigation.imports.mode
+
+  function create(keySymbols, logger) {
+    /* eslint-enable */
+    return new WindowSelector(
+      keySymbols,
+      logger,
+      Main.overview,
+      new SelectedWindow.Factory(),
+      Mode.MODE
+    )
+  }
 }

@@ -12,6 +12,26 @@ class CustomWorkspace {
     }
   }
 
+  showWindowsTooltipsClosing () {
+    this.logger.debug('Showing windows tooltips closing ...')
+
+    for (let i in this.windowOverlays) {
+      if (this.windowOverlays[i] != null) {
+        this.windowOverlays[i].showTooltipClosing()
+      }
+    }
+  }
+
+  hideWindowsTooltipsClosing () {
+    this.logger.debug('Showing windows tooltips closing ...')
+
+    for (let i in this.windowOverlays) {
+      if (this.windowOverlays[i] != null) {
+        this.windowOverlays[i].hideTooltipClosing()
+      }
+    }
+  }
+
   hideWindowsTooltips () {
     this.logger.debug('Hiding windows tooltips ...')
 

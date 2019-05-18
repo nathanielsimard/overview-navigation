@@ -10,7 +10,7 @@ const windowSelectorMock = require('./helpers/windowSelectorMock')
 const actorMock = require('./helpers/actorMock')
 const CustomWindowOverlay = require('../src/customWindowOverlay')
 
-describe('Custom Window Overlay', function () {
+describe('Custom Window Overlay', () => {
   const PADDING = 3
 
   let logger
@@ -21,7 +21,7 @@ describe('Custom Window Overlay', function () {
   let customWindowOverlay
   let windowClone
 
-  beforeEach(function () {
+  beforeEach(() => {
     logger = loggerMock.create()
     windowSelector = windowSelectorMock.create()
     label = labelMock.create()
@@ -39,46 +39,82 @@ describe('Custom Window Overlay', function () {
     )
   })
 
-  it('adds label to parent actor', function () {
+  it('adds label to parent actor', () => {
     expect(parentActor.add_actor).toHaveBeenCalledWith(label)
   })
 
-  it('registers meta window', function () {
+  it('registers meta window', () => {
     expect(windowSelector.registerWindow).toHaveBeenCalled()
   })
 
-  describe('when destroying', function () {
-    beforeEach(function () {
+  describe('when destroying', () => {
+    beforeEach(() => {
       customWindowOverlay._onDestroy(logger, label)
     })
 
-    it('destroy label', function () {
+    it('destroy label', () => {
       expect(label.destroy).toHaveBeenCalled()
     })
   })
 
-  describe('when re-calculating layout with 3 padding at position x=200, y=300', function () {
-    beforeEach(function () {
+  describe('when re-calculating layout with 3 padding at position x=200, y=300', () => {
+    beforeEach(() => {
       windowClone.slot = [200, 300]
       customWindowOverlay.relayout(false)
     })
 
-    it('set label position to x=203, y=303', function () {
+    it('set label position to x=203, y=303', () => {
       expect(label.set_position).toHaveBeenCalledWith(203, 303)
     })
   })
 
-  describe('when showing tooltip', function () {
-    beforeEach(function () {
+  describe('when showing tooltip', () => {
+    beforeEach(() => {
       customWindowOverlay.showTooltip()
     })
 
-    it('shows label', function () {
+    it('shows label', () => {
       expect(label.show).toHaveBeenCalled()
     })
 
-    it('raises label on top', function () {
+    it('raises label on top', () => {
       expect(label.raise_top).toHaveBeenCalled()
+    })
+  })
+
+  describe('When showing closing tooltip', () => {
+    const labelText = 'aa'
+    beforeEach(() => {
+      label.text = labelText
+      customWindowOverlay.showTooltipClosing()
+    })
+
+    it('Should set label style class name', () => {
+      expect(label.set_style_class_name).toHaveBeenCalledWith(
+        CustomWindowOverlay.CLOSING_WINDOW_STYLE
+      )
+    })
+
+    it('Should upper case label text', () => {
+      expect(label.text).toEqual(labelText.toUpperCase())
+    })
+  })
+
+  describe('When hiding closing tooltip', () => {
+    const labelText = 'AA'
+    beforeEach(() => {
+      label.text = labelText
+      customWindowOverlay.hideTooltipClosing()
+    })
+
+    it('Should set label style class name', () => {
+      expect(label.set_style_class_name).toHaveBeenCalledWith(
+        CustomWindowOverlay.FOCUS_WINDOW_STYLE
+      )
+    })
+
+    it('Should lower case label text', () => {
+      expect(label.text).toEqual(labelText.toLowerCase())
     })
   })
 })

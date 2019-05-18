@@ -3,7 +3,7 @@ class WindowSelector {
   registerWindow (metaWindow, callback) {}
   reset () {}
   resetSelection () {}
-  select (keySymbol) {}
+  select (keySymbol, mode) {}
 }
 
 function create () {
