@@ -11,9 +11,9 @@ const MODE = require('../src/mode')
 const overviewMock = require('./helpers/overviewMock')
 
 describe('WindowSelector', () => {
-  const UKNOWN_KEY_SYMBOL = 'x076'
-  const KNOWM_KEY_SYMBOL = 'x056'
-  const OTHER_KNOWM_KEY_SYMBOL = 'x057'
+  const UNKNOWN_KEY_SYMBOL = 'x076'
+  const KNOWN_KEY_SYMBOL = 'x056'
+  const OTHER_KNOWN_KEY_SYMBOL = 'x057'
   const KEY = 'a'
   const OTHER_KEY = 'b'
 
@@ -28,8 +28,8 @@ describe('WindowSelector', () => {
     overview = overviewMock.create()
     window = {}
     focusKeySymbols = {}
-    focusKeySymbols[KNOWM_KEY_SYMBOL] = KEY
-    focusKeySymbols[OTHER_KNOWM_KEY_SYMBOL] = OTHER_KEY
+    focusKeySymbols[KNOWN_KEY_SYMBOL] = KEY
+    focusKeySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
     closeKeySymbols = {}
     closeKeySymbols['A'] = 'A'
     closeKeySymbols['B'] = 'B'
@@ -65,9 +65,9 @@ describe('WindowSelector', () => {
           mode = MODE.Closing
         })
 
-        describe('With a knowm key symbol', () => {
+        describe('With a known key symbol', () => {
           beforeEach(() => {
-            selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL, mode)
+            selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL, mode)
           })
 
           it('Should return closable window', () => {
@@ -82,9 +82,9 @@ describe('WindowSelector', () => {
             mode = MODE.Focussing
           })
 
-          describe('With a knowm key symbol', () => {
+          describe('With a known key symbol', () => {
             beforeEach(() => {
-              selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL, mode)
+              selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL, mode)
             })
 
             it('Should return focusable window ', () => {
@@ -95,7 +95,7 @@ describe('WindowSelector', () => {
 
         describe('With a an unknown key symbol', () => {
           beforeEach(() => {
-            selectedWindow = windowSelector.select(UKNOWN_KEY_SYMBOL)
+            selectedWindow = windowSelector.select(UNKNOWN_KEY_SYMBOL)
           })
 
           it('should not return any window', () => {
@@ -124,12 +124,12 @@ describe('WindowSelector', () => {
 
       describe('With a knowm key symbol', () => {
         beforeEach(() => {
-          selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL)
+          selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL)
         })
 
         describe('another time', () => {
           beforeEach(() => {
-            selectedWindow = windowSelector.select(KNOWM_KEY_SYMBOL)
+            selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL)
           })
 
           it('Should return selected window', () => {
