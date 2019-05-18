@@ -170,8 +170,32 @@ describe('Custom Workspace View', function () {
         })
       })
 
-      it('selects using window selector', () => {
+      it('selects window selector with focussing mode', () => {
         expect(windowSelector.select).toHaveBeenCalledWith('a', MODE.Focussing)
+      })
+
+      it('activate selected window', () => {
+        expect(selectedWindow.activate).toHaveBeenCalled()
+      })
+    })
+
+    describe("when on key press with 'a' and CLOSING KEY", () => {
+      let selectedWindow
+
+      beforeEach(() => {
+        selectedWindow = selectedWindowMock.create()
+        windowSelector.select.and.returnValue(selectedWindow)
+
+        customWorkspaceView.onKeyPress('', {
+          get_key_symbol: () => CLOSING_KEY
+        })
+        customWorkspaceView.onKeyPress('', {
+          get_key_symbol: () => 'a'
+        })
+      })
+
+      it('selects window selector with closing mode', () => {
+        expect(windowSelector.select).toHaveBeenCalledWith('a', MODE.Closing)
       })
 
       it('activate selected window', () => {
