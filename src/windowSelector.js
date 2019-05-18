@@ -97,7 +97,7 @@ class WindowSelector {
   }
 
   _calculateTagLength () {
-    if (Math.floor(this.index / this.numberOfDifferentKeys) === 0) {
+    if (Math.floor(this.index / (this.numberOfDifferentKeys + 1)) === 0) {
       return 1
     } else {
       return 2

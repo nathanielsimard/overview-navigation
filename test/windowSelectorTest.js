@@ -100,7 +100,32 @@ describe('WindowSelector', () => {
       })
     })
 
-    describe('With multiple registered window', () => {
+    describe('With multiple windows registered', () => {
+      let firstTag
+      let secondTag
+
+      beforeEach(() => {
+        windowSelector.registerWindow(window, tag => (firstTag = tag))
+        windowSelector.registerWindow({}, tag => (secondTag = tag))
+      })
+
+      it('Tag should have on key symbol', () => {
+        expect(firstTag).toBe(KEY)
+        expect(secondTag).toBe(OTHER_KEY)
+      })
+
+      describe('With a known key symbol', () => {
+        beforeEach(() => {
+          selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL)
+        })
+
+        it('should not return any window', () => {
+          expect(selectedWindow).toBeDefined()
+        })
+      })
+    })
+
+    describe('With more windows registered than the number of different key symbols', () => {
       let firstTag
       let secondTag
       let thirdTag
@@ -111,7 +136,7 @@ describe('WindowSelector', () => {
         windowSelector.registerWindow({}, tag => (thirdTag = tag))
       })
 
-      it('first tag should be two times first symbol', () => {
+      it('Tags should have two key symbols', () => {
         expect(firstTag).toBe(KEY + KEY)
         expect(secondTag).toBe(KEY + OTHER_KEY)
         expect(thirdTag).toBe(OTHER_KEY + KEY)
