@@ -1,14 +1,6 @@
 class WindowSelector {
-  constructor (
-    focusKeySymbols,
-    closeKeySymbols,
-    logger,
-    overview,
-    selectedWindowFactory,
-    MODE
-  ) {
+  constructor (focusKeySymbols, logger, overview, selectedWindowFactory, MODE) {
     this.focusKeySymbols = focusKeySymbols
-    this.closeKeySymbols = closeKeySymbols
     this.overview = overview
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
@@ -22,10 +14,6 @@ class WindowSelector {
 
     let key = this.focusKeySymbols[keySymbol]
 
-    if (!key) {
-      key = this.closeKeySymbols[keySymbol]
-    }
-
     this.logger.debug(`Key is window ${key}`)
     if (key === undefined) {
       return
@@ -34,16 +22,13 @@ class WindowSelector {
     this.selections = this.selections + key
 
     this.logger.debug(`Selection is  ${this.selections}`)
-    if (this.selections.length < this._calculateTagLenght()) {
+    if (this.selections.length < this._calculateTagLength()) {
       return
     }
 
     this.logger.debug(`Selections ${this.selections}`)
 
-    let selectedWindow = this.selectedWindows[this.selections.toUpperCase()]
-    if (!selectedWindow) {
-      selectedWindow = this.selectedWindows[this.selections.toLowerCase()]
-    }
+    let selectedWindow = this.selectedWindows[this.selections]
 
     if (!selectedWindow) {
       this.logger.debug(`Event with close`)
@@ -108,7 +93,7 @@ class WindowSelector {
     }
   }
 
-  _calculateTagLenght () {
+  _calculateTagLength () {
     if (Math.floor(this.index / this.keys.length) === 0) {
       return 1
     } else {
@@ -142,11 +127,10 @@ if (global.overviewNavigationTesting) {
   const SelectedWindow = OverviewNavigation.imports.selectedWindow
   const Mode = OverviewNavigation.imports.mode
 
-  function create(focusKeySymbols, closeKeySymbols, logger) {
+  function create(focusKeySymbols, logger) {
     /* eslint-enable */
     return new WindowSelector(
       focusKeySymbols,
-      closeKeySymbols,
       logger,
       Main.overview,
       new SelectedWindow.Factory(),

@@ -19,7 +19,6 @@ class Main {
     const settings = Settings.initialize()
     const windowSelector = WindowSelector.create(
       keySymbols.focusKeySymbols,
-      keySymbols.closeKeySymbols,
       new Utils.Logger('WindowSelector', settings)
     )
 

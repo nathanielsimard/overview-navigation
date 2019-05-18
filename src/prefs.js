@@ -121,7 +121,7 @@ class HelpWidget extends Widget {
 
     const closeTitle = this.createTitle(`Close a Window`)
     const closeDescription = this.createTextDescription(
-      `When the activation is done, to close a particular window, you have to press its letters one after the other while holding SHIFT.`
+      `It is also possible to close a window in the same way, but while keeping SHIFT pressed.`
     )
 
     this.parent.add(activationTitle)

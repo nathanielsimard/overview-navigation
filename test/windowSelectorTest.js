@@ -18,7 +18,6 @@ describe('WindowSelector', () => {
   const OTHER_KEY = 'b'
 
   let focusKeySymbols
-  let closeKeySymbols
   let logger
   let windowSelector
   let window
@@ -30,13 +29,9 @@ describe('WindowSelector', () => {
     focusKeySymbols = {}
     focusKeySymbols[KNOWN_KEY_SYMBOL] = KEY
     focusKeySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
-    closeKeySymbols = {}
-    closeKeySymbols['A'] = 'A'
-    closeKeySymbols['B'] = 'B'
     logger = new TestLogger('Window Selector Test', true)
     windowSelector = new WindowSelector(
       focusKeySymbols,
-      closeKeySymbols,
       logger,
       overview,
       new Factory(),
@@ -122,7 +117,7 @@ describe('WindowSelector', () => {
         expect(thirdTag).toBe(OTHER_KEY + KEY)
       })
 
-      describe('With a knowm key symbol', () => {
+      describe('With a known key symbol', () => {
         beforeEach(() => {
           selectedWindow = windowSelector.select(KNOWN_KEY_SYMBOL)
         })
