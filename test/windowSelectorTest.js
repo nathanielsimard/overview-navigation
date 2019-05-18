@@ -17,7 +17,7 @@ describe('WindowSelector', () => {
   const KEY = 'a'
   const OTHER_KEY = 'b'
 
-  let focusKeySymbols
+  let keySymbols
   let logger
   let windowSelector
   let window
@@ -26,12 +26,12 @@ describe('WindowSelector', () => {
   beforeEach(() => {
     overview = overviewMock.create()
     window = {}
-    focusKeySymbols = {}
-    focusKeySymbols[KNOWN_KEY_SYMBOL] = KEY
-    focusKeySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
+    keySymbols = {}
+    keySymbols[KNOWN_KEY_SYMBOL] = KEY
+    keySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
     logger = new TestLogger('Window Selector Test', true)
     windowSelector = new WindowSelector(
-      focusKeySymbols,
+      keySymbols,
       logger,
       overview,
       new Factory(),

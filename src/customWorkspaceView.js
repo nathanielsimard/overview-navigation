@@ -63,13 +63,11 @@ class CustomWorkspaceView {
   onKeyPress (s, o) {
     this.logger.debug('On key press ...')
 
-    const keySymbol = o.get_key_symbol()
-
     if (!this.isOnFirstMonitor()) return
     if (this.showWindowsTooltipsClosing(o.get_key_symbol())) return
-
     if (this.searching) return
 
+    const keySymbol = o.get_key_symbol()
     this._selectWindow(keySymbol)
   }
 

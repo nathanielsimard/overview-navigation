@@ -1,10 +1,10 @@
 class WindowSelector {
-  constructor (focusKeySymbols, logger, overview, selectedWindowFactory, MODE) {
-    this.focusKeySymbols = focusKeySymbols
+  constructor (keySymbols, logger, overview, selectedWindowFactory, MODE) {
+    this.keySymbols = keySymbols
     this.overview = overview
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
-    this.keys = Object.keys(focusKeySymbols)
+    this.keys = Object.keys(keySymbols)
     this.MODE = MODE
     this.reset()
   }
@@ -12,7 +12,7 @@ class WindowSelector {
   select (keySymbol, mode) {
     this.logger.debug(`Selecting a window ${keySymbol}`)
 
-    let key = this.focusKeySymbols[keySymbol]
+    let key = this.keySymbols[keySymbol]
 
     this.logger.debug(`Key is window ${key}`)
     if (key === undefined) {
@@ -81,14 +81,14 @@ class WindowSelector {
     const mod = index % this.keys.length
 
     if (div === 0) {
-      const tag = `${this.focusKeySymbols[this.keys[index]]}`
+      const tag = `${this.keySymbols[this.keys[index]]}`
 
       this.logger.debug(`Generating tag : ${tag}`)
       return tag
     } else {
       this.logger.debug(`div: ${div - 1} mod: ${mod}`)
-      return `${this.focusKeySymbols[this.keys[div - 1]]}${
-        this.focusKeySymbols[this.keys[mod]]
+      return `${this.keySymbols[this.keys[div - 1]]}${
+        this.keySymbols[this.keys[mod]]
       }`
     }
   }
@@ -127,10 +127,10 @@ if (global.overviewNavigationTesting) {
   const SelectedWindow = OverviewNavigation.imports.selectedWindow
   const Mode = OverviewNavigation.imports.mode
 
-  function create(focusKeySymbols, logger) {
+  function create(keySymbols, logger) {
     /* eslint-enable */
     return new WindowSelector(
-      focusKeySymbols,
+      keySymbols,
       logger,
       Main.overview,
       new SelectedWindow.Factory(),
