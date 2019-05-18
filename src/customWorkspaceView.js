@@ -144,7 +144,6 @@ class CustomWorkspaceView {
     this.searching = true
   }
   _selectWindow (keySymbol) {
-    console.log(this.current_mode)
     const selectedWindow = this.windowSelector.select(
       keySymbol,
       this.current_mode
