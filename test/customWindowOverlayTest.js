@@ -8,11 +8,14 @@ const loggerMock = require('./helpers/loggerMock')
 const labelMock = require('./helpers/labelMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const actorMock = require('./helpers/actorMock')
+const OverlaysMock = require('./helpers/customWindowOverlaysMock')
+
 const CustomWindowOverlay = require('../src/customWindowOverlay')
 
 describe('Custom Window Overlay', () => {
   const PADDING = 3
 
+  let overlays
   let logger
   let label
   let parentActor
@@ -22,6 +25,7 @@ describe('Custom Window Overlay', () => {
   let windowClone
 
   beforeEach(() => {
+    overlays = OverlaysMock.create()
     logger = loggerMock.create()
     windowSelector = windowSelectorMock.create()
     label = labelMock.create()
@@ -35,7 +39,8 @@ describe('Custom Window Overlay', () => {
       parentActor,
       windowClone,
       metaWindow,
-      PADDING
+      PADDING,
+      overlays
     )
   })
 
@@ -54,6 +59,10 @@ describe('Custom Window Overlay', () => {
 
     it('destroy label', () => {
       expect(label.destroy).toHaveBeenCalled()
+    })
+
+    it('should call overlays window deleted', () => {
+      expect(overlays.onWindowDeleted).toHaveBeenCalledWith(customWindowOverlay)
     })
   })
 

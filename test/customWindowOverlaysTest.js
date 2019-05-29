@@ -4,16 +4,26 @@
 /* global expect */
 require('./helpers/core')
 
+const ListenerMock = require('./helpers/listenerMock')
 const { CustomWindowOverlays } = require('../src/customWindowOverlays')
 
 describe('Custom Window Overlay Listener', () => {
+  let listener
+  let otherListener
   let overlays
 
   beforeEach(() => {
     overlays = new CustomWindowOverlays()
   })
 
-  describe('when a new window is register', () => {
+  beforeEach(() => {
+    listener = ListenerMock.create()
+    otherListener = ListenerMock.create()
+    overlays.register(listener)
+    overlays.register(otherListener)
+  })
+
+  describe('when a new window is created', () => {
     const window = {}
 
     beforeEach(() => {
@@ -24,13 +34,23 @@ describe('Custom Window Overlay Listener', () => {
       expect(overlays.getAllWindows().length).toEqual(1)
     })
 
-    describe('than is deleted', () => {
+    it('should notified listeners', () => {
+      expect(listener.onWindowCreated).toHaveBeenCalledWith(window)
+      expect(otherListener.onWindowCreated).toHaveBeenCalledWith(window)
+    })
+
+    describe('when is deleted', () => {
       beforeEach(() => {
         overlays.onWindowDeleted(window)
       })
 
       it('should remove the window', () => {
         expect(overlays.getAllWindows().length).toEqual(0)
+      })
+
+      it('should notified listeners', () => {
+        expect(listener.onWindowDeleted).toHaveBeenCalledWith(window)
+        expect(otherListener.onWindowDeleted).toHaveBeenCalledWith(window)
       })
     })
   })
