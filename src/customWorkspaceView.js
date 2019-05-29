@@ -7,8 +7,6 @@ class CustomWorkspaceView {
     workspaces,
     workspaceManager,
     keys,
-    overview,
-    keySymbols,
     settings,
     MODE,
     overlays
@@ -20,8 +18,6 @@ class CustomWorkspaceView {
     this.workspaces = workspaces
     this.workspaceManager = workspaceManager
     this.keys = keys
-    this.overview = overview
-    this.keySymbols = keySymbols
     this.settings = settings
     this.MODE = MODE
     this.current_mode = this.MODE.Focussing
@@ -169,7 +165,6 @@ if (!global.overviewNavigationTesting) {
   /* global imports */
   const Clutter = imports.gi.Clutter
   const WorkspacesView = imports.ui.workspacesView
-  const Main = imports.ui.main
   const ExtensionUtils = imports.misc.extensionUtils
   const OverviewNavigation = ExtensionUtils.getCurrentExtension()
   const Mode = OverviewNavigation.imports.mode
@@ -202,8 +197,6 @@ if (!global.overviewNavigationTesting) {
           parent._workspaces,
           workspaceManager,
           Clutter,
-          Main.overview,
-          keySymbols.keySymbols,
           settings,
           Mode.MODE,
           overlays

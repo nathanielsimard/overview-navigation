@@ -6,7 +6,6 @@ require('./helpers/core')
 
 const searchMock = require('./helpers/searchMock')
 const stageMock = require('./helpers/stageMock')
-const overviewMock = require('./helpers/overviewMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const settingsStub = require('./helpers/settingsStub.js')
 const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
@@ -33,8 +32,6 @@ describe('Custom Workspace View', function () {
   let workspaces
   let workspaceManager
   let keys
-  let overview
-  let keySymbols
   let settings
   let customWorkspaceView
   let overlays
@@ -47,7 +44,6 @@ describe('Custom Workspace View', function () {
     overlays.onWindowCreated(otherWindowOverlay)
 
     logger = new log.TestLogger('CustomWorkspaceViewTest', false)
-    overview = overviewMock.create()
     search = searchMock.create()
     windowSelector = windowSelectorMock.create()
     stage = stageMock.create()
@@ -58,7 +54,6 @@ describe('Custom Workspace View', function () {
       KEY_Shift_L: CLOSING_KEY,
       KEY_Shift_R: CLOSING_KEY
     }
-    keySymbols = {}
     settings = settingsStub.create()
 
     customWorkspaceView = new cwv.CustomWorkspaceView(
@@ -69,8 +64,6 @@ describe('Custom Workspace View', function () {
       workspaces,
       workspaceManager,
       keys,
-      overview,
-      keySymbols,
       settings,
       MODE,
       overlays
@@ -129,8 +122,6 @@ describe('Custom Workspace View', function () {
         workspaces,
         workspaceManager,
         keys,
-        overview,
-        keySymbols,
         settings,
         MODE,
         overlays
@@ -161,8 +152,6 @@ describe('Custom Workspace View', function () {
         workspaces,
         workspaceManager,
         keys,
-        overview,
-        keySymbols,
         settings,
         MODE,
         overlays
