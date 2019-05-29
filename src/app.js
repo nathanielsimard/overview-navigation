@@ -9,14 +9,19 @@ const Settings = OverviewNavigation.imports.settings
 const KeySymbols = OverviewNavigation.imports.keySymbols
 const CustomWindowManager = OverviewNavigation.imports.customWindowManager
 const WindowSelector = OverviewNavigation.imports.windowSelector
-const CustomWorkspace = OverviewNavigation.imports.customWorkspace
+// const CustomWorkspace = OverviewNavigation.imports.customWorkspace
 const CustomWindowOverlay = OverviewNavigation.imports.customWindowOverlay
 const CustomWorkspaceView = OverviewNavigation.imports.customWorkspaceView
+const CustomWindowOverlays = OverviewNavigation.imports.customWindowOverlays
 
 class Main {
   constructor () {
     const keySymbols = KeySymbols.initialize()
     const settings = Settings.initialize()
+    const overlays = new CustomWindowOverlays.CustomWindowOverlays(
+      new Utils.Logger('CustomWindowOverlays', settings)
+    )
+
     const windowSelector = WindowSelector.create(
       keySymbols.keySymbols,
       new Utils.Logger('WindowSelector', settings)
@@ -31,12 +36,13 @@ class Main {
     CustomWindowOverlay.initialize(
       this.injector,
       windowSelector,
-      new Utils.Logger('CustomWindowOverlay', settings)
+      new Utils.Logger('CustomWindowOverlay', settings),
+      overlays
     )
-    CustomWorkspace.initialize(
-      this.injector,
-      new Utils.Logger('CustomWorkspace', settings)
-    )
+    //   CustomWorkspace.initialize(
+    //     this.injector,
+    //     new Utils.Logger('CustomWorkspace', settings)
+    //   )
 
     CustomWorkspaceView.initialize(
       this.injector,
@@ -44,7 +50,8 @@ class Main {
       this.search,
       windowSelector,
       keySymbols,
-      settings
+      settings,
+      overlays
     )
   }
 

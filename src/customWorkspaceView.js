@@ -10,7 +10,8 @@ class CustomWorkspaceView {
     overview,
     keySymbols,
     settings,
-    MODE
+    MODE,
+    overlays
   ) {
     this.logger = logger
     this.search = search
@@ -24,6 +25,16 @@ class CustomWorkspaceView {
     this.settings = settings
     this.MODE = MODE
     this.current_mode = this.MODE.Focussing
+    this.overlays = overlays
+    this.overlays.register(this)
+  }
+
+  onWindowCreated (window) {
+    if (this.searching) {
+      window.hideTooltip()
+    } else {
+      window.showTooltip()
+    }
   }
 
   animateToOverview () {
@@ -87,9 +98,10 @@ class CustomWorkspaceView {
   hideWindowsTooltipsClosing (keySymbol) {
     if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
 
-    for (let i = 0; i < this.workspaces.length; i++) {
-      this.workspaces[i].hideWindowsTooltipsClosing()
-    }
+    this.overlays.getAllWindows().forEach(window => {
+      window.hideTooltipClosing()
+    })
+
     this.current_mode = this.MODE.Focussing
     return true
   }
@@ -97,9 +109,10 @@ class CustomWorkspaceView {
   showWindowsTooltipsClosing (keySymbol) {
     if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
 
-    for (let i = 0; i < this.workspaces.length; i++) {
-      this.workspaces[i].showWindowsTooltipsClosing()
-    }
+    this.overlays.getAllWindows().forEach(window => {
+      window.showTooltipClosing()
+    })
+
     this.current_mode = this.MODE.Closing
     return true
   }
@@ -122,9 +135,9 @@ class CustomWorkspaceView {
   showTooltips () {
     this.logger.debug('Showing tooltips ...')
 
-    for (let i = 0; i < this.workspaces.length; i++) {
-      this.workspaces[i].showWindowsTooltips()
-    }
+    this.overlays.getAllWindows().forEach(window => {
+      window.showTooltip()
+    })
 
     this.search.disable()
     this.searching = false
@@ -133,9 +146,9 @@ class CustomWorkspaceView {
   hideTooltips () {
     this.logger.debug('Hiding tooltips ...')
 
-    for (let i = 0; i < this.workspaces.length; i++) {
-      this.workspaces[i].hideWindowsTooltips()
-    }
+    this.overlays.getAllWindows().forEach(window => {
+      window.hideTooltip()
+    })
 
     this.windowSelector.resetSelection()
     this.search.enable()
@@ -168,7 +181,8 @@ if (!global.overviewNavigationTesting) {
     search,
     windowSelector,
     keySymbols,
-    settings
+    settings,
+    overlays
   ) {
     /* eslint-enable */
     injector.inject(
@@ -191,7 +205,8 @@ if (!global.overviewNavigationTesting) {
           Main.overview,
           keySymbols.keySymbols,
           settings,
-          Mode.MODE
+          Mode.MODE,
+          overlays
         )
       }
     )
