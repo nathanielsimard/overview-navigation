@@ -8,7 +8,7 @@ const loggerMock = require('./helpers/loggerMock')
 const labelMock = require('./helpers/labelMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const actorMock = require('./helpers/actorMock')
-const OverlaysMock = require('./helpers/customWindowOverlaysMock')
+const OverlaysMock = require('./helpers/subject/customWindowOverlaySubjectMock')
 
 const CustomWindowOverlay = require('../src/customWindowOverlay')
 
@@ -62,7 +62,7 @@ describe('Custom Window Overlay', () => {
     })
 
     it('should call overlays window deleted', () => {
-      expect(overlays.onWindowDeleted).toHaveBeenCalledWith(customWindowOverlay)
+      expect(overlays.removeWindow).toHaveBeenCalledWith(customWindowOverlay)
     })
   })
 

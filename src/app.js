@@ -11,13 +11,14 @@ const CustomWindowManager = OverviewNavigation.imports.customWindowManager
 const WindowSelector = OverviewNavigation.imports.windowSelector
 const CustomWindowOverlay = OverviewNavigation.imports.customWindowOverlay
 const CustomWorkspaceView = OverviewNavigation.imports.customWorkspaceView
-const CustomWindowOverlays = OverviewNavigation.imports.customWindowOverlays
+const customWindowOverlaySubject =
+  OverviewNavigation.imports.subject.customWindowOverlaySubject
 
 class Main {
   constructor () {
     const keySymbols = KeySymbols.initialize()
     const settings = Settings.initialize()
-    const overlays = new CustomWindowOverlays.CustomWindowOverlays(
+    const overlays = new customWindowOverlaySubject.CustomWindowOverlaySubject(
       new Utils.Logger('CustomWindowOverlays', settings)
     )
 

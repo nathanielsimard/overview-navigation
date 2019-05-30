@@ -40,7 +40,7 @@ class CustomWindowOverlay {
   _onDestroy () {
     this.logger.info('Destroying ...')
     this.label.destroy()
-    this.overlays.onWindowDeleted(this)
+    this.overlays.removeWindow(this)
   }
 
   showTooltip () {
@@ -88,7 +88,7 @@ if (!global.overviewNavigationTesting) {
         3,
         overlays
       )
-      overlays.onWindowCreated(customWindow)
+      overlays.addWindow(customWindow)
       return customWindow
     })
   }

@@ -1,16 +1,16 @@
 /* global spyOn */
-class CustomWindowOverlaysMock {
-  onWindowCreated () {}
-  onWindowDeleted () {}
+class CustomWindowOverlaySubjectMock {
+  addWindow () {}
+  removeWindow () {}
   getAllWindows () {}
   register () {}
   unRegister () {}
 }
 
 function create () {
-  const mock = new CustomWindowOverlaysMock()
-  spyOn(mock, 'onWindowCreated')
-  spyOn(mock, 'onWindowDeleted')
+  const mock = new CustomWindowOverlaySubjectMock()
+  spyOn(mock, 'addWindow')
+  spyOn(mock, 'removeWindow')
   spyOn(mock, 'getAllWindows')
   spyOn(mock, 'register')
   spyOn(mock, 'unRegister')

@@ -2,10 +2,10 @@
 /* global beforeEach */
 /* global it */
 /* global expect */
-require('./helpers/core')
+require('../helpers/core')
 
-const ListenerMock = require('./helpers/listenerMock')
-const { CustomWindowOverlays } = require('../src/customWindowOverlays')
+const ListenerMock = require('../helpers/listenerMock')
+const { CustomWindowOverlaySubject } = require('../src/subject/customWindowOverlaySubject')
 
 describe('Custom Window Overlay Listener', () => {
   let listener
@@ -13,21 +13,21 @@ describe('Custom Window Overlay Listener', () => {
   let overlays
 
   beforeEach(() => {
-    overlays = new CustomWindowOverlays()
+    overlays = new CustomWindowOverlaySubject()
   })
 
   beforeEach(() => {
     listener = ListenerMock.create()
     otherListener = ListenerMock.create()
-    overlays.register(listener)
-    overlays.register(otherListener)
+    overlays.attach(listener)
+    overlays.attach(otherListener)
   })
 
-  describe('when a new window is created', () => {
+  describe('when a new window is added', () => {
     const window = {}
 
     beforeEach(() => {
-      overlays.onWindowCreated(window)
+      overlays.addWindow(window)
     })
 
     it('should be added', () => {
@@ -39,9 +39,9 @@ describe('Custom Window Overlay Listener', () => {
       expect(otherListener.onWindowCreated).toHaveBeenCalledWith(window)
     })
 
-    describe('when is deleted', () => {
+    describe('when is removed', () => {
       beforeEach(() => {
-        overlays.onWindowDeleted(window)
+        overlays.removeWindow(window)
       })
 
       it('should remove the window', () => {

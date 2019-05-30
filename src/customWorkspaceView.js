@@ -22,7 +22,7 @@ class CustomWorkspaceView {
     this.MODE = MODE
     this.current_mode = this.MODE.Focussing
     this.overlays = overlays
-    this.overlays.register(this)
+    this.overlays.attach(this)
   }
 
   onWindowCreated (window) {

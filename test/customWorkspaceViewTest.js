@@ -16,7 +16,9 @@ const windowOverlayMock = require('./helpers/windowOverlayMock')
 const MODE = require('../src/mode')
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
-const { CustomWindowOverlays } = require('../src/customWindowOverlays')
+const {
+  CustomWindowOverlaySubject
+} = require('../src/subject/customWindowOverlaySubject')
 
 const FOCUS_KEY = 'focusKey'
 const CLOSING_KEY = 'closingKey'
@@ -39,9 +41,9 @@ describe('Custom Workspace View', function () {
   beforeEach(function () {
     windowOverlay = windowOverlayMock.create()
     otherWindowOverlay = windowOverlayMock.create()
-    overlays = new CustomWindowOverlays()
-    overlays.onWindowCreated(windowOverlay)
-    overlays.onWindowCreated(otherWindowOverlay)
+    overlays = new CustomWindowOverlaySubject()
+    overlays.addWindow(windowOverlay)
+    overlays.addWindow(otherWindowOverlay)
 
     logger = new log.TestLogger('CustomWorkspaceViewTest', false)
     search = searchMock.create()
