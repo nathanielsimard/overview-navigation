@@ -10,7 +10,8 @@ class CustomWindowOverlay {
     parentActor,
     windowClone,
     metaWindow,
-    padding
+    padding,
+    overlays
   ) {
     this.logger = logger
     this.logger.debug('Initializing ...')
@@ -18,6 +19,8 @@ class CustomWindowOverlay {
     this.windowClone = windowClone
     this.label = label
     this.padding = padding
+    this.metaWindow = metaWindow
+    this.overlays = overlays
 
     parentActor.add_actor(label)
     windowSelector.registerWindow(metaWindow, function (name) {
@@ -35,8 +38,9 @@ class CustomWindowOverlay {
   }
 
   _onDestroy () {
-    this.logger.debug('Destroying ...')
+    this.logger.info('Destroying ...')
     this.label.destroy()
+    this.overlays.removeWindow(this)
   }
 
   showTooltip () {
@@ -69,20 +73,23 @@ if (!global.overviewNavigationTesting) {
   const Workspace = imports.ui.workspace
 
   /*eslint-disable */
-  function initialize(injector, windowSelector, logger) {
+  function initialize(injector, windowSelector, logger, overlays) {
     /* eslint-enable */
     injector.inject(CustomWindowOverlay, Workspace.WindowOverlay, parent => {
       const label = new St.Label({})
       label.set_style_class_name(FOCUS_WINDOW_STYLE)
-      return new CustomWindowOverlay(
+      const customWindow = new CustomWindowOverlay(
         logger,
         windowSelector,
         label,
         parent._parentActor,
         parent._windowClone,
         parent._windowClone.metaWindow,
-        3
+        3,
+        overlays
       )
+      overlays.addWindow(customWindow)
+      return customWindow
     })
   }
 } else {

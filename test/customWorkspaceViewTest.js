@@ -6,21 +6,27 @@ require('./helpers/core')
 
 const searchMock = require('./helpers/searchMock')
 const stageMock = require('./helpers/stageMock')
-const overviewMock = require('./helpers/overviewMock')
 const windowSelectorMock = require('./helpers/windowSelectorMock')
 const settingsStub = require('./helpers/settingsStub.js')
 const workspaceManagerStub = require('./helpers/workspaceManagerStub.js')
 const workspaceMock = require('./helpers/workspaceMock.js')
 const selectedWindowMock = require('./helpers/selectedWindowMock')
+const windowOverlayMock = require('./helpers/windowOverlayMock')
 
 const MODE = require('../src/mode')
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
+const {
+  CustomWindowOverlaySubject
+} = require('../src/subject/customWindowOverlaySubject')
 
 const FOCUS_KEY = 'focusKey'
 const CLOSING_KEY = 'closingKey'
 
 describe('Custom Workspace View', function () {
+  let windowOverlay
+  let otherWindowOverlay
+
   let logger
   let search
   let windowSelector
@@ -28,17 +34,21 @@ describe('Custom Workspace View', function () {
   let workspaces
   let workspaceManager
   let keys
-  let overview
-  let keySymbols
   let settings
   let customWorkspaceView
+  let overlays
 
   beforeEach(function () {
+    windowOverlay = windowOverlayMock.create()
+    otherWindowOverlay = windowOverlayMock.create()
+    overlays = new CustomWindowOverlaySubject()
+    overlays.addWindow(windowOverlay)
+    overlays.addWindow(otherWindowOverlay)
+
     logger = new log.TestLogger('CustomWorkspaceViewTest', false)
     search = searchMock.create()
     windowSelector = windowSelectorMock.create()
     stage = stageMock.create()
-    overview = overviewMock.create()
     workspaces = [workspaceMock.create()]
     workspaceManager = workspaceManagerStub.create()
     keys = {
@@ -46,7 +56,6 @@ describe('Custom Workspace View', function () {
       KEY_Shift_L: CLOSING_KEY,
       KEY_Shift_R: CLOSING_KEY
     }
-    keySymbols = {}
     settings = settingsStub.create()
 
     customWorkspaceView = new cwv.CustomWorkspaceView(
@@ -57,10 +66,9 @@ describe('Custom Workspace View', function () {
       workspaces,
       workspaceManager,
       keys,
-      overview,
-      keySymbols,
       settings,
-      MODE
+      MODE,
+      overlays
     )
   })
 
@@ -75,9 +83,8 @@ describe('Custom Workspace View', function () {
       })
 
       it('shows tooltips', () => {
-        workspaces.forEach(workspace => {
-          expect(workspace.showWindowsTooltips).toHaveBeenCalled()
-        })
+        expect(windowOverlay.showTooltip).toHaveBeenCalled()
+        expect(otherWindowOverlay.showTooltip).toHaveBeenCalled()
       })
     })
   })
@@ -93,9 +100,8 @@ describe('Custom Workspace View', function () {
       })
 
       it('hides tooltips', () => {
-        workspaces.forEach(workspace => {
-          expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
-        })
+        expect(windowOverlay.hideTooltip).toHaveBeenCalled()
+        expect(otherWindowOverlay.hideTooltip).toHaveBeenCalled()
       })
     })
   })
@@ -118,10 +124,9 @@ describe('Custom Workspace View', function () {
         workspaces,
         workspaceManager,
         keys,
-        overview,
-        keySymbols,
         settings,
-        MODE
+        MODE,
+        overlays
       )
       customWorkspaceView._onDestroy()
     })
@@ -149,10 +154,9 @@ describe('Custom Workspace View', function () {
         workspaces,
         workspaceManager,
         keys,
-        overview,
-        keySymbols,
         settings,
-        MODE
+        MODE,
+        overlays
       )
       workspaceManager.active_workspace_index = 0
       workspaces[0].monitorIndex = 0
@@ -211,9 +215,8 @@ describe('Custom Workspace View', function () {
       )
 
       it('hides tooltips', () => {
-        workspaces.forEach(workspace =>
-          expect(workspace.hideWindowsTooltips).toHaveBeenCalled()
-        )
+        expect(windowOverlay.hideTooltip).toHaveBeenCalled()
+        expect(otherWindowOverlay.hideTooltip).toHaveBeenCalled()
       })
 
       it('enables search', function () {
@@ -236,9 +239,8 @@ describe('Custom Workspace View', function () {
       })
 
       it('shows tooltips', () => {
-        workspaces.forEach(workspace =>
-          expect(workspace.showWindowsTooltips).toHaveBeenCalled()
-        )
+        expect(windowOverlay.showTooltip).toHaveBeenCalled()
+        expect(otherWindowOverlay.showTooltip).toHaveBeenCalled()
       })
 
       it('disable search', function () {
@@ -254,9 +256,8 @@ describe('Custom Workspace View', function () {
       )
 
       it('hides tooltips closing', () => {
-        workspaces.forEach(workspace =>
-          expect(workspace.hideWindowsTooltipsClosing).toHaveBeenCalled()
-        )
+        expect(windowOverlay.hideTooltipClosing).toHaveBeenCalled()
+        expect(otherWindowOverlay.hideTooltipClosing).toHaveBeenCalled()
       })
     })
 
@@ -268,9 +269,8 @@ describe('Custom Workspace View', function () {
       )
 
       it('show tooltips closing', () => {
-        workspaces.forEach(workspace =>
-          expect(workspace.showWindowsTooltipsClosing).toHaveBeenCalled()
-        )
+        expect(windowOverlay.showTooltipClosing).toHaveBeenCalled()
+        expect(otherWindowOverlay.showTooltipClosing).toHaveBeenCalled()
       })
     })
   })
