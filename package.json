@@ -19,5 +19,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathanielsimard/overview-navigation.git"
+  },
+  "dependencies": {
+    "glob": "^7.1.4"
   }
 }

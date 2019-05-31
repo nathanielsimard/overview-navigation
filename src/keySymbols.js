@@ -58,8 +58,7 @@ class KeysSymbols {
 }
 
 if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const Clutter = imports.gi.Clutter
+  const Clutter = require('gi/Clutter')
 
   /*eslint-disable */
   function initialize() {

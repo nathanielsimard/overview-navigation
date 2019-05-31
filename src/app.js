@@ -10,7 +10,6 @@ const CustomWindowManager = require('./customWindowManager')
 const WindowSelector = require('./windowSelector')
 const CustomWindowOverlay = require('./customWindowOverlay')
 const CustomWorkspaceView = require('./customWorkspaceView')
-const Workspace = require('ui.workspace')
 
 class Main {
   constructor () {

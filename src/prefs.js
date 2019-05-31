@@ -1,5 +1,4 @@
-/* global imports */
-const Gtk = imports.gi.Gtk
+const Gtk = require('gi/Gtk')
 
 class Widget {
   constructor (parent) {
@@ -160,11 +159,8 @@ function init() {
 /*eslint-disable */
 // Required by Gnome Shell
 function buildPrefsWidget() {
-  /* eslint-enable */
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const Utils = OverviewNavigation.imports.utils
-  const Settings = OverviewNavigation.imports.settings
+  const Utils = require('./utils')
+  const Settings = require('./settings')
 
   const settings = Settings.initialize()
   const logger = new Utils.PrefLogger('SettingsWidget', settings)

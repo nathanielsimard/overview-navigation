@@ -124,11 +124,9 @@ if (global.overviewNavigationTesting) {
   module.exports = { WindowSelector }
 } else {
   /*eslint-disable */
-  const Main = imports.ui.main
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const SelectedWindow = OverviewNavigation.imports.selectedWindow
-  const Mode = OverviewNavigation.imports.mode
+  const Main = require('ui/main')
+  const SelectedWindow = require('./selectedWindow')
+  const Mode = require('./mode')
 
   function create(keySymbols, logger) {
     /* eslint-enable */

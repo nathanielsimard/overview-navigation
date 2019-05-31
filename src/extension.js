@@ -1,9 +1,5 @@
-/* global imports */
-const ExtensionUtils = imports.misc.extensionUtils
-const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-
-const app = OverviewNavigation.imports.app
-const utils = OverviewNavigation.imports.utils
+const app = require('./app')
+const utils = require('./utils')
 
 let main, logger
 /*eslint-disable */

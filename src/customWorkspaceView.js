@@ -163,12 +163,9 @@ class CustomWorkspaceView {
 }
 
 if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const Clutter = imports.gi.Clutter
-  const WorkspacesView = imports.ui.workspacesView
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const Mode = OverviewNavigation.imports.mode
+  const Clutter = require('gi/Clutter')
+  const WorkspacesView = require('ui/workspacesView')
+  const Mode = require('./mode')
 
   /*eslint-disable */
   function initialize(

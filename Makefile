@@ -6,6 +6,8 @@ PACKAGE_NAME=package.zip
 build: clean
 	mkdir -p ${BUILD_DIR}
 	cp -r src/* ${BUILD_DIR}
+	npm install
+	node import-compatibility.js
 	cp metadata.json ${BUILD_DIR}
 	cp stylesheet.css ${BUILD_DIR}
 	glib-compile-schemas ${BUILD_DIR}/schemas/

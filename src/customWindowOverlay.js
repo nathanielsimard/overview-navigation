@@ -68,9 +68,8 @@ class CustomWindowOverlay {
 }
 
 if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const St = imports.gi.St
-  const Workspace = imports.ui.workspace
+  const St = require('gi/St')
+  const Workspace = require('ui/workspace')
 
   /*eslint-disable */
   function initialize(injector, windowSelector, logger, overlays) {

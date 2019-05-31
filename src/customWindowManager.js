@@ -16,9 +16,8 @@ class CustomWindowManager {
 }
 
 if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const WindowManager = imports.ui.windowManager
-  const Main = imports.ui.main
+  const WindowManager = require('ui/windowManager')
+  const Main = require('ui/main')
 
   /*eslint-disable */
   function initialize(injector, search, settings) {
