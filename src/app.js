@@ -1,19 +1,16 @@
-/* global imports */
-const ExtensionUtils = imports.misc.extensionUtils
-const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-
-const Injector = OverviewNavigation.imports.injector
-const Utils = OverviewNavigation.imports.utils
-const Search = OverviewNavigation.imports.search
-const Settings = OverviewNavigation.imports.settings
-const KeySymbols = OverviewNavigation.imports.keySymbols
-const CustomWindowManager = OverviewNavigation.imports.customWindowManager
-const WindowSelector = OverviewNavigation.imports.windowSelector
-const CustomWindowOverlay = OverviewNavigation.imports.customWindowOverlay
-const CustomWorkspaceView = OverviewNavigation.imports.customWorkspaceView
 const {
   CustomWindowOverlaySubject
-} = OverviewNavigation.imports.subject.customWindowOverlaySubject
+} = require('./subject/customWindowOverlaySubject')
+const Injector = require('./injector')
+const Utils = require('./utils')
+const Search = require('./search')
+const Settings = require('./settings')
+const KeySymbols = require('./keySymbols')
+const CustomWindowManager = require('./customWindowManager')
+const WindowSelector = require('./windowSelector')
+const CustomWindowOverlay = require('./customWindowOverlay')
+const CustomWorkspaceView = require('./customWorkspaceView')
+const Workspace = require('ui.workspace')
 
 class Main {
   constructor () {
