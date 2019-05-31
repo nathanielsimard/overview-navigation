@@ -32,6 +32,7 @@ class CustomWorkspaceView {
       window.showTooltip()
     }
   }
+  onWindowDeleted (window) {}
 
   animateToOverview () {
     this.logger.info('Animate to overview ...')
