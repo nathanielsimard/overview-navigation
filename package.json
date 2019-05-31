@@ -4,6 +4,9 @@
   "directories": {
     "test": "test"
   },
+  "dependencies": {
+    "glob": "^7.1.4"
+  },
   "devDependencies": {
     "eslint": "^5.15.3",
     "eslint-config-standard": "^12.0.0",
@@ -14,13 +17,14 @@
     "jasmine": "^3.3.1"
   },
   "scripts": {
-    "test": "jasmine test/**Test.js"
+    "test": "jasmine test/**Test.js",
+    "build": "script/build.sh",
+    "package": "script/build.sh && script/package.sh",
+    "local:install": "script/build.sh && script/package.sh && script/install.sh",
+    "local:uninstall": "script/uninstall.sh"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathanielsimard/overview-navigation.git"
-  },
-  "dependencies": {
-    "glob": "^7.1.4"
   }
 }
