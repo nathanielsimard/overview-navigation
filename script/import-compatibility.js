@@ -2,80 +2,71 @@ const glob = require('glob')
 const fs = require('fs')
 const ExtensionTag = 'Extension'
 
-const replaceExtensionFileImport = importLine => {
-  return importLine
-    .replace("require('./", `${ExtensionTag}.imports.`)
-    .replace(/\//g, '.')
-    .replace("')", '')
+const generateExtensionFileImports = imports => {
+  return imports
+    .filter(i => i.includes("require('."))
+    .map(i => {
+      return {
+        newImport: i
+          .replace("require('./", `${ExtensionTag}.imports.`)
+          .replace(/\//g, '.')
+          .replace("')", ''),
+        oldImport: i
+      }
+    })
 }
 
-const replaceGnomeFileImport = importLine => {
-  return importLine
-    .replace("require('", 'imports.')
-    .replace(/\//g, '.')
-    .replace("')", '')
+const generateGnomeFileImports = imports => {
+  return imports
+    .filter(i => !i.includes("require('."))
+    .filter(i => !i.includes(`require('${ExtensionTag}')`))
+    .map(i => {
+      return {
+        newImport: i
+          .replace("require('", 'imports.')
+          .replace(/\//g, '.')
+          .replace("')", ''),
+        oldImport: i
+      }
+    })
+}
+
+const generateExtensionTagImports = imports => {
+  return imports
+    .filter(i => i.includes(`require('${ExtensionTag}')`))
+    .map(i => {
+      return { newImport: '', oldImport: i }
+    })
+}
+
+const addExtensionTag = contents => {
+  return (
+    'const ExtensionUtils = imports.misc.extensionUtils\n' +
+    `const ${ExtensionTag} = ExtensionUtils.getCurrentExtension()\n` +
+    contents
+  )
 }
 
 const replaceImportsInFile = fileName => {
   console.log(`Replace imports in file ${fileName}`)
-  fs.readFile(fileName, 'utf8', (err, contents) => {
-    if (err) {
-      throw Error(err)
-    }
+  let contents = fs.readFileSync(fileName, 'utf8')
 
-    let newContents = contents
+  const imports = contents.split('\n').filter(line => line.includes('require'))
+  const extensionImports = generateExtensionFileImports(imports)
+  const gnomeImports = generateGnomeFileImports(imports)
+  const extensionsTagImports = generateExtensionTagImports(imports)
 
-    const imports = contents
-      .split('\n')
-      .filter(line => line.includes('require'))
+  extensionImports
+    .concat(gnomeImports)
+    .concat(extensionsTagImports)
+    .forEach(i => (contents = contents.replace(i.oldImport, i.newImport)))
 
-    const extensionImports = imports
-      .filter(i => i.includes("require('."))
-      .map(i => {
-        return {
-          newImport: replaceExtensionFileImport(i),
-          oldImport: i
-        }
-      })
+  if (extensionImports.length > 0 || extensionsTagImports.length > 0) {
+    contents = addExtensionTag(contents)
+  }
 
-    const gnomeImports = imports
-      .filter(i => !i.includes("require('."))
-      .filter(i => !i.includes(`require('${ExtensionTag}')`))
-      .map(i => {
-        return {
-          newImport: replaceGnomeFileImport(i),
-          oldImport: i
-        }
-      })
-
-    let extensionImported = false
-    imports
-      .filter(i => i.includes(`require('${ExtensionTag}')`))
-      .forEach(i => {
-        newContents = newContents.replace(i, '')
-        extensionImported = true
-      })
-
-    extensionImports.forEach(
-      i => (newContents = newContents.replace(i.oldImport, i.newImport))
-    )
-    gnomeImports.forEach(
-      i => (newContents = newContents.replace(i.oldImport, i.newImport))
-    )
-    if (extensionImports.length > 0 || extensionImported) {
-      newContents =
-        'const ExtensionUtils = imports.misc.extensionUtils\n' +
-        `const ${ExtensionTag} = ExtensionUtils.getCurrentExtension()\n` +
-        newContents
-    }
-
-    newContents
-      .split('\n')
-      .filter(line => line.includes('module.exports'))
-      .forEach(line => (newContents = newContents.replace(line, '')))
-
-    fs.writeFileSync(fileName, newContents)
-  })
+  contents = contents.replace(/module.exports = {[^}]+}/, '')
+  fs.writeFileSync(fileName, contents)
 }
 
 glob('build/**/*.js', {}, (err, files) => {

@@ -92,5 +92,9 @@ if (!global.overviewNavigationTesting) {
     })
   }
 } else {
-  module.exports = { CustomWindowOverlay, CLOSING_WINDOW_STYLE, FOCUS_WINDOW_STYLE }
+  module.exports = {
+    CustomWindowOverlay,
+    CLOSING_WINDOW_STYLE,
+    FOCUS_WINDOW_STYLE
+  }
 }
