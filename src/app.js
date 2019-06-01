@@ -3,13 +3,15 @@ const {
 } = require('./subject/customWindowOverlaySubject')
 const { Injector } = require('./injector')
 const { Logger } = require('./utils')
-const Search = require('./search')
 const Settings = require('./settings')
 const KeySymbols = require('./keySymbols')
-const WindowManagerBootstrap = require('./bootstrap/windowManager')
+const {
+  initializeWindowManager,
+  initializeWindowOverlay,
+  initializeWorkspaceView,
+  initializeSearch
+} = require('./bootstrap/customComponents')
 const WindowSelector = require('./windowSelector')
-const CustomWindowOverlay = require('./customWindowOverlay')
-const CustomWorkspaceView = require('./customWorkspaceView')
 
 class Main {
   constructor () {
@@ -24,23 +26,22 @@ class Main {
       new Logger('WindowSelector', settings)
     )
 
-    this.search = Search.initialize()
+    this.search = initializeSearch()
     this.injector = new Injector(new Logger('Injector', settings))
 
-    WindowManagerBootstrap.initialize(this.injector, this.search, settings)
-    CustomWindowOverlay.initialize(
+    initializeWindowManager(this.injector, this.search, settings)
+    initializeWindowOverlay(
       this.injector,
       windowSelector,
       new Logger('CustomWindowOverlay', settings),
       overlays
     )
 
-    CustomWorkspaceView.initialize(
+    initializeWorkspaceView(
       this.injector,
       new Logger('CustomWorkspaceView', settings),
       this.search,
       windowSelector,
-      keySymbols,
       settings,
       overlays
     )

@@ -1,12 +1,12 @@
 const app = require('./app')
-const utils = require('./utils')
+const { Logger } = require('./utils')
 
 let main, logger
 /*eslint-disable */
 function init() {
   /* eslint-enable */
   try {
-    logger = new utils.Logger('Entension')
+    logger = new Logger('Extension')
     main = new app.Main()
     logger.info('Initialized')
   } catch (err) {

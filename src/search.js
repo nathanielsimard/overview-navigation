@@ -21,13 +21,4 @@ class Search {
   }
 }
 
-if (!global.overviewNavigationTesting) {
-  const Utils = require('./utils')
-
-  /*eslint-disable */
-  function initialize() {
-    /* eslint-enable */
-    const Main = require('ui/main')
-    return new Search(Main.overview, new Utils.Logger('Search'))
-  }
-}
+module.exports = { Search }
