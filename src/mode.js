@@ -4,5 +4,5 @@ const MODE = {
 }
 
 if (global.overviewNavigationTesting) {
-  module.exports = MODE
+  module.exports = { MODE }
 }

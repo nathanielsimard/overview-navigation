@@ -1,11 +1,11 @@
 const glob = require('glob')
 const fs = require('fs')
+const ExtensionTag = 'Extension'
 
 const replaceExtensionFileImport = importLine => {
   return importLine
-    .replace('./', 'OverviewNavigation.imports.')
+    .replace("require('./", `${ExtensionTag}.imports.`)
     .replace(/\//g, '.')
-    .replace("require('", '')
     .replace("')", '')
 }
 
@@ -24,31 +24,56 @@ const replaceImportsInFile = fileName => {
     }
 
     let newContents = contents
-    let addExtensionImport = false
 
-    contents
+    const imports = contents
       .split('\n')
-      .filter(string => string.includes('require'))
-      .forEach(i => {
-        let final
-        if (i.includes("require('.")) {
-          addExtensionImport = true
-          final = replaceExtensionFileImport(i)
-        } else {
-          if (i.includes("require('Extension')")) {
-            addExtensionImport = true
-            final = 'const Extension = OverviewNavigation'
-          } else {
-            final = replaceGnomeFileImport(i)
-          }
+      .filter(line => line.includes('require'))
+
+    const extensionImports = imports
+      .filter(i => i.includes("require('."))
+      .map(i => {
+        return {
+          newImport: replaceExtensionFileImport(i),
+          oldImport: i
         }
-        newContents = newContents.replace(i, final)
       })
-    if (addExtensionImport) {
-      newContents = `const ExtensionUtils = imports.misc.extensionUtils
-const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-${newContents}`
+
+    const gnomeImports = imports
+      .filter(i => !i.includes("require('."))
+      .filter(i => !i.includes(`require('${ExtensionTag}')`))
+      .map(i => {
+        return {
+          newImport: replaceGnomeFileImport(i),
+          oldImport: i
+        }
+      })
+
+    let extensionImported = false
+    imports
+      .filter(i => i.includes(`require('${ExtensionTag}')`))
+      .forEach(i => {
+        newContents = newContents.replace(i, '')
+        extensionImported = true
+      })
+
+    extensionImports.forEach(
+      i => (newContents = newContents.replace(i.oldImport, i.newImport))
+    )
+    gnomeImports.forEach(
+      i => (newContents = newContents.replace(i.oldImport, i.newImport))
+    )
+    if (extensionImports.length > 0 || extensionImported) {
+      newContents =
+        'const ExtensionUtils = imports.misc.extensionUtils\n' +
+        `const ${ExtensionTag} = ExtensionUtils.getCurrentExtension()\n` +
+        newContents
     }
+
+    newContents
+      .split('\n')
+      .filter(line => line.includes('module.exports'))
+      .forEach(line => (newContents = newContents.replace(line, '')))
+
     fs.writeFileSync(fileName, newContents)
   })
 }
