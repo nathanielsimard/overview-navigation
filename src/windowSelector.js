@@ -1,10 +1,11 @@
+const { MODE } = require('./mode')
+
 class WindowSelector {
-  constructor (keySymbols, logger, overview, selectedWindowFactory, MODE) {
+  constructor (keySymbols, logger, overview, selectedWindowFactory) {
     this.keySymbols = keySymbols
     this.overview = overview
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
-    this.MODE = MODE
 
     const values = Object.values(this.keySymbols)
     this.numberOfDifferentKeys = [...new Set(values)].length
@@ -13,7 +14,7 @@ class WindowSelector {
   }
 
   select (keySymbol, mode) {
-    this.logger.debug(`Selecting a window ${keySymbol}`)
+    this.logger.debug(`Selecting a window ${keySymbol} with mode ${mode}`)
 
     let key = this.keySymbols[keySymbol]
 
@@ -40,7 +41,7 @@ class WindowSelector {
     }
 
     this.logger.debug(`Selecting window ${this.selections} ...`)
-    if (this.MODE.Closing === mode) {
+    if (MODE.Closing === mode) {
       selectedWindow.toBeClose()
     } else {
       selectedWindow.toBeFocus()
@@ -120,15 +121,10 @@ class WindowSelector {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { WindowSelector }
-} else {
+if (!global.overviewNavigationTesting) {
   /*eslint-disable */
-  const Main = imports.ui.main
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const SelectedWindow = OverviewNavigation.imports.selectedWindow
-  const Mode = OverviewNavigation.imports.mode
+  const Main = require('ui/main')
+  const SelectedWindow = require('./selectedWindow')
 
   function create(keySymbols, logger) {
     /* eslint-enable */
@@ -136,8 +132,9 @@ if (global.overviewNavigationTesting) {
       keySymbols,
       logger,
       Main.overview,
-      new SelectedWindow.Factory(),
-      Mode.MODE
+      new SelectedWindow.Factory()
     )
   }
 }
+
+module.exports = { WindowSelector }

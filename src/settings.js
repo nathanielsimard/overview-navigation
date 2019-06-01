@@ -1,3 +1,5 @@
+const Extension = require('Extension')
+
 const PROPERTIES = {
   SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY:
     'show-overview-when-change-workspace',
@@ -35,16 +37,13 @@ class Settings {
 }
 
 if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const Gio = imports.gi.Gio
+  const Gio = require('gi/Gio')
   const GioSS = Gio.SettingsSchemaSource
 
   class GioSettingsLoader {
     constructor () {
-      this.schema = OverviewNavigation.metadata['settings-schema']
-      this.schemaDir = OverviewNavigation.dir.get_child('schemas')
+      this.schema = Extension.metadata['settings-schema']
+      this.schemaDir = Extension.dir.get_child('schemas')
     }
 
     load () {
@@ -54,7 +53,7 @@ if (!global.overviewNavigationTesting) {
       if (!schemaObj) {
         throw new Error(
           `Schema ${this.schema} could not be found for extension ${
-            OverviewNavigation.metadata.uuid
+            Extension.metadata.uuid
           }`
         )
       }
@@ -81,6 +80,6 @@ if (!global.overviewNavigationTesting) {
     const gioSettingsLoader = new GioSettingsLoader()
     return new Settings(gioSettingsLoader.load(), Gio.SettingsBindFlags.DEFAULT)
   }
-} else {
-  module.exports = { Settings }
 }
+
+module.exports = { Settings }

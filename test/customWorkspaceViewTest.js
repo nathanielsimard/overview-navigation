@@ -13,7 +13,7 @@ const workspaceMock = require('./helpers/workspaceMock.js')
 const selectedWindowMock = require('./helpers/selectedWindowMock')
 const windowOverlayMock = require('./helpers/windowOverlayMock')
 
-const MODE = require('../src/mode')
+const { MODE } = require('../src/mode')
 const log = require('../src/utils')
 const cwv = require('../src/customWorkspaceView')
 const {
@@ -67,7 +67,6 @@ describe('Custom Workspace View', function () {
       workspaceManager,
       keys,
       settings,
-      MODE,
       overlays
     )
   })
@@ -125,7 +124,6 @@ describe('Custom Workspace View', function () {
         workspaceManager,
         keys,
         settings,
-        MODE,
         overlays
       )
       customWorkspaceView._onDestroy()
@@ -155,7 +153,6 @@ describe('Custom Workspace View', function () {
         workspaceManager,
         keys,
         settings,
-        MODE,
         overlays
       )
       workspaceManager.active_workspace_index = 0

@@ -22,6 +22,7 @@ class CustomWindowOverlay {
     this.metaWindow = metaWindow
     this.overlays = overlays
 
+    label.set_style_class_name(FOCUS_WINDOW_STYLE)
     parentActor.add_actor(label)
     windowSelector.registerWindow(metaWindow, function (name) {
       label.text = name
@@ -67,35 +68,8 @@ class CustomWindowOverlay {
   }
 }
 
-if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const St = imports.gi.St
-  const Workspace = imports.ui.workspace
-
-  /*eslint-disable */
-  function initialize(injector, windowSelector, logger, overlays) {
-    /* eslint-enable */
-    injector.inject(CustomWindowOverlay, Workspace.WindowOverlay, parent => {
-      const label = new St.Label({})
-      label.set_style_class_name(FOCUS_WINDOW_STYLE)
-      const customWindow = new CustomWindowOverlay(
-        logger,
-        windowSelector,
-        label,
-        parent._parentActor,
-        parent._windowClone,
-        parent._windowClone.metaWindow,
-        3,
-        overlays
-      )
-      overlays.addWindow(customWindow)
-      return customWindow
-    })
-  }
-} else {
-  module.exports = {
-    CustomWindowOverlay,
-    CLOSING_WINDOW_STYLE,
-    FOCUS_WINDOW_STYLE
-  }
+module.exports = {
+  CustomWindowOverlay,
+  CLOSING_WINDOW_STYLE,
+  FOCUS_WINDOW_STYLE
 }

@@ -21,16 +21,4 @@ class Search {
   }
 }
 
-if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const Utils = OverviewNavigation.imports.utils
-
-  /*eslint-disable */
-  function initialize() {
-    /* eslint-enable */
-    const Main = imports.ui.main
-    return new Search(Main.overview, new Utils.Logger('Search'))
-  }
-}
+module.exports = { Search }

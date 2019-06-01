@@ -1,16 +1,12 @@
-/* global imports */
-const ExtensionUtils = imports.misc.extensionUtils
-const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-
-const app = OverviewNavigation.imports.app
-const utils = OverviewNavigation.imports.utils
+const app = require('./app')
+const { Logger } = require('./utils')
 
 let main, logger
 /*eslint-disable */
 function init() {
   /* eslint-enable */
   try {
-    logger = new utils.Logger('Entension')
+    logger = new Logger('Extension')
     main = new app.Main()
     logger.info('Initialized')
   } catch (err) {

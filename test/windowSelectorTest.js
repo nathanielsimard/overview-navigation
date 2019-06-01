@@ -7,7 +7,7 @@ require('./helpers/core')
 const { WindowSelector } = require('../src/windowSelector')
 const { TestLogger } = require('../src/utils')
 const { Factory } = require('../src/selectedWindow')
-const MODE = require('../src/mode')
+const { MODE } = require('../src/mode')
 const overviewMock = require('./helpers/overviewMock')
 
 describe('WindowSelector', () => {
@@ -34,8 +34,7 @@ describe('WindowSelector', () => {
       keySymbols,
       logger,
       overview,
-      new Factory(),
-      MODE
+      new Factory()
     )
   })
 

@@ -1,3 +1,5 @@
+const { MODE } = require('./mode')
+
 class CustomWorkspaceView {
   constructor (
     logger,
@@ -8,7 +10,6 @@ class CustomWorkspaceView {
     workspaceManager,
     keys,
     settings,
-    MODE,
     overlays
   ) {
     this.logger = logger
@@ -19,8 +20,7 @@ class CustomWorkspaceView {
     this.workspaceManager = workspaceManager
     this.keys = keys
     this.settings = settings
-    this.MODE = MODE
-    this.current_mode = this.MODE.Focussing
+    this.current_mode = MODE.Focussing
     this.overlays = overlays
     this.overlays.attach(this)
   }
@@ -99,7 +99,7 @@ class CustomWorkspaceView {
       window.hideTooltipClosing()
     })
 
-    this.current_mode = this.MODE.Focussing
+    this.current_mode = MODE.Focussing
     return true
   }
 
@@ -110,7 +110,7 @@ class CustomWorkspaceView {
       window.showTooltipClosing()
     })
 
-    this.current_mode = this.MODE.Closing
+    this.current_mode = MODE.Closing
     return true
   }
 
@@ -162,49 +162,4 @@ class CustomWorkspaceView {
   }
 }
 
-if (!global.overviewNavigationTesting) {
-  /* global imports */
-  const Clutter = imports.gi.Clutter
-  const WorkspacesView = imports.ui.workspacesView
-  const ExtensionUtils = imports.misc.extensionUtils
-  const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-  const Mode = OverviewNavigation.imports.mode
-
-  /*eslint-disable */
-  function initialize(
-    injector,
-    logger,
-    search,
-    windowSelector,
-    keySymbols,
-    settings,
-    overlays
-  ) {
-    /* eslint-enable */
-    injector.inject(
-      CustomWorkspaceView,
-      WorkspacesView.WorkspacesView,
-      parent => {
-        var workspaceManager = global.workspace_manager
-        if (!workspaceManager) {
-          workspaceManager = global.screen
-        }
-
-        return new CustomWorkspaceView(
-          logger,
-          search,
-          windowSelector,
-          global.stage,
-          parent._workspaces,
-          workspaceManager,
-          Clutter,
-          settings,
-          Mode.MODE,
-          overlays
-        )
-      }
-    )
-  }
-} else {
-  module.exports = { CustomWorkspaceView }
-}
+module.exports = { CustomWorkspaceView }

@@ -1,52 +1,47 @@
-/* global imports */
-const ExtensionUtils = imports.misc.extensionUtils
-const OverviewNavigation = ExtensionUtils.getCurrentExtension()
-
-const Injector = OverviewNavigation.imports.injector
-const Utils = OverviewNavigation.imports.utils
-const Search = OverviewNavigation.imports.search
-const Settings = OverviewNavigation.imports.settings
-const KeySymbols = OverviewNavigation.imports.keySymbols
-const CustomWindowManager = OverviewNavigation.imports.customWindowManager
-const WindowSelector = OverviewNavigation.imports.windowSelector
-const CustomWindowOverlay = OverviewNavigation.imports.customWindowOverlay
-const CustomWorkspaceView = OverviewNavigation.imports.customWorkspaceView
 const {
   CustomWindowOverlaySubject
-} = OverviewNavigation.imports.subject.customWindowOverlaySubject
+} = require('./subject/customWindowOverlaySubject')
+const { Injector } = require('./injector')
+const { Logger } = require('./utils')
+const Settings = require('./settings')
+const KeySymbols = require('./keySymbols')
+const {
+  initializeWindowManager,
+  initializeWindowOverlay,
+  initializeWorkspaceView,
+  initializeSearch
+} = require('./bootstrap/customComponents')
+const WindowSelector = require('./windowSelector')
 
 class Main {
   constructor () {
     const keySymbols = KeySymbols.initialize()
     const settings = Settings.initialize()
     const overlays = new CustomWindowOverlaySubject(
-      new Utils.Logger('CustomWindowOverlays', settings)
+      new Logger('CustomWindowOverlays', settings)
     )
 
     const windowSelector = WindowSelector.create(
       keySymbols.keySymbols,
-      new Utils.Logger('WindowSelector', settings)
+      new Logger('WindowSelector', settings)
     )
 
-    this.search = Search.initialize()
-    this.injector = new Injector.Injector(
-      new Utils.Logger('Injector', settings)
-    )
+    this.search = initializeSearch()
+    this.injector = new Injector(new Logger('Injector', settings))
 
-    CustomWindowManager.initialize(this.injector, this.search, settings)
-    CustomWindowOverlay.initialize(
+    initializeWindowManager(this.injector, this.search, settings)
+    initializeWindowOverlay(
       this.injector,
       windowSelector,
-      new Utils.Logger('CustomWindowOverlay', settings),
+      new Logger('CustomWindowOverlay', settings),
       overlays
     )
 
-    CustomWorkspaceView.initialize(
+    initializeWorkspaceView(
       this.injector,
-      new Utils.Logger('CustomWorkspaceView', settings),
+      new Logger('CustomWorkspaceView', settings),
       this.search,
       windowSelector,
-      keySymbols,
       settings,
       overlays
     )
@@ -62,6 +57,4 @@ class Main {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.export = { Main }
-}
+module.exports = { Main }

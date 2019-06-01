@@ -28,6 +28,4 @@ class CustomWindowOverlaySubject {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { CustomWindowOverlaySubject }
-}
+module.exports = { CustomWindowOverlaySubject }
