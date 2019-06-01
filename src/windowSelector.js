@@ -121,9 +121,7 @@ class WindowSelector {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { WindowSelector }
-} else {
+if (!global.overviewNavigationTesting) {
   /*eslint-disable */
   const Main = require('ui/main')
   const SelectedWindow = require('./selectedWindow')
@@ -138,3 +136,5 @@ if (global.overviewNavigationTesting) {
     )
   }
 }
+
+module.exports = { WindowSelector }

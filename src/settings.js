@@ -80,6 +80,6 @@ if (!global.overviewNavigationTesting) {
     const gioSettingsLoader = new GioSettingsLoader()
     return new Settings(gioSettingsLoader.load(), Gio.SettingsBindFlags.DEFAULT)
   }
-} else {
-  module.exports = { Settings }
 }
+
+module.exports = { Settings }

@@ -3,6 +3,4 @@ const MODE = {
   Focussing: 'Focussing'
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { MODE }
-}
+module.exports = { MODE }

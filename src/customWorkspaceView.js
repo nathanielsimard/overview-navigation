@@ -202,6 +202,6 @@ if (!global.overviewNavigationTesting) {
       }
     )
   }
-} else {
-  module.exports = { CustomWorkspaceView }
 }
+
+module.exports = { CustomWorkspaceView }

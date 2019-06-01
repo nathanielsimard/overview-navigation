@@ -35,6 +35,4 @@ class Factory {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { Factory, SelectedWindow }
-}
+module.exports = { Factory, SelectedWindow }

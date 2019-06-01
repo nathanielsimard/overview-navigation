@@ -79,6 +79,4 @@ class Injector {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { Injector }
-}
+module.exports = { Injector }

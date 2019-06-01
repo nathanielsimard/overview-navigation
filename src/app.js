@@ -56,6 +56,4 @@ class Main {
   }
 }
 
-if (global.overviewNavigationTesting) {
-  module.exports = { Main }
-}
+module.exports = { Main }
