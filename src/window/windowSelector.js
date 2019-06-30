@@ -1,4 +1,5 @@
 const { MODE } = require('../mode')
+const { TagGenerator } = require('../tagGenerator')
 
 class WindowSelector {
   constructor (keySymbols, logger, overview, selectedWindowFactory) {
@@ -7,9 +8,7 @@ class WindowSelector {
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
 
-    const values = Object.values(this.keySymbols)
-    this.numberOfDifferentKeys = [...new Set(values)].length
-    this.keys = Object.keys(keySymbols)
+    this.tagGenerator = new TagGenerator(keySymbols, logger)
     this.reset()
   }
 
@@ -26,7 +25,9 @@ class WindowSelector {
     this.selections = this.selections + key
 
     this.logger.debug(`Selection is  ${this.selections}`)
-    if (this.selections.length < this._calculateTagLength()) {
+    if (
+      this.selections.length < this.tagGenerator.calculateTagLength(this.index)
+    ) {
       return
     }
 
@@ -54,11 +55,11 @@ class WindowSelector {
   registerWindow (window, callback) {
     this.logger.debug('Registering a window ...')
 
-    if (this.index === this.numberOfDifferentKeys) {
+    if (this.tagGenerator.isMaximumIndex(this.index)) {
       this._updateSelectedWindowsToNewTagsSize()
     }
 
-    const tag = this._generateTag(this.index++)
+    const tag = this.tagGenerator.generate(this.index++)
     const selectedWindow = this.selectedWindowFactory.create(
       window,
       callback,
@@ -80,38 +81,13 @@ class WindowSelector {
     this.selections = ''
   }
 
-  _generateTag (index) {
-    const div = Math.floor(index / this.numberOfDifferentKeys)
-    const mod = index % this.numberOfDifferentKeys
-
-    if (div === 0) {
-      const tag = `${this.keySymbols[this.keys[index]]}`
-
-      this.logger.debug(`Generating tag : ${tag}`)
-      return tag
-    } else {
-      this.logger.debug(`div: ${div - 1} mod: ${mod}`)
-      return `${this.keySymbols[this.keys[div - 1]]}${
-        this.keySymbols[this.keys[mod]]
-      }`
-    }
-  }
-
-  _calculateTagLength () {
-    if (Math.floor(this.index / (this.numberOfDifferentKeys + 1)) === 0) {
-      return 1
-    } else {
-      return 2
-    }
-  }
-
   _updateSelectedWindowsToNewTagsSize () {
     const newSelectedWindows = {}
     const tagKeys = Object.keys(this.selectedWindows)
 
     for (let i = 0; i < tagKeys.length; i++) {
       const selectedWindow = this.selectedWindows[tagKeys[i]]
-      const newTag = this._generateTag(this.index++)
+      const newTag = this.tagGenerator.generate(this.index++)
 
       newSelectedWindows[newTag] = selectedWindow
       selectedWindow.updateTag(newTag)

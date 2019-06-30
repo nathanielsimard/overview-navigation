@@ -3,12 +3,12 @@
 /* global it */
 /* global expect */
 
-require('./helpers/core')
-const { WindowSelector } = require('../src/windowSelector')
-const { TestLogger } = require('../src/utils')
+require('../helpers/core')
+const { WindowSelector } = require('../src/window/windowSelector')
+const { TestLogger } = require('../../src/utils')
 const { Factory } = require('../src/selectedWindow')
-const { MODE } = require('../src/mode')
-const overviewMock = require('./helpers/overviewMock')
+const { MODE } = require('../../src/mode')
+const overviewMock = require('../helpers/overviewMock')
 
 describe('WindowSelector', () => {
   const UNKNOWN_KEY_SYMBOL = 'x076'

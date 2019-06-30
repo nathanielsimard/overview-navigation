@@ -2,15 +2,15 @@
 /* global beforeEach */
 /* global it */
 /* global expect */
-require('./helpers/core')
+require('../helpers/core')
 
-const loggerMock = require('./helpers/loggerMock')
-const labelMock = require('./helpers/labelMock')
-const windowSelectorMock = require('./helpers/windowSelectorMock')
-const actorMock = require('./helpers/actorMock')
-const OverlaysMock = require('./helpers/subject/customWindowOverlaySubjectMock')
+const loggerMock = require('../helpers/loggerMock')
+const labelMock = require('../helpers/labelMock')
+const windowSelectorMock = require('../helpers/windowSelectorMock')
+const actorMock = require('../helpers/actorMock')
+const OverlaysMock = require('../helpers/subject/customWindowOverlaySubjectMock')
 
-const CustomWindowOverlay = require('../src/customWindowOverlay')
+const CustomWindowOverlay = require('../src/window/customWindowOverlay')
 
 describe('Custom Window Overlay', () => {
   const PADDING = 3
