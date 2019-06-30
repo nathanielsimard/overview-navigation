@@ -11,7 +11,7 @@ const {
   initializeWorkspaceView,
   initializeSearch
 } = require('./bootstrap/customComponents')
-const WindowSelector = require('./windowSelector')
+const WindowSelector = require('./window/windowSelector')
 
 class Main {
   constructor () {

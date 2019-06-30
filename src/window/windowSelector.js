@@ -1,4 +1,4 @@
-const { MODE } = require('./mode')
+const { MODE } = require('../mode')
 
 class WindowSelector {
   constructor (keySymbols, logger, overview, selectedWindowFactory) {
