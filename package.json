@@ -17,7 +17,7 @@
     "jasmine": "^3.3.1"
   },
   "scripts": {
-    "test": "jasmine test/**Test.js",
+    "test": "jasmine ",
     "build": "script/build.sh",
     "package": "script/build.sh && script/package.sh",
     "local:install": "script/build.sh && script/package.sh && script/install.sh",

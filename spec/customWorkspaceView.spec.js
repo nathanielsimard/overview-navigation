@@ -14,7 +14,7 @@ const selectedWindowMock = require('./helpers/selectedWindowMock')
 const windowOverlayMock = require('./helpers/windowOverlayMock')
 
 const { MODE } = require('../src/mode')
-const log = require('../src/utils')
+const LoggerMock = require('./helpers/loggerMock')
 const cwv = require('../src/customWorkspaceView')
 const {
   CustomWindowOverlaySubject
@@ -45,7 +45,7 @@ describe('Custom Workspace View', function () {
     overlays.addWindow(windowOverlay)
     overlays.addWindow(otherWindowOverlay)
 
-    logger = new log.TestLogger('CustomWorkspaceViewTest', false)
+    logger = LoggerMock.create()
     search = searchMock.create()
     windowSelector = windowSelectorMock.create()
     stage = stageMock.create()

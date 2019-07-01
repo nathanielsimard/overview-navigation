@@ -2,12 +2,12 @@
 /* global beforeEach */
 /* global it */
 /* global expect */
-require('./helpers/core')
+require('../helpers/core')
 
-const searchMock = require('./helpers/searchMock')
-const overviewMock = require('./helpers/overviewMock')
-const customWindowManager = require('../src/customWindowManager')
-const settingsStub = require('./helpers/settingsStub.js')
+const searchMock = require('../helpers/searchMock')
+const overviewMock = require('../helpers/overviewMock')
+const customWindowManager = require('../../src/window/customWindowManager')
+const settingsStub = require('../helpers/settingsStub.js')
 
 describe('Custom Window Manager', function () {
   let overview

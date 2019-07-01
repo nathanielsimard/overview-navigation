@@ -3,12 +3,14 @@
 /* global it */
 /* global expect */
 
-require('./helpers/core')
-const { WindowSelector } = require('../src/windowSelector')
-const { TestLogger } = require('../src/utils')
-const { Factory } = require('../src/selectedWindow')
-const { MODE } = require('../src/mode')
-const overviewMock = require('./helpers/overviewMock')
+require('../helpers/core')
+const { WindowSelector } = require('../../src/window/windowSelector')
+const { TagGenerator } = require('../../src/tagGenerator')
+
+const LoggerMock = require('../helpers/loggerMock')
+const { Factory } = require('../../src/window/selectedWindow')
+const { MODE } = require('../../src/mode')
+const overviewMock = require('../helpers/overviewMock')
 
 describe('WindowSelector', () => {
   const UNKNOWN_KEY_SYMBOL = 'x076'
@@ -16,6 +18,7 @@ describe('WindowSelector', () => {
   const OTHER_KNOWN_KEY_SYMBOL = 'x057'
   const KEY = 'a'
   const OTHER_KEY = 'b'
+  const KEYS = [KEY, OTHER_KEY]
 
   let keySymbols
   let logger
@@ -29,9 +32,10 @@ describe('WindowSelector', () => {
     keySymbols = {}
     keySymbols[KNOWN_KEY_SYMBOL] = KEY
     keySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
-    logger = new TestLogger('Window Selector Test', true)
+    logger = LoggerMock.create()
     windowSelector = new WindowSelector(
       keySymbols,
+      new TagGenerator(keySymbols),
       logger,
       overview,
       new Factory()
@@ -48,8 +52,8 @@ describe('WindowSelector', () => {
         windowSelector.registerWindow(window, tag => (windowFocusedTag = tag))
       })
 
-      it('tag should be first key symbol', () => {
-        expect(windowFocusedTag).toBe(KEY)
+      it('should callback with a generated tag', () => {
+        expect(KEYS.includes(windowFocusedTag)).toBeTruthy()
       })
 
       describe('With Closing Mode', () => {
@@ -111,9 +115,9 @@ describe('WindowSelector', () => {
       })
 
       it('Tags should have two key symbols', () => {
-        expect(firstTag).toBe(KEY + KEY)
-        expect(secondTag).toBe(KEY + OTHER_KEY)
-        expect(thirdTag).toBe(OTHER_KEY + KEY)
+        expect(firstTag.length).toBe(2)
+        expect(secondTag.length).toBe(2)
+        expect(thirdTag.length).toBe(2)
       })
 
       describe('With a known key symbol', () => {
@@ -146,9 +150,9 @@ describe('WindowSelector', () => {
         windowSelector.registerWindow({}, tag => (secondTag = tag))
       })
 
-      it('Tag should have on key symbol', () => {
-        expect(firstTag).toBe(KEY)
-        expect(secondTag).toBe(OTHER_KEY)
+      it('Tag should have one key symbol', () => {
+        expect(firstTag.length).toBe(1)
+        expect(secondTag.length).toBe(1)
       })
 
       describe('With a known key symbol', () => {
