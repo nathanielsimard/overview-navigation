@@ -33,13 +33,7 @@ describe('WindowSelector', () => {
     keySymbols[KNOWN_KEY_SYMBOL] = KEY
     keySymbols[OTHER_KNOWN_KEY_SYMBOL] = OTHER_KEY
     logger = LoggerMock.create()
-    windowSelector = new WindowSelector(
-      keySymbols,
-      new TagGenerator(keySymbols),
-      logger,
-      overview,
-      new Factory()
-    )
+    windowSelector = new WindowSelector(keySymbols, new TagGenerator(keySymbols), logger, overview, new Factory())
   })
 
   describe('when select', () => {

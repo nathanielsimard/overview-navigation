@@ -72,9 +72,7 @@ class Injector {
 
   _findMethods (object) {
     return Object.getOwnPropertyNames(object.prototype)
-      .filter(propertie => {
-        return typeof object.prototype[propertie] === 'function'
-      })
+      .filter(property => typeof object.prototype[property] === 'function')
       .filter(methodName => methodName !== 'constructor')
   }
 }

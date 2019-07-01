@@ -1,10 +1,8 @@
 const Extension = require('Extension')
 
 const PROPERTIES = {
-  SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY:
-    'show-overview-when-change-workspace',
-  SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW:
-    'show-window-selector-when-show-overview',
+  SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY: 'show-overview-when-change-workspace',
+  SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW: 'show-window-selector-when-show-overview',
   DEBUG: 'debug'
 }
 
@@ -16,15 +14,11 @@ class Settings {
   }
 
   isShowOverviewOnSwitchWorkspace () {
-    return this.gioSettings.get_boolean(
-      PROPERTIES.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY
-    )
+    return this.gioSettings.get_boolean(PROPERTIES.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
   }
 
   isShowWindowSelectorWhenShowOverview () {
-    return this.gioSettings.get_boolean(
-      PROPERTIES.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW
-    )
+    return this.gioSettings.get_boolean(PROPERTIES.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
   }
 
   isDebug () {
@@ -51,11 +45,7 @@ if (!global.overviewNavigationTesting) {
       const schemaObj = schemaSource.lookup(this.schema, true)
 
       if (!schemaObj) {
-        throw new Error(
-          `Schema ${this.schema} could not be found for extension ${
-            Extension.metadata.uuid
-          }`
-        )
+        throw new Error(`Schema ${this.schema} could not be found for extension ${Extension.metadata.uuid}`)
       }
 
       return new Gio.Settings({ settings_schema: schemaObj })
@@ -66,11 +56,7 @@ if (!global.overviewNavigationTesting) {
         return GioSS.get_default()
       }
 
-      return GioSS.new_from_directory(
-        this.schemaDir.get_path(),
-        GioSS.get_default(),
-        false
-      )
+      return GioSS.new_from_directory(this.schemaDir.get_path(), GioSS.get_default(), false)
     }
   }
 

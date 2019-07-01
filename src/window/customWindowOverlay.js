@@ -1,18 +1,8 @@
-const CLOSING_WINDOW_STYLE =
-  'extension-overview-navigation-window-tooltip-closing'
+const CLOSING_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip-closing'
 const FOCUS_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip'
 
 class CustomWindowOverlay {
-  constructor (
-    logger,
-    windowSelector,
-    label,
-    parentActor,
-    windowClone,
-    metaWindow,
-    padding,
-    overlays
-  ) {
+  constructor (logger, windowSelector, label, parentActor, windowClone, metaWindow, padding, overlays) {
     this.logger = logger
     this.logger.debug('Initializing ...')
     this.windowSelector = windowSelector
@@ -32,10 +22,7 @@ class CustomWindowOverlay {
   relayout (animate) {
     let [x, y] = this.windowClone.slot
     this.logger.debug('Calculating layout ...')
-    this.label.set_position(
-      Math.floor(x) + this.padding,
-      Math.floor(y) + this.padding
-    )
+    this.label.set_position(Math.floor(x) + this.padding, Math.floor(y) + this.padding)
   }
 
   _onDestroy () {

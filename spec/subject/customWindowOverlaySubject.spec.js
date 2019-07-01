@@ -5,7 +5,7 @@
 require('../helpers/core')
 
 const ListenerMock = require('../helpers/listenerMock')
-const { CustomWindowOverlaySubject } = require('../src/subject/customWindowOverlaySubject')
+const { CustomWindowOverlaySubject } = require('../../src/subject/customWindowOverlaySubject')
 
 describe('Custom Window Overlay Listener', () => {
   let listener

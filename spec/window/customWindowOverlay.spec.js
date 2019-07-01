@@ -99,9 +99,7 @@ describe('Custom Window Overlay', () => {
     })
 
     it('Should set label style class name', () => {
-      expect(label.set_style_class_name).toHaveBeenCalledWith(
-        CustomWindowOverlay.CLOSING_WINDOW_STYLE
-      )
+      expect(label.set_style_class_name).toHaveBeenCalledWith(CustomWindowOverlay.CLOSING_WINDOW_STYLE)
     })
 
     it('Should upper case label text', () => {
@@ -117,9 +115,7 @@ describe('Custom Window Overlay', () => {
     })
 
     it('Should set label style class name', () => {
-      expect(label.set_style_class_name).toHaveBeenCalledWith(
-        CustomWindowOverlay.FOCUS_WINDOW_STYLE
-      )
+      expect(label.set_style_class_name).toHaveBeenCalledWith(CustomWindowOverlay.FOCUS_WINDOW_STYLE)
     })
 
     it('Should lower case label text', () => {

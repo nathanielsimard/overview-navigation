@@ -1,13 +1,7 @@
 const { MODE } = require('../mode')
 
 class WindowSelector {
-  constructor (
-    keySymbols,
-    tagGenerator,
-    logger,
-    overview,
-    selectedWindowFactory
-  ) {
+  constructor (keySymbols, tagGenerator, logger, overview, selectedWindowFactory) {
     this.keySymbols = keySymbols
     this.tagGenerator = tagGenerator
     this.overview = overview
@@ -30,9 +24,7 @@ class WindowSelector {
     this.selections = this.selections + key
 
     this.logger.debug(`Selection is  ${this.selections}`)
-    if (
-      this.selections.length < this.tagGenerator.calculateTagLength(this.index)
-    ) {
+    if (this.selections.length < this.tagGenerator.calculateTagLength(this.index)) {
       return
     }
 
@@ -65,11 +57,7 @@ class WindowSelector {
     }
 
     const tag = this.tagGenerator.generate(this.index++)
-    const selectedWindow = this.selectedWindowFactory.create(
-      window,
-      callback,
-      this.overview
-    )
+    const selectedWindow = this.selectedWindowFactory.create(window, callback, this.overview)
     this.selectedWindows[tag] = selectedWindow
     selectedWindow.updateTag(tag)
   }
@@ -109,13 +97,7 @@ if (!global.overviewNavigationTesting) {
 
   function create(keySymbols, tagGenerator, logger) {
     /* eslint-enable */
-    return new WindowSelector(
-      keySymbols,
-      tagGenerator,
-      logger,
-      Main.overview,
-      new SelectedWindow.Factory()
-    )
+    return new WindowSelector(keySymbols, tagGenerator, logger, Main.overview, new SelectedWindow.Factory())
   }
 }
 

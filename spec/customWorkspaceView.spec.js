@@ -16,9 +16,7 @@ const windowOverlayMock = require('./helpers/windowOverlayMock')
 const { MODE } = require('../src/mode')
 const LoggerMock = require('./helpers/loggerMock')
 const cwv = require('../src/customWorkspaceView')
-const {
-  CustomWindowOverlaySubject
-} = require('../src/subject/customWindowOverlaySubject')
+const { CustomWindowOverlaySubject } = require('../src/subject/customWindowOverlaySubject')
 
 const FOCUS_KEY = 'focusKey'
 const CLOSING_KEY = 'closingKey'

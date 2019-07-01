@@ -16,12 +16,7 @@ const initializeWindowManager = (injector, search, settings) => {
   })
 }
 
-const initializeWindowOverlay = (
-  injector,
-  windowSelector,
-  logger,
-  overlays
-) => {
+const initializeWindowOverlay = (injector, windowSelector, logger, overlays) => {
   injector.inject(CustomWindowOverlay, Workspace.WindowOverlay, parent => {
     const customWindow = new CustomWindowOverlay(
       logger,
@@ -38,36 +33,25 @@ const initializeWindowOverlay = (
   })
 }
 
-function initializeWorkspaceView (
-  injector,
-  logger,
-  search,
-  windowSelector,
-  settings,
-  overlays
-) {
-  injector.inject(
-    CustomWorkspaceView,
-    WorkspacesView.WorkspacesView,
-    parent => {
-      var workspaceManager = global.workspace_manager
-      if (!workspaceManager) {
-        workspaceManager = global.screen
-      }
-
-      return new CustomWorkspaceView(
-        logger,
-        search,
-        windowSelector,
-        global.stage,
-        parent._workspaces,
-        workspaceManager,
-        Clutter,
-        settings,
-        overlays
-      )
+function initializeWorkspaceView (injector, logger, search, windowSelector, settings, overlays) {
+  injector.inject(CustomWorkspaceView, WorkspacesView.WorkspacesView, parent => {
+    var workspaceManager = global.workspace_manager
+    if (!workspaceManager) {
+      workspaceManager = global.screen
     }
-  )
+
+    return new CustomWorkspaceView(
+      logger,
+      search,
+      windowSelector,
+      global.stage,
+      parent._workspaces,
+      workspaceManager,
+      Clutter,
+      settings,
+      overlays
+    )
+  })
 }
 
 function initializeSearch () {

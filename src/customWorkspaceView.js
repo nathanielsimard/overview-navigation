@@ -1,17 +1,7 @@
 const { MODE } = require('./mode')
 
 class CustomWorkspaceView {
-  constructor (
-    logger,
-    search,
-    windowSelector,
-    stage,
-    workspaces,
-    workspaceManager,
-    keys,
-    settings,
-    overlays
-  ) {
+  constructor (logger, search, windowSelector, stage, workspaces, workspaceManager, keys, settings, overlays) {
     this.logger = logger
     this.search = search
     this.windowSelector = windowSelector
@@ -38,17 +28,11 @@ class CustomWorkspaceView {
     this.logger.info('Animate to overview ...')
 
     if (!this.keyPressEventId) {
-      this.keyPressEventId = this.stage.connect(
-        'key-press-event',
-        this.onKeyPress.bind(this)
-      )
+      this.keyPressEventId = this.stage.connect('key-press-event', this.onKeyPress.bind(this))
     }
 
     if (!this.keyReleaseEventId) {
-      this.keyReleaseEventId = this.stage.connect(
-        'key-release-event',
-        this.onKeyRelease.bind(this)
-      )
+      this.keyReleaseEventId = this.stage.connect('key-release-event', this.onKeyRelease.bind(this))
     }
 
     if (this.settings.isShowWindowSelectorWhenShowOverview()) {
@@ -119,9 +103,7 @@ class CustomWorkspaceView {
   }
 
   isTooltipsClosingKeySymbol (keySymbol) {
-    return (
-      keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
-    )
+    return keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
   }
 
   isOnFirstMonitor () {
@@ -152,10 +134,7 @@ class CustomWorkspaceView {
     this.searching = true
   }
   _selectWindow (keySymbol) {
-    const selectedWindow = this.windowSelector.select(
-      keySymbol,
-      this.current_mode
-    )
+    const selectedWindow = this.windowSelector.select(keySymbol, this.current_mode)
     if (selectedWindow) {
       selectedWindow.activate()
     }

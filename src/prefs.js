@@ -24,22 +24,15 @@ class SettingsWidget extends Widget {
   }
 
   initialize () {
-    const overviewToggleButton = new ToggleButtonWidget(
-      'Show Overview When Change Workspace',
-      this.settings
-    )
+    const overviewToggleButton = new ToggleButtonWidget('Show Overview When Change Workspace', this.settings)
     const showWindowSelectorToggleButton = new ToggleButtonWidget(
       'Show Window Selector when show Overview',
       this.settings
     )
     const debugToggleButton = new ToggleButtonWidget('Debug', this.settings)
 
-    overviewToggleButton.bind(
-      this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY
-    )
-    showWindowSelectorToggleButton.bind(
-      this.properties.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW
-    )
+    overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
+    showWindowSelectorToggleButton.bind(this.properties.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
     debugToggleButton.bind(this.properties.DEBUG)
 
     const behaviorPage = new NotebookPage('Behavior')
