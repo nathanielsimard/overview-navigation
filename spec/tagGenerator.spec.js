@@ -19,12 +19,6 @@ const KEY_SYMBOLS = {
   [THIRD_KEY_SYMBOL]: THIRD_KEY_VALUE
 }
 
-const NO_MAPPING = {
-  0: 0,
-  1: 1,
-  2: 2
-}
-
 const VALUES = Object.values(KEY_SYMBOLS)
 const NUMBER_OF_DIFFERENT_KEYS = [...new Set(VALUES)].length
 
@@ -39,35 +33,49 @@ const generateAllTags = tagGenerator => {
   return tags
 }
 
-describe('Tag Generator with 3 key symbols', () => {
-  let tagGenerator
+describe('Tag Generator', () => {
+  describe('with 3 key symbols', () => {
+    describe('with mapping', () => {
+      describe('without the same number of mappings as key symbols', () => {
+        it('should throw', () => {
+          const mapping = { 0: 1, 1: 0 }
 
-  beforeEach(() => {
-    tagGenerator = new TagGenerator(KEY_SYMBOLS, NO_MAPPING)
-  })
-
-  describe('when generate', () => {
-    it('first 3 tags must be of size 1', () => {
-      const tags = generateAllTags(tagGenerator)
-
-      for (let i = 0; i < 3; i++) {
-        expect(tags[i].length).toBe(1)
-      }
+          expect(() => new TagGenerator(KEY_SYMBOLS, mapping)).toThrow()
+        })
+      })
     })
 
-    it('tags after the 3e must be of size 2', () => {
-      const tags = generateAllTags(tagGenerator)
+    describe('with no mapping', () => {
+      let tagGenerator
 
-      for (let i = 3; i < MAXIMUM_NUMBER_OF_DIFFERENT_TAGS; i++) {
-        expect(tags[i].length).toBe(2)
-      }
-    })
+      beforeEach(() => {
+        tagGenerator = new TagGenerator(KEY_SYMBOLS)
+      })
 
-    it('should never return same value for different index', () => {
-      const tags = generateAllTags(tagGenerator)
+      describe('when generate', () => {
+        it('first 3 tags must be of size 1', () => {
+          const tags = generateAllTags(tagGenerator)
 
-      const uniqueTags = [...new Set(tags)]
-      expect(uniqueTags.length).toBe(MAXIMUM_NUMBER_OF_DIFFERENT_TAGS)
+          for (let i = 0; i < 3; i++) {
+            expect(tags[i].length).toBe(1)
+          }
+        })
+
+        it('tags after the 3e must be of size 2', () => {
+          const tags = generateAllTags(tagGenerator)
+
+          for (let i = 3; i < MAXIMUM_NUMBER_OF_DIFFERENT_TAGS; i++) {
+            expect(tags[i].length).toBe(2)
+          }
+        })
+
+        it('should never return same value for different index', () => {
+          const tags = generateAllTags(tagGenerator)
+
+          const uniqueTags = [...new Set(tags)]
+          expect(uniqueTags.length).toBe(MAXIMUM_NUMBER_OF_DIFFERENT_TAGS)
+        })
+      })
     })
   })
 })

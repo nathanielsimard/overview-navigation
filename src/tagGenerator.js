@@ -6,6 +6,8 @@ class TagGenerator {
     const values = Object.values(this.keySymbols)
     this.numberOfDifferentKeys = [...new Set(values)].length
     this.keys = Object.keys(keySymbols)
+
+    this._validateOrdering()
   }
 
   generate (index) {
@@ -39,6 +41,16 @@ class TagGenerator {
     const key = this.keys[orderedIndex]
 
     return this.keySymbols[key]
+  }
+
+  _validateOrdering () {
+    const orderingLength = Object.values(this.ordering).length
+    if (orderingLength !== 0 && orderingLength !== this.numberOfDifferentKeys) {
+      throw new Error(
+        "Ordering doesn't have the same number of values as unique keys : " +
+          `Keys : ${this.numberOfDifferentKeys} Ordering : ${orderingLength}`
+      )
+    }
   }
 }
 
