@@ -1,8 +1,8 @@
-/* global describe */
 /* global beforeEach */
 /* global beforeAll */
 /* global it */
 /* global expect */
+/* global describe */
 require('./helpers/core')
 
 const loggerMock = require('./helpers/loggerMock')
