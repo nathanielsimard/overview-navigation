@@ -5,6 +5,8 @@
 
 require('../helpers/core')
 const { WindowSelector } = require('../../src/window/windowSelector')
+const { TagGenerator } = require('../../src/tagGenerator')
+
 const LoggerMock = require('../helpers/loggerMock')
 const { Factory } = require('../../src/window/selectedWindow')
 const { MODE } = require('../../src/mode')
@@ -33,6 +35,7 @@ describe('WindowSelector', () => {
     logger = LoggerMock.create()
     windowSelector = new WindowSelector(
       keySymbols,
+      new TagGenerator(keySymbols),
       logger,
       overview,
       new Factory()

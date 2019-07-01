@@ -1,14 +1,19 @@
 const { MODE } = require('../mode')
-const { TagGenerator } = require('../tagGenerator')
 
 class WindowSelector {
-  constructor (keySymbols, logger, overview, selectedWindowFactory) {
+  constructor (
+    keySymbols,
+    tagGenerator,
+    logger,
+    overview,
+    selectedWindowFactory
+  ) {
     this.keySymbols = keySymbols
+    this.tagGenerator = tagGenerator
     this.overview = overview
     this.logger = logger
     this.selectedWindowFactory = selectedWindowFactory
 
-    this.tagGenerator = new TagGenerator(keySymbols, logger)
     this.reset()
   }
 
@@ -102,10 +107,11 @@ if (!global.overviewNavigationTesting) {
   const Main = require('ui/main')
   const SelectedWindow = require('./selectedWindow')
 
-  function create(keySymbols, logger) {
+  function create(keySymbols, tagGenerator, logger) {
     /* eslint-enable */
     return new WindowSelector(
       keySymbols,
+      tagGenerator,
       logger,
       Main.overview,
       new SelectedWindow.Factory()

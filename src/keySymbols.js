@@ -1,68 +1,94 @@
-class KeysSymbols {
-  constructor (keys) {
-    this.keySymbols = {}
-    this.keySymbols[keys.KEY_a] = 'a'
-    this.keySymbols[keys.KEY_b] = 'b'
-    this.keySymbols[keys.KEY_c] = 'c'
-    this.keySymbols[keys.KEY_d] = 'd'
-    this.keySymbols[keys.KEY_e] = 'e'
-    this.keySymbols[keys.KEY_f] = 'f'
-    this.keySymbols[keys.KEY_g] = 'g'
-    this.keySymbols[keys.KEY_h] = 'h'
-    this.keySymbols[keys.KEY_i] = 'i'
-    this.keySymbols[keys.KEY_j] = 'j'
-    this.keySymbols[keys.KEY_k] = 'k'
-    this.keySymbols[keys.KEY_l] = 'l'
-    this.keySymbols[keys.KEY_m] = 'm'
-    this.keySymbols[keys.KEY_n] = 'n'
-    this.keySymbols[keys.KEY_o] = 'o'
-    this.keySymbols[keys.KEY_p] = 'p'
-    this.keySymbols[keys.KEY_q] = 'q'
-    this.keySymbols[keys.KEY_r] = 'r'
-    this.keySymbols[keys.KEY_s] = 's'
-    this.keySymbols[keys.KEY_t] = 't'
-    this.keySymbols[keys.KEY_u] = 'u'
-    this.keySymbols[keys.KEY_v] = 'v'
-    this.keySymbols[keys.KEY_w] = 'w'
-    this.keySymbols[keys.KEY_x] = 'x'
-    this.keySymbols[keys.KEY_y] = 'y'
-    this.keySymbols[keys.KEY_z] = 'z'
+const Clutter = require('gi/Clutter')
 
-    this.keySymbols[keys.KEY_A] = 'a'
-    this.keySymbols[keys.KEY_B] = 'b'
-    this.keySymbols[keys.KEY_C] = 'c'
-    this.keySymbols[keys.KEY_D] = 'd'
-    this.keySymbols[keys.KEY_E] = 'e'
-    this.keySymbols[keys.KEY_F] = 'f'
-    this.keySymbols[keys.KEY_G] = 'g'
-    this.keySymbols[keys.KEY_H] = 'h'
-    this.keySymbols[keys.KEY_I] = 'i'
-    this.keySymbols[keys.KEY_J] = 'j'
-    this.keySymbols[keys.KEY_K] = 'k'
-    this.keySymbols[keys.KEY_L] = 'l'
-    this.keySymbols[keys.KEY_M] = 'm'
-    this.keySymbols[keys.KEY_N] = 'n'
-    this.keySymbols[keys.KEY_O] = 'o'
-    this.keySymbols[keys.KEY_P] = 'p'
-    this.keySymbols[keys.KEY_Q] = 'q'
-    this.keySymbols[keys.KEY_R] = 'r'
-    this.keySymbols[keys.KEY_S] = 's'
-    this.keySymbols[keys.KEY_T] = 't'
-    this.keySymbols[keys.KEY_U] = 'u'
-    this.keySymbols[keys.KEY_V] = 'v'
-    this.keySymbols[keys.KEY_W] = 'w'
-    this.keySymbols[keys.KEY_X] = 'x'
-    this.keySymbols[keys.KEY_Y] = 'y'
-    this.keySymbols[keys.KEY_Z] = 'z'
-  }
+const LOWER_CASE_KEY_SYMBOLS = {
+  [Clutter.KEY_a]: 'a',
+  [Clutter.KEY_b]: 'b',
+  [Clutter.KEY_c]: 'c',
+  [Clutter.KEY_d]: 'd',
+  [Clutter.KEY_e]: 'e',
+  [Clutter.KEY_f]: 'f',
+  [Clutter.KEY_g]: 'g',
+  [Clutter.KEY_h]: 'h',
+  [Clutter.KEY_i]: 'i',
+  [Clutter.KEY_j]: 'j',
+  [Clutter.KEY_k]: 'k',
+  [Clutter.KEY_l]: 'l',
+  [Clutter.KEY_m]: 'm',
+  [Clutter.KEY_n]: 'n',
+  [Clutter.KEY_o]: 'o',
+  [Clutter.KEY_p]: 'p',
+  [Clutter.KEY_q]: 'q',
+  [Clutter.KEY_r]: 'r',
+  [Clutter.KEY_s]: 's',
+  [Clutter.KEY_t]: 't',
+  [Clutter.KEY_u]: 'u',
+  [Clutter.KEY_v]: 'v',
+  [Clutter.KEY_w]: 'w',
+  [Clutter.KEY_x]: 'x',
+  [Clutter.KEY_y]: 'y',
+  [Clutter.KEY_z]: 'z'
 }
 
-if (!global.overviewNavigationTesting) {
-  const Clutter = require('gi/Clutter')
+const UPPER_CASE_KEY_SYMBOLS = {
+  [Clutter.KEY_A]: 'a',
+  [Clutter.KEY_B]: 'b',
+  [Clutter.KEY_C]: 'c',
+  [Clutter.KEY_D]: 'd',
+  [Clutter.KEY_E]: 'e',
+  [Clutter.KEY_F]: 'f',
+  [Clutter.KEY_G]: 'g',
+  [Clutter.KEY_H]: 'h',
+  [Clutter.KEY_I]: 'i',
+  [Clutter.KEY_J]: 'j',
+  [Clutter.KEY_K]: 'k',
+  [Clutter.KEY_L]: 'l',
+  [Clutter.KEY_M]: 'm',
+  [Clutter.KEY_N]: 'n',
+  [Clutter.KEY_O]: 'o',
+  [Clutter.KEY_P]: 'p',
+  [Clutter.KEY_Q]: 'q',
+  [Clutter.KEY_R]: 'r',
+  [Clutter.KEY_S]: 's',
+  [Clutter.KEY_T]: 't',
+  [Clutter.KEY_U]: 'u',
+  [Clutter.KEY_V]: 'v',
+  [Clutter.KEY_W]: 'w',
+  [Clutter.KEY_X]: 'x',
+  [Clutter.KEY_Y]: 'y',
+  [Clutter.KEY_Z]: 'z'
+}
 
-  /*eslint-disable */
-  function initialize() {
-    /* eslint-enable */
-    return new KeysSymbols(Clutter)
-  }
+const NATURAL_ORDERING = {
+  0: 0,
+  1: 18,
+  2: 3,
+  3: 5,
+  4: 6,
+  5: 16,
+  6: 22,
+  7: 4,
+  8: 17,
+  9: 19,
+  10: 25,
+  11: 23,
+  12: 2,
+  13: 21,
+  14: 1,
+  15: 24,
+  16: 7,
+  17: 13,
+  18: 20,
+  19: 9,
+  20: 12,
+  21: 8,
+  22: 10,
+  23: 11,
+  24: 14,
+  25: 15
+}
+
+module.exports = {
+  LOWER_CASE_KEY_SYMBOLS,
+  UPPER_CASE_KEY_SYMBOLS,
+  NATURAL_ORDERING
 }

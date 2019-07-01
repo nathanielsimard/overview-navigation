@@ -3,7 +3,6 @@
 /* global it */
 /* global expect */
 const { TagGenerator } = require('../src/tagGenerator')
-const LoggerMock = require('./helpers/loggerMock')
 
 const FIRST_KEY_VALUE = 'a'
 const FIRST_KEY_SYMBOL = 'x01'
@@ -20,6 +19,12 @@ const KEY_SYMBOLS = {
   [THIRD_KEY_SYMBOL]: THIRD_KEY_VALUE
 }
 
+const NO_MAPPING = {
+  0: 0,
+  1: 1,
+  2: 2
+}
+
 const VALUES = Object.values(KEY_SYMBOLS)
 const NUMBER_OF_DIFFERENT_KEYS = [...new Set(VALUES)].length
 
@@ -33,11 +38,12 @@ const generateAllTags = tagGenerator => {
   }
   return tags
 }
+
 describe('Tag Generator with 3 key symbols', () => {
   let tagGenerator
 
   beforeEach(() => {
-    tagGenerator = new TagGenerator(KEY_SYMBOLS, LoggerMock.create())
+    tagGenerator = new TagGenerator(KEY_SYMBOLS, NO_MAPPING)
   })
 
   describe('when generate', () => {

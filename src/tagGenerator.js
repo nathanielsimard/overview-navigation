@@ -1,7 +1,7 @@
 class TagGenerator {
-  constructor (keySymbols, logger) {
+  constructor (keySymbols, ordering = {}) {
     this.keySymbols = keySymbols
-    this.logger = logger
+    this.ordering = ordering
 
     const values = Object.values(this.keySymbols)
     this.numberOfDifferentKeys = [...new Set(values)].length
@@ -13,15 +13,12 @@ class TagGenerator {
     const mod = index % this.numberOfDifferentKeys
 
     if (div === 0) {
-      const tag = `${this.keySymbols[this.keys[index]]}`
-
-      this.logger.debug(`Generating tag : ${tag}`)
-      return tag
+      return this._generateLetter(index)
     } else {
-      this.logger.debug(`div: ${div - 1} mod: ${mod}`)
-      return `${this.keySymbols[this.keys[div - 1]]}${
-        this.keySymbols[this.keys[mod]]
-      }`
+      const firstLetter = this._generateLetter(div - 1)
+      const secondLetter = this._generateLetter(mod)
+
+      return firstLetter + secondLetter
     }
   }
 
@@ -35,6 +32,13 @@ class TagGenerator {
     } else {
       return 2
     }
+  }
+
+  _generateLetter (index) {
+    const orderedIndex = this.ordering[index] || index
+    const key = this.keys[orderedIndex]
+
+    return this.keySymbols[key]
   }
 }
 
