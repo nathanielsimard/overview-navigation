@@ -6,7 +6,7 @@ require('../helpers/core')
 
 const searchMock = require('../helpers/searchMock')
 const overviewMock = require('../helpers/overviewMock')
-const customWindowManager = require('../src/window/customWindowManager')
+const customWindowManager = require('../../src/window/customWindowManager')
 const settingsStub = require('../helpers/settingsStub.js')
 
 describe('Custom Window Manager', function () {

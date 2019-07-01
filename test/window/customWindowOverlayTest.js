@@ -10,7 +10,7 @@ const windowSelectorMock = require('../helpers/windowSelectorMock')
 const actorMock = require('../helpers/actorMock')
 const OverlaysMock = require('../helpers/subject/customWindowOverlaySubjectMock')
 
-const CustomWindowOverlay = require('../src/window/customWindowOverlay')
+const CustomWindowOverlay = require('../../src/window/customWindowOverlay')
 
 describe('Custom Window Overlay', () => {
   const PADDING = 3

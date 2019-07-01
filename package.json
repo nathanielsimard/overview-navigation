@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "jasmine ",
-    "test:all": "npm test test/**Test.js",
+    "test:all": "npm test test/**Test.js test/window/**Test.js",
     "build": "script/build.sh",
     "package": "script/build.sh && script/package.sh",
     "local:install": "script/build.sh && script/package.sh && script/install.sh",
