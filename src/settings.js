@@ -6,26 +6,26 @@ const PROPERTIES = {
   DEBUG: 'debug'
 }
 
-class Settings {
-  constructor (gioSettings, gioFlag) {
+var Settings = class Settings {
+  constructor(gioSettings, gioFlag) {
     this.gioFlag = gioFlag
     this.gioSettings = gioSettings
     this.showOverviewOnSwitchWorkspace = true
   }
 
-  isShowOverviewOnSwitchWorkspace () {
+  isShowOverviewOnSwitchWorkspace() {
     return this.gioSettings.get_boolean(PROPERTIES.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
   }
 
-  isShowWindowSelectorWhenShowOverview () {
+  isShowWindowSelectorWhenShowOverview() {
     return this.gioSettings.get_boolean(PROPERTIES.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
   }
 
-  isDebug () {
+  isDebug() {
     return this.gioSettings.get_boolean(PROPERTIES.DEBUG)
   }
 
-  bind (key, object, property) {
+  bind(key, object, property) {
     this.gioSettings.bind(key, object, property, this.gioFlag)
   }
 }
@@ -35,12 +35,12 @@ if (!global.overviewNavigationTesting) {
   const GioSS = Gio.SettingsSchemaSource
 
   class GioSettingsLoader {
-    constructor () {
+    constructor() {
       this.schema = Extension.metadata['settings-schema']
       this.schemaDir = Extension.dir.get_child('schemas')
     }
 
-    load () {
+    load() {
       const schemaSource = this._createSchemaSource()
       const schemaObj = schemaSource.lookup(this.schema, true)
 
@@ -51,7 +51,7 @@ if (!global.overviewNavigationTesting) {
       return new Gio.Settings({ settings_schema: schemaObj })
     }
 
-    _createSchemaSource () {
+    _createSchemaSource() {
       if (!this.schemaDir.query_exists(null)) {
         return GioSS.get_default()
       }

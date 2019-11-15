@@ -1,4 +1,4 @@
-const MODE = {
+var MODE = {
   Closing: 'Closing',
   Focussing: 'Focussing'
 }

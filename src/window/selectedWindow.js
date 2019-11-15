@@ -1,4 +1,4 @@
-class SelectedWindow {
+var SelectedWindow = class SelectedWindow {
   constructor (window, updateLabelCallback, overview) {
     this.window = window
     this.updateLabelCallback = updateLabelCallback
@@ -29,7 +29,7 @@ class SelectedWindow {
   }
 }
 
-class Factory {
+var Factory = class Factory {
   create (window, updateLabelCallback, overview) {
     return new SelectedWindow(window, updateLabelCallback, overview)
   }
