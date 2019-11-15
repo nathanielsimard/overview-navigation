@@ -1,20 +1,20 @@
-class Logger {
-  constructor (name, settings) {
+var Logger = class Logger {
+  constructor(name, settings) {
     this.settings = settings
     this.name = name
     this.extensionName = 'Overview Navigation'
     this._out = global.log
   }
 
-  info (message) {
+  info(message) {
     this._log('INFO', message)
   }
 
-  error (message) {
+  error(message) {
     this._log('ERROR', message)
   }
 
-  debug (message) {
+  debug(message) {
     if (this.settings && !this.settings.isDebug()) {
       return
     }
@@ -22,15 +22,15 @@ class Logger {
     this._log('DEBUG', message)
   }
 
-  _log (tag, message) {
+  _log(tag, message) {
     this._out(`${tag} - [${this.extensionName} - ${this.name}] ${message}`)
   }
 }
 
 /*eslint-disable */
-class PrefLogger extends Logger {
+var PrefLogger = class PrefLogger extends Logger {
   /* eslint-enable */
-  constructor (name, settings) {
+  constructor(name, settings) {
     super(name, settings)
     /* global log */
     this._out = log
@@ -38,8 +38,8 @@ class PrefLogger extends Logger {
 }
 
 if (global.overviewNavigationTesting) {
-  class TestLogger extends Logger {
-    constructor (name, debug) {
+  var TestLogger = class TestLogger extends Logger {
+    constructor(name, debug) {
       super(name, {
         isDebug: () => debug
       })

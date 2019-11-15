@@ -1,4 +1,4 @@
-class TagGenerator {
+var TagGenerator = class TagGenerator {
   constructor (keySymbols, ordering = {}) {
     this.keySymbols = keySymbols
     this.ordering = ordering

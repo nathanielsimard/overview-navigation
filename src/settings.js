@@ -6,7 +6,7 @@ const PROPERTIES = {
   DEBUG: 'debug'
 }
 
-class Settings {
+var Settings = class Settings {
   constructor(gioSettings, gioFlag) {
     this.gioFlag = gioFlag
     this.gioSettings = gioSettings

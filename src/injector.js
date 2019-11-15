@@ -36,7 +36,7 @@ class Inject {
   }
 }
 
-class Injector {
+var Injector = class Injector {
   constructor (logger) {
     this.logger = logger
     this.injected = []

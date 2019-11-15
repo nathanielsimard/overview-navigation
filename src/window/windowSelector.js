@@ -1,6 +1,6 @@
 const { MODE } = require('../mode')
 
-class WindowSelector {
+var WindowSelector = class WindowSelector {
   constructor(keySymbols, tagGenerator, logger, overview, selectedWindowFactory) {
     this.keySymbols = keySymbols
     this.tagGenerator = tagGenerator

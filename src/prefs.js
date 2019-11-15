@@ -1,4 +1,4 @@
-var Gtk = require('gi/Gtk')
+const Gtk = require('gi/Gtk')
 
 class Widget {
   constructor(parent) {

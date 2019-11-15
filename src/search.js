@@ -1,4 +1,4 @@
-class Search {
+var Search = class Search {
   constructor (overview, logger) {
     this.overview = overview
     this.logger = logger

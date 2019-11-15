@@ -1,4 +1,4 @@
-var Clutter = require('gi/Clutter')
+const Clutter = require('gi/Clutter')
 
 const { Label } = require('gi/St')
 const { WorkspacesView } = require('ui/workspacesView')
@@ -11,13 +11,13 @@ const { CustomWindowOverlay } = require('../window/customWindowOverlay')
 const { CustomWorkspaceView } = require('../customWorkspaceView')
 const { Search } = require('../search')
 
-const initializeWindowManager = (injector, search, settings) => {
+var initializeWindowManager = (injector, search, settings) => {
   injector.inject(CustomWindowManager, WindowManager, parent => {
     return new CustomWindowManager(search, overview, settings)
   })
 }
 
-const initializeWindowOverlay = (injector, windowSelector, logger, overlays) => {
+var initializeWindowOverlay = (injector, windowSelector, logger, overlays) => {
   injector.inject(CustomWindowOverlay, WindowOverlay, parent => {
     const customWindow = new CustomWindowOverlay(
       logger,
@@ -34,7 +34,7 @@ const initializeWindowOverlay = (injector, windowSelector, logger, overlays) => 
   })
 }
 
-function initializeWorkspaceView(injector, logger, search, windowSelector, settings, overlays) {
+var initializeWorkspaceView = (injector, logger, search, windowSelector, settings, overlays) => {
   injector.inject(CustomWorkspaceView, WorkspacesView, parent => {
     var workspaceManager = global.workspace_manager
     if (!workspaceManager) {
@@ -55,7 +55,7 @@ function initializeWorkspaceView(injector, logger, search, windowSelector, setti
   })
 }
 
-function initializeSearch() {
+var initializeSearch = () => {
   return new Search(overview, new Logger('Search'))
 }
 
