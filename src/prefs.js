@@ -1,17 +1,17 @@
-const Gtk = require('gi/Gtk')
+var Gtk = require('gi/Gtk')
 
 class Widget {
-  constructor (parent) {
+  constructor(parent) {
     this.parent = parent
   }
 
-  add (widget) {
+  add(widget) {
     this.parent.add(widget.parent)
   }
 }
 
 class SettingsWidget extends Widget {
-  constructor (logger, settings, properties) {
+  constructor(logger, settings, properties) {
     super(new Gtk.Box({}))
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.notebook = new Gtk.Notebook()
@@ -23,7 +23,7 @@ class SettingsWidget extends Widget {
     this.properties = properties
   }
 
-  initialize () {
+  initialize() {
     const overviewToggleButton = new ToggleButtonWidget('Show Overview When Change Workspace', this.settings)
     const showWindowSelectorToggleButton = new ToggleButtonWidget(
       'Show Window Selector when show Overview',
@@ -48,7 +48,7 @@ class SettingsWidget extends Widget {
 }
 
 class NotebookPage extends Widget {
-  constructor (name) {
+  constructor(name) {
     super(
       new Gtk.Box({
         'margin-top': 10,
@@ -60,14 +60,14 @@ class NotebookPage extends Widget {
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
   }
 
-  register (notebook) {
+  register(notebook) {
     const label = new Gtk.Label({ label: this.name })
     notebook.append_page(this.parent, label)
   }
 }
 
 class ToggleButtonWidget extends Widget {
-  constructor (name, settings) {
+  constructor(name, settings) {
     super(
       new Gtk.HBox({
         'margin-left': 10,
@@ -85,12 +85,12 @@ class ToggleButtonWidget extends Widget {
     this.parent.add(this.gSwitch)
   }
 
-  bind (property) {
+  bind(property) {
     this.settings.bind(property, this.gSwitch, 'active')
   }
 }
 class HelpWidget extends Widget {
-  constructor (name, settings) {
+  constructor(name, settings) {
     super(
       new Gtk.VBox({
         'margin-left': 10,
@@ -103,7 +103,7 @@ class HelpWidget extends Widget {
     const activationTitle = this.createTitle(`Activation`)
     const activationDescription = this.createTextDescription(
       `In the overview, you can press SPACE and letters are going to pop in the corner of every window.` +
-        `The search will be disabled and the user will be able to focus or close windows.`
+      `The search will be disabled and the user will be able to focus or close windows.`
     )
 
     const focusTitle = this.createTitle(`Focus a Window`)
@@ -125,7 +125,7 @@ class HelpWidget extends Widget {
     this.parent.add(closeTitle)
     this.parent.add(closeDescription)
   }
-  createTitle (text) {
+  createTitle(text) {
     const label = new Gtk.Label({
       halign: Gtk.Align.START
     })
@@ -133,7 +133,7 @@ class HelpWidget extends Widget {
     return label
   }
 
-  createTextDescription (text) {
+  createTextDescription(text) {
     const label = new Gtk.Label({
       label: text,
       halign: Gtk.Align.START
@@ -152,12 +152,12 @@ function init() {
 /*eslint-disable */
 // Required by Gnome Shell
 function buildPrefsWidget() {
-  const Utils = require('./utils')
-  const Settings = require('./settings')
+  const { PrefLogger } = require('./utils')
+  const { initialize, PROPERTIES } = require('./settings')
 
-  const settings = Settings.initialize()
-  const logger = new Utils.PrefLogger('SettingsWidget', settings)
-  const widget = new SettingsWidget(logger, settings, Settings.PROPERTIES)
+  const settings = initialize()
+  const logger = new PrefLogger('SettingsWidget', settings)
+  const widget = new SettingsWidget(logger, settings, PROPERTIES)
 
   widget.initialize()
   widget.parent.show_all()

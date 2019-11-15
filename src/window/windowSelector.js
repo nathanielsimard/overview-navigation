@@ -1,7 +1,7 @@
 const { MODE } = require('../mode')
 
 class WindowSelector {
-  constructor (keySymbols, tagGenerator, logger, overview, selectedWindowFactory) {
+  constructor(keySymbols, tagGenerator, logger, overview, selectedWindowFactory) {
     this.keySymbols = keySymbols
     this.tagGenerator = tagGenerator
     this.overview = overview
@@ -11,7 +11,7 @@ class WindowSelector {
     this.reset()
   }
 
-  select (keySymbol, mode) {
+  select(keySymbol, mode) {
     this.logger.debug(`Selecting a window ${keySymbol} with mode ${mode}`)
 
     let key = this.keySymbols[keySymbol]
@@ -49,7 +49,7 @@ class WindowSelector {
     return selectedWindow
   }
 
-  registerWindow (window, callback) {
+  registerWindow(window, callback) {
     this.logger.debug('Registering a window ...')
 
     if (this.tagGenerator.isMaximumIndex(this.index)) {
@@ -62,7 +62,7 @@ class WindowSelector {
     selectedWindow.updateTag(tag)
   }
 
-  reset () {
+  reset() {
     this.logger.debug('Resetting ...')
 
     this.selectedWindows = {}
@@ -70,11 +70,11 @@ class WindowSelector {
     this.resetSelection()
   }
 
-  resetSelection () {
+  resetSelection() {
     this.selections = ''
   }
 
-  _updateSelectedWindowsToNewTagsSize () {
+  _updateSelectedWindowsToNewTagsSize() {
     const newSelectedWindows = {}
     const tagKeys = Object.keys(this.selectedWindows)
 
@@ -92,12 +92,12 @@ class WindowSelector {
 
 if (!global.overviewNavigationTesting) {
   /*eslint-disable */
-  const Main = require('ui/main')
-  const SelectedWindow = require('./selectedWindow')
+  const { overview } = require('ui/main')
+  const { Factory } = require('./selectedWindow')
 
   function create(keySymbols, tagGenerator, logger) {
     /* eslint-enable */
-    return new WindowSelector(keySymbols, tagGenerator, logger, Main.overview, new SelectedWindow.Factory())
+    return new WindowSelector(keySymbols, tagGenerator, logger, overview, new Factory())
   }
 }
 

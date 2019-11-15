@@ -1,4 +1,4 @@
-const app = require('./app')
+const { Main } = require('./app')
 const { Logger } = require('./utils')
 
 let main, logger
@@ -7,7 +7,7 @@ function init() {
   /* eslint-enable */
   try {
     logger = new Logger('Extension')
-    main = new app.Main()
+    main = new Main()
     logger.info('Initialized')
   } catch (err) {
     logger.error(err)

@@ -1,4 +1,4 @@
-const Clutter = require('gi/Clutter')
+var Clutter = require('gi/Clutter')
 
 const LOWER_CASE_KEY_SYMBOLS = {
   [Clutter.KEY_a]: 'a',
