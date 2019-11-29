@@ -3,7 +3,7 @@ const Extension = require('Extension')
 const PROPERTIES = {
   SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY: 'show-overview-when-change-workspace',
   SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW: 'show-window-selector-when-show-overview',
-  DEBUG: 'debug'
+  LOGGING: 'logging'
 }
 
 var Settings = class Settings {
@@ -21,8 +21,8 @@ var Settings = class Settings {
     return this.gioSettings.get_boolean(PROPERTIES.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
   }
 
-  isDebug() {
-    return this.gioSettings.get_boolean(PROPERTIES.DEBUG)
+  isLogging() {
+    return this.gioSettings.get_boolean(PROPERTIES.LOGGING)
   }
 
   bind(key, object, property) {

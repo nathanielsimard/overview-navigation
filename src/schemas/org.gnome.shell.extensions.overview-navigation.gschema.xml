@@ -13,10 +13,10 @@
       <description>Show Window Selector when Show Overview without using keybinding.</description>
     </key>
 
-    <key name="debug" type="b">
+    <key name="logging" type="b">
       <default>false</default>
-      <summary>Set extension in debug mode</summary>
-      <description>Set extension in debug mode makes output more verbose.</description>
+      <summary>Enable logging to help debugging.</summary>
+      <description>Enable logging to help debugging. Note that all errors will be logged even if this option is set to false.</description>
     </key>
 
   </schema>

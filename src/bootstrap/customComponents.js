@@ -55,8 +55,8 @@ var initializeWorkspaceView = (injector, logger, search, windowSelector, setting
   })
 }
 
-var initializeSearch = () => {
-  return new Search(overview, new Logger('Search'))
+var initializeSearch = (settings) => {
+  return new Search(overview, new Logger('Search', settings))
 }
 
 module.exports = {

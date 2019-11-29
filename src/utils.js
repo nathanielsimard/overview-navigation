@@ -7,6 +7,10 @@ var Logger = class Logger {
   }
 
   info(message) {
+    if (this.settings && !this.settings.isLogging()) {
+      return
+    }
+
     this._log('INFO', message)
   }
 
@@ -15,7 +19,7 @@ var Logger = class Logger {
   }
 
   debug(message) {
-    if (this.settings && !this.settings.isDebug()) {
+    if (this.settings && !this.settings.isLogging()) {
       return
     }
 
@@ -39,9 +43,9 @@ var PrefLogger = class PrefLogger extends Logger {
 
 if (global.overviewNavigationTesting) {
   var TestLogger = class TestLogger extends Logger {
-    constructor(name, debug) {
+    constructor(name, logging) {
       super(name, {
-        isDebug: () => debug
+        isLogging: () => logging
       })
       this._out = console.log
     }
