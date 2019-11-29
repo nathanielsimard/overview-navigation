@@ -22,7 +22,7 @@ var Main = class Main {
     const tagGenerator = new TagGenerator(keySymbols, NATURAL_ORDERING)
     const windowSelector = WindowSelector.create(keySymbols, tagGenerator, new Logger('WindowSelector', settings))
 
-    this.search = initializeSearch()
+    this.search = initializeSearch(settings)
     this.injector = new Injector(new Logger('Injector', settings))
 
     initializeWindowManager(this.injector, this.search, settings)

@@ -29,16 +29,16 @@ class SettingsWidget extends Widget {
       'Show Window Selector when show Overview',
       this.settings
     )
-    const debugToggleButton = new ToggleButtonWidget('Debug', this.settings)
+    const loggingToggleButton = new ToggleButtonWidget('Logging', this.settings)
 
     overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
     showWindowSelectorToggleButton.bind(this.properties.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
-    debugToggleButton.bind(this.properties.DEBUG)
+    loggingToggleButton.bind(this.properties.LOGGING)
 
     const behaviorPage = new NotebookPage('Behavior')
     behaviorPage.add(overviewToggleButton)
     behaviorPage.add(showWindowSelectorToggleButton)
-    behaviorPage.add(debugToggleButton)
+    behaviorPage.add(loggingToggleButton)
     behaviorPage.register(this.notebook)
 
     const helpPage = new NotebookPage('Help')
