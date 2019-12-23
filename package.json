@@ -5,7 +5,8 @@
     "test": "test"
   },
   "dependencies": {
-    "glob": "^7.1.4"
+    "glob": "^7.1.4",
+    "typescript-language-server": "^0.4.0"
   },
   "devDependencies": {
     "eslint": "^5.15.3",

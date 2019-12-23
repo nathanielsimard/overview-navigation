@@ -17,7 +17,7 @@ var initializeWindowManager = (injector, search, settings) => {
   })
 }
 
-var initializeWindowOverlay = (injector, windowSelector, logger, overlays) => {
+var initializeWindowOverlay = (injector, windowSelector, logger, overlays, settings) => {
   injector.inject(CustomWindowOverlay, WindowOverlay, parent => {
     const customWindow = new CustomWindowOverlay(
       logger,
@@ -27,7 +27,8 @@ var initializeWindowOverlay = (injector, windowSelector, logger, overlays) => {
       parent._windowClone,
       parent._windowClone.metaWindow,
       3,
-      overlays
+      overlays,
+      settings
     )
     overlays.addWindow(customWindow)
     return customWindow

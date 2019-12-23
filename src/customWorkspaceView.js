@@ -1,7 +1,7 @@
 const { MODE } = require('./mode')
 
 var CustomWorkspaceView = class CustomWorkspaceView {
-  constructor(logger, search, windowSelector, stage, workspaces, workspaceManager, keys, settings, overlays) {
+  constructor (logger, search, windowSelector, stage, workspaces, workspaceManager, keys, settings, overlays) {
     this.logger = logger
     this.search = search
     this.windowSelector = windowSelector
@@ -15,16 +15,16 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.overlays.attach(this)
   }
 
-  onWindowCreated(window) {
+  onWindowCreated (window) {
     if (this.searching) {
       window.hideTooltip()
     } else {
       window.showTooltip()
     }
   }
-  onWindowDeleted(window) { }
+  onWindowDeleted (window) { }
 
-  animateToOverview() {
+  animateToOverview () {
     this.logger.info('Animate to overview ...')
 
     if (!this.keyPressEventId) {
@@ -42,7 +42,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     }
   }
 
-  _onDestroy() {
+  _onDestroy () {
     this.logger.info('On Destroy ...')
 
     this.stage.disconnect(this.keyPressEventId)
@@ -52,7 +52,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.search.enable()
   }
 
-  onKeyPress(s, o) {
+  onKeyPress (s, o) {
     this.logger.debug('On key press ...')
 
     if (!this.isOnFirstMonitor()) return
@@ -63,7 +63,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this._selectWindow(keySymbol)
   }
 
-  onKeyRelease(s, o) {
+  onKeyRelease (s, o) {
     this.logger.debug('On key release ...')
 
     if (this.hideWindowsTooltipsClosing(o.get_key_symbol())) return
@@ -76,7 +76,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     }
   }
 
-  hideWindowsTooltipsClosing(keySymbol) {
+  hideWindowsTooltipsClosing (keySymbol) {
     if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
 
     this.overlays.getAllWindows().forEach(window => {
@@ -87,7 +87,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     return true
   }
 
-  showWindowsTooltipsClosing(keySymbol) {
+  showWindowsTooltipsClosing (keySymbol) {
     if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
 
     this.overlays.getAllWindows().forEach(window => {
@@ -98,20 +98,20 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     return true
   }
 
-  isShowTooltipsKeySymbol(keySymbol) {
+  isShowTooltipsKeySymbol (keySymbol) {
     return keySymbol === this.keys.KEY_space
   }
 
-  isTooltipsClosingKeySymbol(keySymbol) {
+  isTooltipsClosingKeySymbol (keySymbol) {
     return keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
   }
 
-  isOnFirstMonitor() {
+  isOnFirstMonitor () {
     const activeWorkspaceIndex = this.workspaceManager.get_active_workspace_index()
     return this.workspaces[activeWorkspaceIndex].monitorIndex === 0
   }
 
-  showTooltips() {
+  showTooltips () {
     this.logger.debug('Showing tooltips ...')
 
     this.overlays.getAllWindows().forEach(window => {
@@ -122,7 +122,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.searching = false
   }
 
-  hideTooltips() {
+  hideTooltips () {
     this.logger.debug('Hiding tooltips ...')
 
     this.overlays.getAllWindows().forEach(window => {
@@ -133,7 +133,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.search.enable()
     this.searching = true
   }
-  _selectWindow(keySymbol) {
+  _selectWindow (keySymbol) {
     const selectedWindow = this.windowSelector.select(keySymbol, this.current_mode)
     if (selectedWindow) {
       selectedWindow.activate()

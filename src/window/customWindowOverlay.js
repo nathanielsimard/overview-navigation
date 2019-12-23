@@ -2,7 +2,7 @@ var CLOSING_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip-closing
 var FOCUS_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip'
 
 var CustomWindowOverlay = class CustomWindowOverlay {
-  constructor(logger, windowSelector, label, parentActor, windowClone, metaWindow, padding, overlays) {
+  constructor (logger, windowSelector, label, parentActor, windowClone, metaWindow, padding, overlays, settings) {
     this.logger = logger
     this.logger.debug('Initializing ...')
     this.windowSelector = windowSelector
@@ -13,43 +13,49 @@ var CustomWindowOverlay = class CustomWindowOverlay {
     this.overlays = overlays
 
     label.set_style_class_name(FOCUS_WINDOW_STYLE)
+
+    label.set_style(`
+      background: ${settings.getBackgroundColor()};
+      color: ${settings.getFontColor()};
+    `)
+
     parentActor.add_actor(label)
     windowSelector.registerWindow(metaWindow, function (name) {
       label.text = name
     })
   }
 
-  relayout(animate) {
+  relayout (animate) {
     let [x, y] = this.windowClone.slot
     this.logger.debug('Calculating layout ...')
     this.label.set_position(Math.floor(x) + this.padding, Math.floor(y) + this.padding)
   }
 
-  _onDestroy() {
+  _onDestroy () {
     this.logger.info('Destroying ...')
     this.label.destroy()
     this.overlays.removeWindow(this)
   }
 
-  showTooltip() {
+  showTooltip () {
     this.logger.debug('Showing tooltip ...')
     this.label.raise_top()
     this.label.show()
   }
 
-  showTooltipClosing() {
+  showTooltipClosing () {
     this.label.set_style_class_name(CLOSING_WINDOW_STYLE)
 
     this.label.text = this.label.text.toUpperCase()
   }
 
-  hideTooltipClosing() {
+  hideTooltipClosing () {
     this.label.set_style_class_name(FOCUS_WINDOW_STYLE)
 
     this.label.text = this.label.text.toLowerCase()
   }
 
-  hideTooltip() {
+  hideTooltip () {
     this.logger.debug('Hiding tooltip ...')
     this.label.hide()
   }

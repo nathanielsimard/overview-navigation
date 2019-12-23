@@ -19,5 +19,17 @@
       <description>Enable logging to help debugging. Note that all errors will be logged even if this option is set to false.</description>
     </key>
 
+    <key name="background-color" type="s">
+      <default>"#ffffff"</default>
+      <summary>Hint background color.</summary>
+      <description>Customize the background color of the hint.</description>
+    </key>
+
+    <key name="font-color" type="s">
+      <default>"#fefefe"</default>
+      <summary>Hint font color.</summary>
+      <description>Customize the font color of the hint.</description>
+    </key>
+
   </schema>
 </schemalist>

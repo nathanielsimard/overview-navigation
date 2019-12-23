@@ -1,17 +1,17 @@
 const Gtk = require('gi/Gtk')
 
 class Widget {
-  constructor(parent) {
+  constructor (parent) {
     this.parent = parent
   }
 
-  add(widget) {
+  add (widget) {
     this.parent.add(widget.parent)
   }
 }
 
 class SettingsWidget extends Widget {
-  constructor(logger, settings, properties) {
+  constructor (logger, settings, properties) {
     super(new Gtk.Box({}))
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.notebook = new Gtk.Notebook()
@@ -23,16 +23,50 @@ class SettingsWidget extends Widget {
     this.properties = properties
   }
 
-  initialize() {
+  initialize () {
+    this.initializeBehaviorPage()
+    this.initializeStylePage()
+    this.initializeHelpPage()
+  }
+
+  initializeStylePage () {
+    const style = new NotebookPage('Style')
+
+    const backgroundColorText = new TextBoxWidget(
+      'Hint background color',
+      this.settings,
+      this.properties.HINT_BACKGROUND_COLOR,
+      this.logger
+    )
+    const fontColorText = new TextBoxWidget(
+      'Hint font color',
+      this.settings,
+      this.properties.HINT_FONT_COLOR,
+      this.logger
+    )
+
+    style.add(backgroundColorText)
+    style.add(fontColorText)
+    style.register(this.notebook)
+  }
+
+  initializeHelpPage () {
+    const helpPage = new NotebookPage('Help')
+    helpPage.add(new HelpWidget())
+    helpPage.register(this.notebook)
+  }
+
+  initializeBehaviorPage () {
     const overviewToggleButton = new ToggleButtonWidget('Show Overview When Change Workspace', this.settings)
+    overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
+
     const showWindowSelectorToggleButton = new ToggleButtonWidget(
       'Show Window Selector when show Overview',
       this.settings
     )
-    const loggingToggleButton = new ToggleButtonWidget('Logging', this.settings)
-
-    overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
     showWindowSelectorToggleButton.bind(this.properties.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
+
+    const loggingToggleButton = new ToggleButtonWidget('Logging', this.settings)
     loggingToggleButton.bind(this.properties.LOGGING)
 
     const behaviorPage = new NotebookPage('Behavior')
@@ -40,15 +74,11 @@ class SettingsWidget extends Widget {
     behaviorPage.add(showWindowSelectorToggleButton)
     behaviorPage.add(loggingToggleButton)
     behaviorPage.register(this.notebook)
-
-    const helpPage = new NotebookPage('Help')
-    helpPage.add(new HelpWidget())
-    helpPage.register(this.notebook)
   }
 }
 
 class NotebookPage extends Widget {
-  constructor(name) {
+  constructor (name) {
     super(
       new Gtk.Box({
         'margin-top': 10,
@@ -60,14 +90,55 @@ class NotebookPage extends Widget {
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
   }
 
-  register(notebook) {
+  register (notebook) {
     const label = new Gtk.Label({ label: this.name })
     notebook.append_page(this.parent, label)
   }
 }
 
+class TextBoxWidget extends Widget {
+  constructor (name, settings, property, logger) {
+    super(
+      new Gtk.HBox({
+        'margin-left': 10,
+        'margin-right': 10,
+        spacing: 10,
+        hexpand: true
+      })
+    )
+    this.settings = settings
+    this.property = property
+    this.logger = logger
+
+    this.gText = new Gtk.Entry({ halign: Gtk.Align.END })
+    this.gText.activate()
+
+    const text = this.settings.getStringProperty(this.property)
+    if (text) {
+      this.gText.set_text(text)
+    }
+
+    this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
+
+    this.parent.add(this.gLabel)
+    this.parent.add(this.gText)
+
+    this.parent.connect('key-release-event', this.onKeyPress.bind(this))
+  }
+
+  onKeyPress (s, o) {
+    const text = this.gText.get_text()
+    this.logger.debug(`Update settings ${this.property} with value ${text}`)
+    if (text) {
+      const updated = this.settings.updateStringProperty(this.property, text)
+      this.logger.debug(`Updated Succeed : ${updated}`)
+      this.logger.debug(`Is now ${this.settings.getStringProperty(this.property)}`)
+    }
+  }
+}
+
 class ToggleButtonWidget extends Widget {
-  constructor(name, settings) {
+  constructor (name, settings) {
     super(
       new Gtk.HBox({
         'margin-left': 10,
@@ -85,12 +156,13 @@ class ToggleButtonWidget extends Widget {
     this.parent.add(this.gSwitch)
   }
 
-  bind(property) {
+  bind (property) {
     this.settings.bind(property, this.gSwitch, 'active')
   }
 }
+
 class HelpWidget extends Widget {
-  constructor(name, settings) {
+  constructor (name, settings) {
     super(
       new Gtk.VBox({
         'margin-left': 10,
@@ -125,7 +197,7 @@ class HelpWidget extends Widget {
     this.parent.add(closeTitle)
     this.parent.add(closeDescription)
   }
-  createTitle(text) {
+  createTitle (text) {
     const label = new Gtk.Label({
       halign: Gtk.Align.START
     })
@@ -133,7 +205,7 @@ class HelpWidget extends Widget {
     return label
   }
 
-  createTextDescription(text) {
+  createTextDescription (text) {
     const label = new Gtk.Label({
       label: text,
       halign: Gtk.Align.START
