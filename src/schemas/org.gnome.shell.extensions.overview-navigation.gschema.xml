@@ -22,13 +22,19 @@
     <key name="background-color" type="s">
       <default>"#ffffff"</default>
       <summary>Hint background color.</summary>
-      <description>Customize the background color of the hint.</description>
+      <description>Customize the background color of hints.</description>
     </key>
 
     <key name="font-color" type="s">
       <default>"#fefefe"</default>
       <summary>Hint font color.</summary>
-      <description>Customize the font color of the hint.</description>
+      <description>Customize the font color of hints.</description>
+    </key>
+
+    <key name="closing-font-color" type="s">
+      <default>"#bb1714"</default>
+      <summary>Hint closing font color.</summary>
+      <description>Customize the font color of closing hints.</description>
     </key>
 
   </schema>

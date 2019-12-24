@@ -1,8 +1,5 @@
-var CLOSING_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip-closing'
-var FOCUS_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip'
-
 var CustomWindowOverlay = class CustomWindowOverlay {
-  constructor (logger, windowSelector, label, parentActor, windowClone, metaWindow, padding, overlays, settings) {
+  constructor (logger, windowSelector, label, windowClone, metaWindow, padding, overlays, settings) {
     this.logger = logger
     this.logger.debug('Initializing ...')
     this.windowSelector = windowSelector
@@ -11,24 +8,18 @@ var CustomWindowOverlay = class CustomWindowOverlay {
     this.padding = padding
     this.metaWindow = metaWindow
     this.overlays = overlays
+    this.settings = settings
 
-    label.set_style_class_name(FOCUS_WINDOW_STYLE)
-
-    label.set_style(`
-      background: ${settings.getBackgroundColor()};
-      color: ${settings.getFontColor()};
-    `)
-
-    parentActor.add_actor(label)
+    this.label.setColor(this.settings.getFontColor())
     windowSelector.registerWindow(metaWindow, function (name) {
-      label.text = name
+      label.setText(name)
     })
   }
 
   relayout (animate) {
     let [x, y] = this.windowClone.slot
     this.logger.debug('Calculating layout ...')
-    this.label.set_position(Math.floor(x) + this.padding, Math.floor(y) + this.padding)
+    this.label.setPosition(Math.floor(x) + this.padding, Math.floor(y) + this.padding)
   }
 
   _onDestroy () {
@@ -39,20 +30,18 @@ var CustomWindowOverlay = class CustomWindowOverlay {
 
   showTooltip () {
     this.logger.debug('Showing tooltip ...')
-    this.label.raise_top()
+    this.label.raiseTop()
     this.label.show()
   }
 
   showTooltipClosing () {
-    this.label.set_style_class_name(CLOSING_WINDOW_STYLE)
-
-    this.label.text = this.label.text.toUpperCase()
+    this.label.setColor(this.settings.getClosingFontColor())
+    this.label.setText(this.label.getText().toUpperCase())
   }
 
   hideTooltipClosing () {
-    this.label.set_style_class_name(FOCUS_WINDOW_STYLE)
-
-    this.label.text = this.label.text.toLowerCase()
+    this.label.setColor(this.settings.getFontColor())
+    this.label.setText(this.label.getText().toLowerCase())
   }
 
   hideTooltip () {
@@ -62,7 +51,5 @@ var CustomWindowOverlay = class CustomWindowOverlay {
 }
 
 module.exports = {
-  CustomWindowOverlay,
-  CLOSING_WINDOW_STYLE,
-  FOCUS_WINDOW_STYLE
+  CustomWindowOverlay
 }

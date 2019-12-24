@@ -127,13 +127,7 @@ class TextBoxWidget extends Widget {
   }
 
   onKeyPress (s, o) {
-    const text = this.gText.get_text()
-    this.logger.debug(`Update settings ${this.property} with value ${text}`)
-    if (text) {
-      const updated = this.settings.updateStringProperty(this.property, text)
-      this.logger.debug(`Updated Succeed : ${updated}`)
-      this.logger.debug(`Is now ${this.settings.getStringProperty(this.property)}`)
-    }
+    this.settings.updateStringProperty(this.property, this.gText.get_text())
   }
 }
 

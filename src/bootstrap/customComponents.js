@@ -1,6 +1,6 @@
 const Clutter = require('gi/Clutter')
 
-const { Label } = require('gi/St')
+const { Label } = require('../components')
 const { WorkspacesView } = require('ui/workspacesView')
 const { WindowOverlay } = require('ui/workspace')
 const { WindowManager } = require('ui/windowManager')
@@ -22,8 +22,7 @@ var initializeWindowOverlay = (injector, windowSelector, logger, overlays, setti
     const customWindow = new CustomWindowOverlay(
       logger,
       windowSelector,
-      new Label({}),
-      parent._parentActor,
+      new Label(settings, parent._parentActor),
       parent._windowClone,
       parent._windowClone.metaWindow,
       3,

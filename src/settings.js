@@ -5,6 +5,7 @@ const PROPERTIES = {
   SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW: 'show-window-selector-when-show-overview',
   LOGGING: 'logging',
   HINT_BACKGROUND_COLOR: 'background-color',
+  HINT_CLOSING_FONT_COLOR: 'closing-font-color',
   HINT_FONT_COLOR: 'font-color'
 }
 
@@ -29,6 +30,10 @@ var Settings = class Settings {
 
   getBackgroundColor () {
     return this.getStringProperty(PROPERTIES.HINT_BACKGROUND_COLOR)
+  }
+
+  getClosingFontColor () {
+    return this.getStringProperty(PROPERTIES.HINT_CLOSING_FONT_COLOR)
   }
 
   getFontColor () {

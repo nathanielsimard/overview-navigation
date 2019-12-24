@@ -9,6 +9,7 @@ const labelMock = require('../helpers/labelMock')
 const windowSelectorMock = require('../helpers/windowSelectorMock')
 const actorMock = require('../helpers/actorMock')
 const OverlaysMock = require('../helpers/subject/customWindowOverlaySubjectMock')
+const settingsStub = require('../helpers/settingsStub.js')
 
 const CustomWindowOverlay = require('../../src/window/customWindowOverlay')
 
@@ -23,6 +24,7 @@ describe('Custom Window Overlay', () => {
   let windowSelector
   let customWindowOverlay
   let windowClone
+  let settings
 
   beforeEach(() => {
     overlays = OverlaysMock.create()
@@ -32,6 +34,8 @@ describe('Custom Window Overlay', () => {
     parentActor = actorMock.create()
     metaWindow = {}
     windowClone = {}
+    settings = settingsStub.create()
+
     customWindowOverlay = new CustomWindowOverlay.CustomWindowOverlay(
       logger,
       windowSelector,
@@ -40,7 +44,8 @@ describe('Custom Window Overlay', () => {
       windowClone,
       metaWindow,
       PADDING,
-      overlays
+      overlays,
+      settings
     )
   })
 
