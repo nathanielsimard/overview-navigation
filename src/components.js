@@ -11,7 +11,7 @@ var Label = class Label {
     parent.add_actor(this.gLabel)
   }
 
-  setColor (color) {
+  updateFontColor (color) {
     this._setLabelStyle(color)
   }
 

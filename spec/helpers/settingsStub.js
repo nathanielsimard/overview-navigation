@@ -2,8 +2,12 @@ class Settings {
   constructor () {
     this.showOverviewOnSwitchWorkspace = undefined
     this.showWindowSelectorWhenShowOverview = undefined
-    this.debug = undefined
+    this.fontColor = undefined
+    this.logging = undefined
+    this.backgroundColor = undefined
+    this.closingFontColor = undefined
   }
+
   isShowOverviewOnSwitchWorkspace () {
     return this.showOverviewOnSwitchWorkspace
   }
@@ -12,8 +16,20 @@ class Settings {
     return this.showWindowSelectorWhenShowOverview
   }
 
-  isDebug () {
-    return this.debug
+  isLogging () {
+    return this.logging
+  }
+
+  getFontColor () {
+    return this.fontColor
+  }
+
+  getBackgroundColor () {
+    return this.backgroundColor
+  }
+
+  getClosingFontColor () {
+    return this.closingFontColor
   }
 }
 

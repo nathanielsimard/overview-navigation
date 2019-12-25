@@ -7,7 +7,6 @@ require('../helpers/core')
 const loggerMock = require('../helpers/loggerMock')
 const labelMock = require('../helpers/labelMock')
 const windowSelectorMock = require('../helpers/windowSelectorMock')
-const actorMock = require('../helpers/actorMock')
 const OverlaysMock = require('../helpers/subject/customWindowOverlaySubjectMock')
 const settingsStub = require('../helpers/settingsStub.js')
 
@@ -19,7 +18,6 @@ describe('Custom Window Overlay', () => {
   let overlays
   let logger
   let label
-  let parentActor
   let metaWindow
   let windowSelector
   let customWindowOverlay
@@ -31,7 +29,6 @@ describe('Custom Window Overlay', () => {
     logger = loggerMock.create()
     windowSelector = windowSelectorMock.create()
     label = labelMock.create()
-    parentActor = actorMock.create()
     metaWindow = {}
     windowClone = {}
     settings = settingsStub.create()
@@ -40,17 +37,12 @@ describe('Custom Window Overlay', () => {
       logger,
       windowSelector,
       label,
-      parentActor,
       windowClone,
       metaWindow,
       PADDING,
       overlays,
       settings
     )
-  })
-
-  it('adds label to parent actor', () => {
-    expect(parentActor.add_actor).toHaveBeenCalledWith(label)
   })
 
   it('registers meta window', () => {
@@ -78,7 +70,7 @@ describe('Custom Window Overlay', () => {
     })
 
     it('set label position to x=203, y=303', () => {
-      expect(label.set_position).toHaveBeenCalledWith(203, 303)
+      expect(label.setPosition).toHaveBeenCalledWith(203, 303)
     })
   })
 
@@ -92,39 +84,45 @@ describe('Custom Window Overlay', () => {
     })
 
     it('raises label on top', () => {
-      expect(label.raise_top).toHaveBeenCalled()
+      expect(label.raiseTop).toHaveBeenCalled()
     })
   })
 
   describe('When showing closing tooltip', () => {
     const labelText = 'aa'
+    const closingFontColor = 'closingFontColor'
+
     beforeEach(() => {
       label.text = labelText
+      settings.closingFontColor = 'closingFontColor'
       customWindowOverlay.showTooltipClosing()
     })
 
     it('Should set label style class name', () => {
-      expect(label.set_style_class_name).toHaveBeenCalledWith(CustomWindowOverlay.CLOSING_WINDOW_STYLE)
+      expect(label.updateFontColor).toHaveBeenCalledWith(closingFontColor)
     })
 
     it('Should upper case label text', () => {
-      expect(label.text).toEqual(labelText.toUpperCase())
+      expect(label.setText).toHaveBeenCalledWith(labelText.toUpperCase())
     })
   })
 
   describe('When hiding closing tooltip', () => {
     const labelText = 'AA'
+    const fontColor = 'fontColor'
+
     beforeEach(() => {
       label.text = labelText
+      settings.fontColor = fontColor
       customWindowOverlay.hideTooltipClosing()
     })
 
     it('Should set label style class name', () => {
-      expect(label.set_style_class_name).toHaveBeenCalledWith(CustomWindowOverlay.FOCUS_WINDOW_STYLE)
+      expect(label.updateFontColor).toHaveBeenCalledWith(fontColor)
     })
 
     it('Should lower case label text', () => {
-      expect(label.text).toEqual(labelText.toLowerCase())
+      expect(label.setText).toHaveBeenCalledWith(labelText.toLowerCase())
     })
   })
 })

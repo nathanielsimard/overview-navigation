@@ -10,7 +10,7 @@ var CustomWindowOverlay = class CustomWindowOverlay {
     this.overlays = overlays
     this.settings = settings
 
-    this.label.setColor(this.settings.getFontColor())
+    this.label.updateFontColor(this.settings.getFontColor())
     windowSelector.registerWindow(metaWindow, function (name) {
       label.setText(name)
     })
@@ -35,12 +35,13 @@ var CustomWindowOverlay = class CustomWindowOverlay {
   }
 
   showTooltipClosing () {
-    this.label.setColor(this.settings.getClosingFontColor())
+    this.label.updateFontColor(this.settings.getClosingFontColor())
     this.label.setText(this.label.getText().toUpperCase())
   }
 
   hideTooltipClosing () {
-    this.label.setColor(this.settings.getFontColor())
+    console.log(this.label.getText())
+    this.label.updateFontColor(this.settings.getFontColor())
     this.label.setText(this.label.getText().toLowerCase())
   }
 

@@ -1,20 +1,40 @@
 /* eslint-disable camelcase */
 /* global spyOn */
 class Label {
-  destroy () {}
-  set_position (x, y) {}
-  raise_top () {}
-  show () {}
-  set_style_class_name (className) {}
+  constructor () {
+    this.text = 'notset'
+  }
+
+  updateFontColor (color) { }
+
+  getText () {
+    return this.text
+  }
+
+  setText (text) {
+    this.text = text
+  }
+
+  destroy () { }
+
+  setPosition (x, y) { }
+
+  raiseTop () { }
+
+  show () { }
+
+  hide () { }
 }
 
 function create () {
   const label = new Label()
+  spyOn(label, 'updateFontColor')
+  spyOn(label, 'setText')
   spyOn(label, 'destroy')
-  spyOn(label, 'set_position')
-  spyOn(label, 'raise_top')
+  spyOn(label, 'setPosition')
+  spyOn(label, 'raiseTop')
   spyOn(label, 'show')
-  spyOn(label, 'set_style_class_name')
+  spyOn(label, 'hide')
   return label
 }
 
