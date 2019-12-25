@@ -47,6 +47,7 @@ var Label = class Label {
     this.gLabel.set_style(`
       background: ${this.settings.getBackgroundColor()};
       color: ${fontColor};
+      border: ${this.settings.getBorderSize()} solid ${this.settings.getBorderColor()};
     `)
   }
 }

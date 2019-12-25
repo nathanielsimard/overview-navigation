@@ -37,5 +37,17 @@
       <description>Customize the font color of closing hints.</description>
     </key>
 
+    <key name="border-color" type="s">
+      <default>"rgba(200,200,200,0.5)"</default>
+      <summary>Hint border color.</summary>
+      <description>Customize the border color of hints.</description>
+    </key>
+
+    <key name="border-size" type="s">
+      <default>"3px"</default>
+      <summary>Hint border size.</summary>
+      <description>Customize the border size of hints.</description>
+    </key>
+
   </schema>
 </schemalist>

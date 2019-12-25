@@ -6,7 +6,9 @@ const PROPERTIES = {
   LOGGING: 'logging',
   HINT_BACKGROUND_COLOR: 'background-color',
   HINT_CLOSING_FONT_COLOR: 'closing-font-color',
-  HINT_FONT_COLOR: 'font-color'
+  HINT_FONT_COLOR: 'font-color',
+  HINT_BORDER_COLOR: 'border-color',
+  HINT_BORDER_SIZE: 'border-size'
 }
 
 var Settings = class Settings {
@@ -38,6 +40,14 @@ var Settings = class Settings {
 
   getFontColor () {
     return this.getStringProperty(PROPERTIES.HINT_FONT_COLOR)
+  }
+
+  getBorderColor () {
+    return this.getStringProperty(PROPERTIES.HINT_BORDER_COLOR)
+  }
+
+  getBorderSize () {
+    return this.getStringProperty(PROPERTIES.HINT_BORDER_SIZE)
   }
 
   getStringProperty (key) {

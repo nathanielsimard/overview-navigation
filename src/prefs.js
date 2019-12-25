@@ -44,9 +44,23 @@ class SettingsWidget extends Widget {
       this.properties.HINT_FONT_COLOR,
       this.logger
     )
+    const borderColor = new TextBoxWidget(
+      'Hint border color',
+      this.settings,
+      this.properties.HINT_BORDER_COLOR,
+      this.logger
+    )
+    const borderSize = new TextBoxWidget(
+      'Hint border size',
+      this.settings,
+      this.properties.HINT_BORDER_SIZE,
+      this.logger
+    )
 
     style.add(backgroundColorText)
     style.add(fontColorText)
+    style.add(borderColor)
+    style.add(borderSize)
     style.register(this.notebook)
   }
 
