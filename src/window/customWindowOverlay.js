@@ -40,7 +40,6 @@ var CustomWindowOverlay = class CustomWindowOverlay {
   }
 
   hideTooltipClosing () {
-    console.log(this.label.getText())
     this.label.updateFontColor(this.settings.getFontColor())
     this.label.setText(this.label.getText().toLowerCase())
   }

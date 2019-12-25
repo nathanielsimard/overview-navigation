@@ -98,7 +98,7 @@ describe('Custom Window Overlay', () => {
       customWindowOverlay.showTooltipClosing()
     })
 
-    it('Should set label style class name', () => {
+    it('Should update closing font color', () => {
       expect(label.updateFontColor).toHaveBeenCalledWith(closingFontColor)
     })
 
@@ -117,7 +117,7 @@ describe('Custom Window Overlay', () => {
       customWindowOverlay.hideTooltipClosing()
     })
 
-    it('Should set label style class name', () => {
+    it('Should update font color', () => {
       expect(label.updateFontColor).toHaveBeenCalledWith(fontColor)
     })
 
