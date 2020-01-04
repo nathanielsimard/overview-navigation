@@ -1,16 +1,8 @@
 const Gtk = require('gi/Gtk')
+const { Widget, TextBoxWidget, ToggleButtonWidget } = require('./preferences/widget')
+const { NotebookPage } = require('./preferences/notebook')
 
-class Widget {
-  constructor (parent) {
-    this.parent = parent
-  }
-
-  add (widget) {
-    this.parent.add(widget.parent)
-  }
-}
-
-class SettingsWidget extends Widget {
+class SettingsUI extends Widget {
   constructor (logger, settings, properties) {
     super(new Gtk.Box({}))
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
@@ -91,84 +83,6 @@ class SettingsWidget extends Widget {
   }
 }
 
-class NotebookPage extends Widget {
-  constructor (name) {
-    super(
-      new Gtk.Box({
-        'margin-top': 10,
-        'border-width': '2px',
-        spacing: 5
-      })
-    )
-    this.name = name
-    this.parent.set_orientation(Gtk.Orientation.VERTICAL)
-  }
-
-  register (notebook) {
-    const label = new Gtk.Label({ label: this.name })
-    notebook.append_page(this.parent, label)
-  }
-}
-
-class TextBoxWidget extends Widget {
-  constructor (name, settings, property, logger) {
-    super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
-        spacing: 10,
-        hexpand: true
-      })
-    )
-    this.settings = settings
-    this.property = property
-    this.logger = logger
-
-    this.gText = new Gtk.Entry({ halign: Gtk.Align.END })
-    this.gText.activate()
-
-    const text = this.settings.getStringProperty(this.property)
-    if (text) {
-      this.gText.set_text(text)
-    }
-
-    this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
-
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gText)
-
-    this.parent.connect('key-release-event', this.onKeyPress.bind(this))
-  }
-
-  onKeyPress (s, o) {
-    this.settings.updateStringProperty(this.property, this.gText.get_text())
-  }
-}
-
-class ToggleButtonWidget extends Widget {
-  constructor (name, settings) {
-    super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
-        spacing: 10,
-        hexpand: true
-      })
-    )
-    this.settings = settings
-
-    this.gSwitch = new Gtk.Switch({ halign: Gtk.Align.END })
-    this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
-
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gSwitch)
-  }
-
-  bind (property) {
-    this.settings.bind(property, this.gSwitch, 'active')
-  }
-}
-
 class HelpWidget extends Widget {
   constructor (name, settings) {
     super(
@@ -237,9 +151,9 @@ function buildPrefsWidget() {
 
   const settings = initialize()
   const logger = new PrefLogger('SettingsWidget', settings)
-  const widget = new SettingsWidget(logger, settings, PROPERTIES)
+  const ui = new SettingsUI(logger, settings, PROPERTIES)
 
-  widget.initialize()
-  widget.parent.show_all()
-  return widget.parent
+  ui.initialize()
+  ui.parent.show_all()
+  return ui.parent
 }
