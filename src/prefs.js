@@ -1,5 +1,10 @@
 const Gtk = require('gi/Gtk')
-const { Widget, TextBoxWidget, ToggleButtonWidget } = require('./preferences/widget')
+const {
+  Widget,
+  TextBoxWidget,
+  ToggleButtonWidget,
+  ColorChooserWidget
+} = require('./preferences/widget')
 const { NotebookPage } = require('./preferences/notebook')
 
 class SettingsUI extends Widget {
@@ -24,19 +29,19 @@ class SettingsUI extends Widget {
   initializeStylePage () {
     const style = new NotebookPage('Style')
 
-    const backgroundColorText = new TextBoxWidget(
+    const backgroundColorText = new ColorChooserWidget(
       'Hint background color',
       this.settings,
       this.properties.HINT_BACKGROUND_COLOR,
       this.logger
     )
-    const fontColorText = new TextBoxWidget(
+    const fontColorText = new ColorChooserWidget(
       'Hint font color',
       this.settings,
       this.properties.HINT_FONT_COLOR,
       this.logger
     )
-    const borderColor = new TextBoxWidget(
+    const borderColor = new ColorChooserWidget(
       'Hint border color',
       this.settings,
       this.properties.HINT_BORDER_COLOR,
