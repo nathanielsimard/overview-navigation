@@ -47,7 +47,7 @@ var Settings = class Settings {
   }
 
   getBorderSize () {
-    return this.getStringProperty(PROPERTIES.HINT_BORDER_SIZE)
+    return this.getNumberProperty(PROPERTIES.HINT_BORDER_SIZE)
   }
 
   getStringProperty (key) {
@@ -56,6 +56,14 @@ var Settings = class Settings {
 
   updateStringProperty (key, property) {
     return this.gioSettings.set_string(key, property)
+  }
+
+  getNumberProperty (key) {
+    return this.gioSettings.get_int(key)
+  }
+
+  updateNumberProperty (key, property) {
+    return this.gioSettings.set_int(key, property)
   }
 
   bind (key, object, property) {

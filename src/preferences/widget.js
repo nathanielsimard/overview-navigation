@@ -107,4 +107,48 @@ var ColorChooserWidget = class ColorChooserWidget extends Widget {
   }
 }
 
-module.exports = { TextBoxWidget, Widget, ToggleButtonWidget, ColorChooserWidget }
+var NumberInputWidget = class NumberInputWidget extends Widget {
+  constructor (name, settings, property, logger) {
+    super(
+      new Gtk.HBox({
+        'margin-left': 10,
+        'margin-right': 10,
+        spacing: 10,
+        hexpand: true
+      })
+    )
+    this.settings = settings
+    this.property = property
+    this.logger = logger
+
+    const initValue = this.settings.getNumberProperty(this.property)
+
+    const adjustment = new Gtk.Adjustment({
+      lower: 0,
+      upper: 100,
+      step_increment: 1
+    })
+
+    this.gSpin = new Gtk.SpinButton({
+      halign: Gtk.Align.END,
+      numeric: true,
+      update_policy: Gtk.SpinButtonUpdatePolicy.IF_VALID,
+      adjustment: adjustment
+    })
+
+    this.gSpin.set_value(initValue)
+
+    this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
+
+    this.parent.add(this.gLabel)
+    this.parent.add(this.gSpin)
+    this.gSpin.connect('value-changed', this.updateProperty.bind(this))
+  }
+
+  updateProperty () {
+    const value = this.gSpin.get_value()
+    this.settings.updateNumberProperty(this.property, value)
+  }
+}
+
+module.exports = { TextBoxWidget, Widget, ToggleButtonWidget, ColorChooserWidget, NumberInputWidget }

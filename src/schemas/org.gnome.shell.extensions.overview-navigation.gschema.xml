@@ -43,10 +43,10 @@
       <description>Customize the border color of hints.</description>
     </key>
 
-    <key name="border-size" type="s">
-      <default>"3px"</default>
+    <key name="border-size" type="i">
+      <default>3</default>
       <summary>Hint border size.</summary>
-      <description>Customize the border size of hints.</description>
+      <description>Customize the border size of hints in pixels.</description>
     </key>
 
   </schema>

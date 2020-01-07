@@ -1,9 +1,9 @@
 const Gtk = require('gi/Gtk')
 const {
   Widget,
-  TextBoxWidget,
   ToggleButtonWidget,
-  ColorChooserWidget
+  ColorChooserWidget,
+  NumberInputWidget
 } = require('./preferences/widget')
 const { NotebookPage } = require('./preferences/notebook')
 
@@ -47,8 +47,8 @@ class SettingsUI extends Widget {
       this.properties.HINT_BORDER_COLOR,
       this.logger
     )
-    const borderSize = new TextBoxWidget(
-      'Hint border size',
+    const borderSize = new NumberInputWidget(
+      'Hint border size (px)',
       this.settings,
       this.properties.HINT_BORDER_SIZE,
       this.logger
