@@ -14,7 +14,7 @@ const Settings = require('./settings')
 const WindowSelector = require('./window/windowSelector')
 
 var Main = class Main {
-  constructor() {
+  constructor () {
     const keySymbols = { ...LOWER_CASE_KEY_SYMBOLS, ...UPPER_CASE_KEY_SYMBOLS }
     const settings = Settings.initialize()
     const overlays = new CustomWindowOverlaySubject(new Logger('CustomWindowOverlays', settings))
@@ -26,7 +26,13 @@ var Main = class Main {
     this.injector = new Injector(new Logger('Injector', settings))
 
     initializeWindowManager(this.injector, this.search, settings)
-    initializeWindowOverlay(this.injector, windowSelector, new Logger('CustomWindowOverlay', settings), overlays)
+    initializeWindowOverlay(
+      this.injector,
+      windowSelector,
+      new Logger('CustomWindowOverlay', settings),
+      overlays,
+      settings
+    )
 
     initializeWorkspaceView(
       this.injector,
@@ -38,11 +44,11 @@ var Main = class Main {
     )
   }
 
-  start() {
+  start () {
     this.injector.enable()
   }
 
-  stop() {
+  stop () {
     this.injector.disable()
     this.search.enable()
   }

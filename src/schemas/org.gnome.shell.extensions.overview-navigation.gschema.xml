@@ -19,5 +19,35 @@
       <description>Enable logging to help debugging. Note that all errors will be logged even if this option is set to false.</description>
     </key>
 
+    <key name="background-color" type="s">
+      <default>"#ffffff"</default>
+      <summary>Hint background color.</summary>
+      <description>Customize the background color of hints.</description>
+    </key>
+
+    <key name="font-color" type="s">
+      <default>"#fefefe"</default>
+      <summary>Hint font color.</summary>
+      <description>Customize the font color of hints.</description>
+    </key>
+
+    <key name="closing-font-color" type="s">
+      <default>"#bb1714"</default>
+      <summary>Hint closing font color.</summary>
+      <description>Customize the font color of closing hints.</description>
+    </key>
+
+    <key name="border-color" type="s">
+      <default>"rgba(200,200,200,0.5)"</default>
+      <summary>Hint border color.</summary>
+      <description>Customize the border color of hints.</description>
+    </key>
+
+    <key name="border-size" type="i">
+      <default>3</default>
+      <summary>Hint border size.</summary>
+      <description>Customize the border size of hints in pixels.</description>
+    </key>
+
   </schema>
 </schemalist>

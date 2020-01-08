@@ -1,17 +1,14 @@
 const Gtk = require('gi/Gtk')
+const {
+  Widget,
+  ToggleButtonWidget,
+  ColorChooserWidget,
+  NumberInputWidget
+} = require('./preferences/widget')
+const { NotebookPage } = require('./preferences/notebook')
 
-class Widget {
-  constructor(parent) {
-    this.parent = parent
-  }
-
-  add(widget) {
-    this.parent.add(widget.parent)
-  }
-}
-
-class SettingsWidget extends Widget {
-  constructor(logger, settings, properties) {
+class SettingsUI extends Widget {
+  constructor (logger, settings, properties) {
     super(new Gtk.Box({}))
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.notebook = new Gtk.Notebook()
@@ -23,16 +20,64 @@ class SettingsWidget extends Widget {
     this.properties = properties
   }
 
-  initialize() {
+  initialize () {
+    this.initializeBehaviorPage()
+    this.initializeStylePage()
+    this.initializeHelpPage()
+  }
+
+  initializeStylePage () {
+    const style = new NotebookPage('Style')
+
+    const backgroundColorText = new ColorChooserWidget(
+      'Hint background color',
+      this.settings,
+      this.properties.HINT_BACKGROUND_COLOR,
+      this.logger
+    )
+    const fontColorText = new ColorChooserWidget(
+      'Hint font color',
+      this.settings,
+      this.properties.HINT_FONT_COLOR,
+      this.logger
+    )
+    const borderColor = new ColorChooserWidget(
+      'Hint border color',
+      this.settings,
+      this.properties.HINT_BORDER_COLOR,
+      this.logger
+    )
+    const borderSize = new NumberInputWidget(
+      'Hint border size (px)',
+      this.settings,
+      this.properties.HINT_BORDER_SIZE,
+      this.logger
+    )
+
+    style.add(backgroundColorText)
+    style.add(fontColorText)
+    style.add(borderColor)
+    style.add(borderSize)
+    style.register(this.notebook)
+  }
+
+  initializeHelpPage () {
+    const helpPage = new NotebookPage('Help')
+    helpPage.add(new HelpWidget())
+    helpPage.register(this.notebook)
+  }
+
+  initializeBehaviorPage () {
     const overviewToggleButton = new ToggleButtonWidget('Show Overview When Change Workspace', this.settings)
+    overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
+
     const showWindowSelectorToggleButton = new ToggleButtonWidget(
       'Show Window Selector when show Overview',
       this.settings
     )
-    const loggingToggleButton = new ToggleButtonWidget('Logging', this.settings)
-
-    overviewToggleButton.bind(this.properties.SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY)
     showWindowSelectorToggleButton.bind(this.properties.SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW)
+
+    const loggingToggleButton = new ToggleButtonWidget('Logging', this.settings)
     loggingToggleButton.bind(this.properties.LOGGING)
 
     const behaviorPage = new NotebookPage('Behavior')
@@ -40,57 +85,11 @@ class SettingsWidget extends Widget {
     behaviorPage.add(showWindowSelectorToggleButton)
     behaviorPage.add(loggingToggleButton)
     behaviorPage.register(this.notebook)
-
-    const helpPage = new NotebookPage('Help')
-    helpPage.add(new HelpWidget())
-    helpPage.register(this.notebook)
   }
 }
 
-class NotebookPage extends Widget {
-  constructor(name) {
-    super(
-      new Gtk.Box({
-        'margin-top': 10,
-        'border-width': '2px',
-        spacing: 5
-      })
-    )
-    this.name = name
-    this.parent.set_orientation(Gtk.Orientation.VERTICAL)
-  }
-
-  register(notebook) {
-    const label = new Gtk.Label({ label: this.name })
-    notebook.append_page(this.parent, label)
-  }
-}
-
-class ToggleButtonWidget extends Widget {
-  constructor(name, settings) {
-    super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
-        spacing: 10,
-        hexpand: true
-      })
-    )
-    this.settings = settings
-
-    this.gSwitch = new Gtk.Switch({ halign: Gtk.Align.END })
-    this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
-
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gSwitch)
-  }
-
-  bind(property) {
-    this.settings.bind(property, this.gSwitch, 'active')
-  }
-}
 class HelpWidget extends Widget {
-  constructor(name, settings) {
+  constructor (name, settings) {
     super(
       new Gtk.VBox({
         'margin-left': 10,
@@ -125,7 +124,7 @@ class HelpWidget extends Widget {
     this.parent.add(closeTitle)
     this.parent.add(closeDescription)
   }
-  createTitle(text) {
+  createTitle (text) {
     const label = new Gtk.Label({
       halign: Gtk.Align.START
     })
@@ -133,7 +132,7 @@ class HelpWidget extends Widget {
     return label
   }
 
-  createTextDescription(text) {
+  createTextDescription (text) {
     const label = new Gtk.Label({
       label: text,
       halign: Gtk.Align.START
@@ -157,9 +156,9 @@ function buildPrefsWidget() {
 
   const settings = initialize()
   const logger = new PrefLogger('SettingsWidget', settings)
-  const widget = new SettingsWidget(logger, settings, PROPERTIES)
+  const ui = new SettingsUI(logger, settings, PROPERTIES)
 
-  widget.initialize()
-  widget.parent.show_all()
-  return widget.parent
+  ui.initialize()
+  ui.parent.show_all()
+  return ui.parent
 }

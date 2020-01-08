@@ -1,11 +1,11 @@
 var CustomWindowManager = class CustomWindowManager {
-  constructor(search, overview, settings) {
+  constructor (search, overview, settings) {
     this.search = search
     this.overview = overview
     this.settings = settings
   }
 
-  actionMoveWorkspace() {
+  actionMoveWorkspace () {
     if (!this.settings.isShowOverviewOnSwitchWorkspace()) {
       return
     }
