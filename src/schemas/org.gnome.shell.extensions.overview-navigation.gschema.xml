@@ -20,7 +20,7 @@
     </key>
 
     <key name="background-color" type="s">
-      <default>"#ffffff"</default>
+      <default>"#0d0d0d"</default>
       <summary>Hint background color.</summary>
       <description>Customize the background color of hints.</description>
     </key>
