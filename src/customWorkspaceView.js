@@ -103,7 +103,9 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
 
   isTooltipsClosingKeySymbol (keySymbol) {
-    return keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
+    return keySymbol === this.keys.KEY_Shift_L ||
+      keySymbol === this.keys.KEY_Shift_R ||
+      keySymbol === 0
   }
 
   isOnFirstMonitor () {
