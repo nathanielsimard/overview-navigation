@@ -103,6 +103,8 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
 
   isTooltipsClosingKeySymbol (keySymbol) {
+    // Shift keySymbol become 0 when the option
+    // 'Shift Cancels Capslock' is enable.
     return keySymbol === this.keys.KEY_Shift_L ||
       keySymbol === this.keys.KEY_Shift_R ||
       keySymbol === 0
