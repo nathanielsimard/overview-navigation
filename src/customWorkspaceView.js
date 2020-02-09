@@ -1,4 +1,5 @@
 const { MODE } = require('./mode')
+const Gdk = require('gi/Gdk')
 
 var CustomWorkspaceView = class CustomWorkspaceView {
   constructor (logger, search, windowSelector, stage, workspaces, workspaceManager, keys, settings, overlays) {
@@ -56,8 +57,23 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.logger.debug('On key press ...')
 
     if (!this.isOnFirstMonitor()) return
-    if (this.showWindowsTooltipsClosing(o.get_key_symbol())) return
     if (this.searching) return
+    if (o.get_key_symbol() === this.keys.KEY_Caps_Lock) {
+      this.logger.info("Release caplocks")
+      if (this.isCapsLock()) {
+        this.logger.info("Was caps locks, hiding")
+        this.hideWindowsTooltipsClosing()
+      } else {
+        this.logger.info("Was not caps locks, showing")
+        this.showWindowsTooltipsClosing()
+      }
+    } else if (this.isTooltipsClosingKeySymbol(o.get_key_symbol())) {
+      if (this.isCapsLock()) {
+        this.hideWindowsTooltipsClosing()
+      } else {
+        this.showWindowsTooltipsClosing()
+      }
+    }
 
     const keySymbol = o.get_key_symbol()
     this._selectWindow(keySymbol)
@@ -66,9 +82,15 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   onKeyRelease (s, o) {
     this.logger.debug('On key release ...')
 
-    if (this.hideWindowsTooltipsClosing(o.get_key_symbol())) return
-    if (!this.isShowTooltipsKeySymbol(o.get_key_symbol())) return
+    if (this.isTooltipsClosingKeySymbol(o.get_key_symbol())) {
+      if (this.isCapsLock()) {
+        this.showWindowsTooltipsClosing()
+      } else {
+        this.hideWindowsTooltipsClosing()
+      }
+    }
 
+    if (!this.isShowTooltipsKeySymbol(o.get_key_symbol())) return
     if (this.searching) {
       this.showTooltips()
     } else {
@@ -76,9 +98,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     }
   }
 
-  hideWindowsTooltipsClosing (keySymbol) {
-    if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
-
+  hideWindowsTooltipsClosing () {
     this.overlays.getAllWindows().forEach(window => {
       window.hideTooltipClosing()
     })
@@ -87,9 +107,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     return true
   }
 
-  showWindowsTooltipsClosing (keySymbol) {
-    if (!this.isTooltipsClosingKeySymbol(keySymbol)) return false
-
+  showWindowsTooltipsClosing () {
     this.overlays.getAllWindows().forEach(window => {
       window.showTooltipClosing()
     })
@@ -106,6 +124,13 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     return keySymbol === this.keys.KEY_Shift_L || keySymbol === this.keys.KEY_Shift_R
   }
 
+  isCapsLock () {
+    const display = Gdk.Display.get_default()
+    const keymap = Gdk.Keymap.get_for_display(display)
+
+    return keymap.get_caps_lock_state()
+  }
+
   isOnFirstMonitor () {
     const activeWorkspaceIndex = this.workspaceManager.get_active_workspace_index()
     return this.workspaces[activeWorkspaceIndex].monitorIndex === 0
@@ -120,6 +145,15 @@ var CustomWorkspaceView = class CustomWorkspaceView {
 
     this.search.disable()
     this.searching = false
+    this.tooltipsStyle()
+  }
+
+  tooltipsStyle (release) {
+    if (this.isCapsLock()) {
+      this.showWindowsTooltipsClosing()
+    } else {
+      this.hideWindowsTooltipsClosing()
+    }
   }
 
   hideTooltips () {
