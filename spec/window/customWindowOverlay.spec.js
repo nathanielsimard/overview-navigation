@@ -82,10 +82,6 @@ describe('Custom Window Overlay', () => {
     it('shows label', () => {
       expect(label.show).toHaveBeenCalled()
     })
-
-    it('raises label on top', () => {
-      expect(label.raiseTop).toHaveBeenCalled()
-    })
   })
 
   describe('When showing closing tooltip', () => {
