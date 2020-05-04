@@ -30,7 +30,6 @@ var CustomWindowOverlay = class CustomWindowOverlay {
 
   showTooltip () {
     this.logger.debug('Showing tooltip ...')
-    this.label.raiseTop()
     this.label.show()
   }
 

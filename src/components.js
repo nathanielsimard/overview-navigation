@@ -31,10 +31,6 @@ var Label = class Label {
     this.gLabel.set_position(x, y)
   }
 
-  raiseTop () {
-    this.gLabel.raise_top()
-  }
-
   show () {
     this.gLabel.show()
   }

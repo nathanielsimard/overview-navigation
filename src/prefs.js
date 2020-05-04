@@ -7,6 +7,8 @@ const {
 } = require('./preferences/widget')
 const { NotebookPage } = require('./preferences/notebook')
 
+global = {}
+
 class SettingsUI extends Widget {
   constructor (logger, settings, properties) {
     super(new Gtk.Box({}))

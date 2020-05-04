@@ -19,8 +19,6 @@ class Label {
 
   setPosition (x, y) { }
 
-  raiseTop () { }
-
   show () { }
 
   hide () { }
@@ -32,7 +30,6 @@ function create () {
   spyOn(label, 'setText')
   spyOn(label, 'destroy')
   spyOn(label, 'setPosition')
-  spyOn(label, 'raiseTop')
   spyOn(label, 'show')
   spyOn(label, 'hide')
   return label
