@@ -2,7 +2,7 @@ const Clutter = require('gi/Clutter')
 
 const { Label } = require('../components')
 const { WorkspacesView } = require('ui/workspacesView')
-const { WindowOverlay } = require('ui/workspace')
+const { WindowPreview } = require('ui/workspace')
 const { WindowManager } = require('ui/windowManager')
 const { overview } = require('ui/main')
 const { Logger } = require('../utils')
@@ -18,23 +18,26 @@ var initializeWindowManager = (injector, search, settings) => {
 }
 
 var initializeWindowOverlay = (injector, windowSelector, logger, overlays, settings) => {
-  injector.inject(CustomWindowOverlay, WindowOverlay, parent => {
+  logger.info('Initialize overlays')
+  injector.inject(CustomWindowOverlay, WindowPreview, parent => {
     const customWindow = new CustomWindowOverlay(
       logger,
       windowSelector,
-      new Label(settings, parent._parentActor),
-      parent._windowClone,
-      parent._windowClone.metaWindow,
+      new Label(settings, parent._windowActor),
+      parent,
+      parent.metaWindow,
       3,
       overlays,
       settings
     )
+    logger.info(`CustomWindowOverlay createddd`)
     overlays.addWindow(customWindow)
     return customWindow
   })
 }
 
 var initializeWorkspaceView = (injector, logger, search, windowSelector, settings, overlays) => {
+  logger.info('Initialize WorkspaceView')
   injector.inject(CustomWorkspaceView, WorkspacesView, parent => {
     var workspaceManager = global.workspace_manager
     if (!workspaceManager) {

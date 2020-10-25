@@ -1,7 +1,7 @@
 var CustomWindowOverlay = class CustomWindowOverlay {
   constructor (logger, windowSelector, label, windowClone, metaWindow, padding, overlays, settings) {
     this.logger = logger
-    this.logger.debug('Initializing ...')
+    this.logger.info('CustomWindowOverlay Initializing ...')
     this.windowSelector = windowSelector
     this.windowClone = windowClone
     this.label = label
@@ -18,7 +18,7 @@ var CustomWindowOverlay = class CustomWindowOverlay {
 
   relayout (animate) {
     let [x, y] = this.windowClone.slot
-    this.logger.debug('Calculating layout ...')
+    this.logger.debug(`Calculating layout with x ${x} y ${y}...`)
     this.label.setPosition(Math.floor(x) + this.padding, Math.floor(y) + this.padding)
   }
 
