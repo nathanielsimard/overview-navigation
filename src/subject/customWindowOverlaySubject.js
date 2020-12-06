@@ -7,6 +7,7 @@ var CustomWindowOverlaySubject = class CustomWindowOverlaySubject {
 
   addWindow (window) {
     this.windows.push(window)
+    this.logger.info(`Added a window`)
     this.listeners.forEach(lister => lister.onWindowCreated(window))
   }
 

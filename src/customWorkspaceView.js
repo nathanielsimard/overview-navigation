@@ -16,6 +16,8 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
 
   onWindowCreated (window) {
+    this.logger.debug(`Window Created.. ${window}`)
+
     if (this.searching) {
       window.hideTooltip()
     } else {
@@ -117,6 +119,9 @@ var CustomWorkspaceView = class CustomWorkspaceView {
 
   showTooltips () {
     this.logger.debug('Showing tooltips ...')
+    this.logger.debug(`I have ${this.overlays.getAllWindows().length} windows`)
+    this.logger.debug(`I have ${global.get_window_actors()} windows actors`)
+    this.logger.debug(`I have ${global.get_window_actors()} windows actors`)
 
     this.overlays.getAllWindows().forEach(window => {
       window.showTooltip()

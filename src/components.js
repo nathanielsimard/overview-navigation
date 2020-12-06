@@ -8,7 +8,8 @@ var Label = class Label {
     this.gLabel = new St.Label({ })
     this.gLabel.set_style_class_name(FOCUS_WINDOW_STYLE)
 
-    // parent.add_actor(this.gLabel)
+    parent.add_child(this.gLabel)
+    this.gLabel.show()
   }
 
   updateFontColor (color) {
