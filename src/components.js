@@ -15,10 +15,6 @@ var Label = class Label {
     this._setLabelStyle(color)
   }
 
-  addConstraint (constraint) {
-    this.gLabel.add_constraint(constraint)
-  }
-
   getText () {
     return this.gLabel.text
   }

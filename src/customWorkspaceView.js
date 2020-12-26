@@ -27,7 +27,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   onWindowDeleted (window) { }
 
   animateToOverview () {
-    this.logger.info('Animate to overview ...')
+    // this.logger.info('Animate to overview ...')
 
     if (!this.keyPressEventId) {
       this.keyPressEventId = this.stage.connect('key-press-event', this.onKeyPress.bind(this))
@@ -119,8 +119,6 @@ var CustomWorkspaceView = class CustomWorkspaceView {
 
   showTooltips () {
     this.logger.debug('Showing tooltips ...')
-    this.logger.debug(`I have ${this.overlays.getAllWindows().length} windows`)
-    this.logger.debug(`I have ${global.get_window_actors()} windows actors`)
 
     this.overlays.getAllWindows().forEach(window => {
       window.showTooltip()

@@ -1,8 +1,6 @@
 var CustomWindowOverlay = class CustomWindowOverlay {
   constructor (logger, windowSelector, label, windowClone, metaWindow, padding, settings) {
     this.logger = logger
-    console.log('CustomWindowOverlay Initializing ...')
-    this.logger.info('CustomWindowOverlay Initializing ...')
     this.windowSelector = windowSelector
     this.windowClone = windowClone
     this.label = label
@@ -10,7 +8,6 @@ var CustomWindowOverlay = class CustomWindowOverlay {
     this.metaWindow = metaWindow
     this.settings = settings
 
-    console.log('done')
     this.label.updateFontColor(this.settings.getFontColor())
     windowSelector.registerWindow(metaWindow, function (name) {
       label.setText(name)

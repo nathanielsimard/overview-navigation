@@ -4,7 +4,6 @@ var Search = class Search {
     this.logger = logger
     this.originalSearch = this.overview._overview._controls.viewSelector.startSearch
     this.originalOnTextChanged = this.overview._overview._controls.viewSelector._onTextChanged
-    this._windows = []
   }
 
   disable () {
@@ -12,8 +11,6 @@ var Search = class Search {
 
     this.overview._overview._controls.viewSelector.startSearch = function (event) {}
     this.overview._overview._controls.viewSelector._onTextChanged = function (se, prop) {}
-
-    this._windows.forEach(w => w._onDelete())
   }
 
   enable () {

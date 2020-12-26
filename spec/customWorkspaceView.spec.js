@@ -15,7 +15,7 @@ const windowOverlayMock = require('./helpers/windowOverlayMock')
 
 const { MODE } = require('../src/mode')
 const LoggerMock = require('./helpers/loggerMock')
-const cwv = require('../src/customWorkspaceView')
+const { CustomWorkspaceView } = require('../src/customWorkspaceView')
 const { CustomWindowOverlaySubject } = require('../src/subject/customWindowOverlaySubject')
 
 const FOCUS_KEY = 'focusKey'
@@ -36,14 +36,15 @@ describe('Custom Workspace View', function () {
   let customWorkspaceView
   let overlays
 
-  beforeEach(function () {
+  beforeEach(() => {
     windowOverlay = windowOverlayMock.create()
     otherWindowOverlay = windowOverlayMock.create()
-    overlays = new CustomWindowOverlaySubject()
+    logger = LoggerMock.create()
+
+    overlays = new CustomWindowOverlaySubject(logger)
     overlays.addWindow(windowOverlay)
     overlays.addWindow(otherWindowOverlay)
 
-    logger = LoggerMock.create()
     search = searchMock.create()
     windowSelector = windowSelectorMock.create()
     stage = stageMock.create()
@@ -56,7 +57,7 @@ describe('Custom Workspace View', function () {
     }
     settings = settingsStub.create()
 
-    customWorkspaceView = new cwv.CustomWorkspaceView(
+    customWorkspaceView = new CustomWorkspaceView(
       logger,
       search,
       windowSelector,
@@ -113,7 +114,7 @@ describe('Custom Workspace View', function () {
 
   describe('when destroying', function () {
     beforeEach(() => {
-      customWorkspaceView = new cwv.CustomWorkspaceView(
+      customWorkspaceView = new CustomWorkspaceView(
         logger,
         search,
         windowSelector,
@@ -142,7 +143,7 @@ describe('Custom Workspace View', function () {
 
   describe('on first window', function () {
     beforeEach(() => {
-      customWorkspaceView = new cwv.CustomWorkspaceView(
+      customWorkspaceView = new CustomWorkspaceView(
         logger,
         search,
         windowSelector,
