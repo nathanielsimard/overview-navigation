@@ -27,7 +27,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   onWindowDeleted (window) { }
 
   animateToOverview () {
-    // this.logger.info('Animate to overview ...')
+    this.logger.info('Animate to overview ...')
 
     if (!this.keyPressEventId) {
       this.keyPressEventId = this.stage.connect('key-press-event', this.onKeyPress.bind(this))
