@@ -9,11 +9,14 @@ var Label = class Label {
     this.gLabel.set_style_class_name(FOCUS_WINDOW_STYLE)
 
     parent.add_child(this.gLabel)
-    this.gLabel.show()
   }
 
   updateFontColor (color) {
     this._setLabelStyle(color)
+  }
+
+  addConstraint (constraint) {
+    this.gLabel.add_constraint(constraint)
   }
 
   getText () {

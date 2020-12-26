@@ -40,7 +40,6 @@ describe('Custom Window Overlay', () => {
       windowClone,
       metaWindow,
       PADDING,
-      overlays,
       settings
     )
   })

@@ -1,15 +1,16 @@
 var CustomWindowOverlay = class CustomWindowOverlay {
-  constructor (logger, windowSelector, label, windowClone, metaWindow, padding, overlays, settings) {
+  constructor (logger, windowSelector, label, windowClone, metaWindow, padding, settings) {
     this.logger = logger
+    console.log('CustomWindowOverlay Initializing ...')
     this.logger.info('CustomWindowOverlay Initializing ...')
     this.windowSelector = windowSelector
     this.windowClone = windowClone
     this.label = label
     this.padding = padding
     this.metaWindow = metaWindow
-    this.overlays = overlays
     this.settings = settings
 
+    console.log('done')
     this.label.updateFontColor(this.settings.getFontColor())
     windowSelector.registerWindow(metaWindow, function (name) {
       label.setText(name)
@@ -25,7 +26,6 @@ var CustomWindowOverlay = class CustomWindowOverlay {
   _onDestroy () {
     this.logger.info('Destroying ...')
     this.label.destroy()
-    this.overlays.removeWindow(this)
   }
 
   showTooltip () {

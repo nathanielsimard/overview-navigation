@@ -1,14 +1,13 @@
 const Clutter = require('gi/Clutter')
 
-const { Label } = require('../components')
 const { WorkspacesView } = require('ui/workspacesView')
-const { WindowPreview } = require('ui/windowPreview')
 const { WindowManager } = require('ui/windowManager')
+const { Workspace } = require('ui/workspace')
 const { overview } = require('ui/main')
 const { Logger } = require('../utils')
 const { CustomWindowManager } = require('../window/customWindowManager')
-const { CustomWindowOverlay } = require('../window/customWindowOverlay')
 const { CustomWorkspaceView } = require('../customWorkspaceView')
+const { CustomWorkspace } = require('../customWorkspace')
 const { Search } = require('../search')
 
 var initializeWindowManager = (injector, search, settings) => {
@@ -17,23 +16,11 @@ var initializeWindowManager = (injector, search, settings) => {
   })
 }
 
-var initializeWindowOverlay = (injector, windowSelector, logger, overlays, settings) => {
-  logger.info('Initialize overlays')
-  injector.inject(CustomWindowOverlay, WindowPreview, parent => {
-    logger.info(`parent ${parent}`)
-    const customWindow = new CustomWindowOverlay(
-      logger,
-      windowSelector,
-      new Label(settings, parent.get_parent()),
-      parent,
-      parent.metaWindow,
-      3,
-      overlays,
-      settings
-    )
-    logger.info(`CustomWindowOverlay createddd`)
-    overlays.addWindow(customWindow)
-    return customWindow
+var initializeWorkspace = (injector, settings, overlays, windowOverlayFactory) => {
+  const logger = new Logger('Custom Workspace', settings)
+
+  injector.inject(CustomWorkspace, Workspace, parent => {
+    return new CustomWorkspace(logger, overlays, windowOverlayFactory, parent)
   })
 }
 
@@ -65,7 +52,7 @@ var initializeSearch = (settings) => {
 
 module.exports = {
   initializeWindowManager,
-  initializeWindowOverlay,
   initializeWorkspaceView,
+  initializeWorkspace,
   initializeSearch
 }
