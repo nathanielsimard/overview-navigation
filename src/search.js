@@ -14,7 +14,7 @@ var Search = class Search {
   }
 
   enable () {
-    this.logger.info('Enabling search ...')
+    this.logger.debug('Enabling search ...')
 
     this.overview._overview._controls.viewSelector.startSearch = this.originalSearch
     this.overview._overview._controls.viewSelector._onTextChanged = this.originalOnTextChanged

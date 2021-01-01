@@ -7,7 +7,6 @@ require('../helpers/core')
 const loggerMock = require('../helpers/loggerMock')
 const labelMock = require('../helpers/labelMock')
 const windowSelectorMock = require('../helpers/windowSelectorMock')
-const OverlaysMock = require('../helpers/subject/customWindowOverlaySubjectMock')
 const settingsStub = require('../helpers/settingsStub.js')
 
 const CustomWindowOverlay = require('../../src/window/customWindowOverlay')
@@ -15,7 +14,6 @@ const CustomWindowOverlay = require('../../src/window/customWindowOverlay')
 describe('Custom Window Overlay', () => {
   const PADDING = 3
 
-  let overlays
   let logger
   let label
   let metaWindow
@@ -25,7 +23,6 @@ describe('Custom Window Overlay', () => {
   let settings
 
   beforeEach(() => {
-    overlays = OverlaysMock.create()
     logger = loggerMock.create()
     windowSelector = windowSelectorMock.create()
     label = labelMock.create()
@@ -40,7 +37,6 @@ describe('Custom Window Overlay', () => {
       windowClone,
       metaWindow,
       PADDING,
-      overlays,
       settings
     )
   })
@@ -56,10 +52,6 @@ describe('Custom Window Overlay', () => {
 
     it('destroy label', () => {
       expect(label.destroy).toHaveBeenCalled()
-    })
-
-    it('should call overlays window deleted', () => {
-      expect(overlays.removeWindow).toHaveBeenCalledWith(customWindowOverlay)
     })
   })
 

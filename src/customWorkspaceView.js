@@ -16,6 +16,8 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
 
   onWindowCreated (window) {
+    this.logger.debug(`Window Created.. ${window}`)
+
     if (this.searching) {
       window.hideTooltip()
     } else {

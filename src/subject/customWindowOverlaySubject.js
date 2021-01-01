@@ -6,11 +6,13 @@ var CustomWindowOverlaySubject = class CustomWindowOverlaySubject {
   }
 
   addWindow (window) {
+    this.logger.info(`Add window`)
     this.windows.push(window)
     this.listeners.forEach(lister => lister.onWindowCreated(window))
   }
 
   removeWindow (window) {
+    this.logger.info(`Remove window`)
     this.windows = this.windows.filter(w => w !== window)
     this.listeners.forEach(lister => lister.onWindowDeleted(window))
   }

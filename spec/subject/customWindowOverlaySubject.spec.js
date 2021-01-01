@@ -5,15 +5,18 @@
 require('../helpers/core')
 
 const ListenerMock = require('../helpers/listenerMock')
+const LoggerMock = require('../helpers/loggerMock')
 const { CustomWindowOverlaySubject } = require('../../src/subject/customWindowOverlaySubject')
 
 describe('Custom Window Overlay Listener', () => {
   let listener
   let otherListener
   let overlays
+  let logger
 
   beforeEach(() => {
-    overlays = new CustomWindowOverlaySubject()
+    logger = LoggerMock.create()
+    overlays = new CustomWindowOverlaySubject(logger)
   })
 
   beforeEach(() => {
