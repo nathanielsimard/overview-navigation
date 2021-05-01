@@ -15,12 +15,13 @@ var TextBoxWidget = class TextBoxWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
-        // 'margin-left': 10,
-        // 'margin-right': 10,
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.property = property
     this.logger = logger
@@ -50,12 +51,13 @@ var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
   constructor (name, settings) {
     super(
       new Gtk.Box({
-        // 'margin-left': 10,
-        // 'margin-right': 10,
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
 
     this.gSwitch = new Gtk.Switch({ halign: Gtk.Align.END })
@@ -74,12 +76,13 @@ var ColorChooserWidget = class ColorChooserWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
-        // 'margin-left': 10,
-        // 'margin-right': 10,
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.logger = logger
     this.property = property
@@ -111,12 +114,13 @@ var NumberInputWidget = class NumberInputWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
-        // 'margin-left': 10,
-        // 'margin-right': 10,
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.property = property
     this.logger = logger

@@ -94,11 +94,12 @@ class HelpWidget extends Widget {
   constructor (name, settings) {
     super(
       new Gtk.Box({
-        // 'margin-left': 10,
-        // 'margin-right': 10,
         spacing: 10
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.name = 'Help'
 
     const activationTitle = this.createTitle(`Activation`)
@@ -139,7 +140,7 @@ class HelpWidget extends Widget {
       label: text,
       halign: Gtk.Align.START
     })
-    // label.set_line_wrap(true)
+    label.set_wrap(true)
     return label
   }
 }
