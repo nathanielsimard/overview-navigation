@@ -6,7 +6,7 @@ var NotebookPage = class NotebookPage extends Widget {
     super(
       new Gtk.Box({
         'margin-top': 10,
-        'border-width': '2px',
+        // 'border-width': '2px',
         spacing: 5
       })
     )

@@ -13,10 +13,12 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     this.current_mode = MODE.Focussing
     this.overlays = overlays
     this.overlays.attach(this)
+    this.searching = true
   }
 
   onWindowCreated (window) {
     this.logger.debug(`Window Created.. ${window}`)
+    this.logger.debug(`Searching ${this.searching}`)
 
     if (this.searching) {
       window.hideTooltip()
@@ -26,7 +28,7 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
   onWindowDeleted (window) { }
 
-  animateToOverview () {
+  _updateWorkspaceMode () {
     this.logger.info('Animate to overview ...')
 
     if (!this.keyPressEventId) {

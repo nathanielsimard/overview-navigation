@@ -26,6 +26,7 @@ var initializeWorkspace = (injector, settings, overlays, windowOverlayFactory) =
 
 var initializeWorkspaceView = (injector, logger, search, windowSelector, settings, overlays) => {
   logger.info('Initialize WorkspaceView')
+  logger.info(`properties ${Object.getOwnPropertyNames(WorkspacesView)}`)
   injector.inject(CustomWorkspaceView, WorkspacesView, parent => {
     var workspaceManager = global.workspace_manager
     if (!workspaceManager) {
