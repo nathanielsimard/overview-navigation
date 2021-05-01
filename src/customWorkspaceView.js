@@ -26,6 +26,10 @@ var CustomWorkspaceView = class CustomWorkspaceView {
   }
   onWindowDeleted (window) { }
 
+  _updateWorkspaceMode () {
+    this.animateToOverview()
+  }
+
   animateToOverview () {
     this.logger.info('Animate to overview ...')
 

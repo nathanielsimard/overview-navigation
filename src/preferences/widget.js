@@ -6,21 +6,22 @@ var Widget = class Widget {
     this.parent = parent
   }
 
-  add (widget) {
-    this.parent.add(widget.parent)
+  append (widget) {
+    this.parent.append(widget.parent)
   }
 }
 
 var TextBoxWidget = class TextBoxWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
+      new Gtk.Box({
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.property = property
     this.logger = logger
@@ -35,8 +36,8 @@ var TextBoxWidget = class TextBoxWidget extends Widget {
 
     this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
 
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gText)
+    this.parent.append(this.gLabel)
+    this.parent.append(this.gText)
 
     this.parent.connect('key-release-event', this.onKeyRelease.bind(this))
   }
@@ -49,20 +50,21 @@ var TextBoxWidget = class TextBoxWidget extends Widget {
 var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
   constructor (name, settings) {
     super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
+      new Gtk.Box({
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
 
     this.gSwitch = new Gtk.Switch({ halign: Gtk.Align.END })
     this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
 
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gSwitch)
+    this.parent.append(this.gLabel)
+    this.parent.append(this.gSwitch)
   }
 
   bind (property) {
@@ -73,13 +75,14 @@ var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
 var ColorChooserWidget = class ColorChooserWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
+      new Gtk.Box({
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.logger = logger
     this.property = property
@@ -97,8 +100,8 @@ var ColorChooserWidget = class ColorChooserWidget extends Widget {
 
     this.gButton.connect('color-set', this.clicked.bind(this))
 
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gButton)
+    this.parent.append(this.gLabel)
+    this.parent.append(this.gButton)
   }
 
   clicked () {
@@ -110,13 +113,14 @@ var ColorChooserWidget = class ColorChooserWidget extends Widget {
 var NumberInputWidget = class NumberInputWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
-      new Gtk.HBox({
-        'margin-left': 10,
-        'margin-right': 10,
+      new Gtk.Box({
         spacing: 10,
         hexpand: true
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.HORIZONTAL)
     this.settings = settings
     this.property = property
     this.logger = logger
@@ -140,8 +144,8 @@ var NumberInputWidget = class NumberInputWidget extends Widget {
 
     this.gLabel = new Gtk.Label({ label: name, halign: Gtk.Align.START })
 
-    this.parent.add(this.gLabel)
-    this.parent.add(this.gSpin)
+    this.parent.append(this.gLabel)
+    this.parent.append(this.gSpin)
     this.gSpin.connect('value-changed', this.updateProperty.bind(this))
   }
 

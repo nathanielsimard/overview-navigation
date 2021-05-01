@@ -15,7 +15,7 @@ class SettingsUI extends Widget {
     this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.notebook = new Gtk.Notebook()
     this.notebook.set_show_border(true)
-    this.parent.pack_end(this.notebook, true, true, 0)
+    this.parent.append(this.notebook, true, true, 0)
 
     this.logger = logger
     this.settings = settings
@@ -56,16 +56,16 @@ class SettingsUI extends Widget {
       this.logger
     )
 
-    style.add(backgroundColorText)
-    style.add(fontColorText)
-    style.add(borderColor)
-    style.add(borderSize)
+    style.append(backgroundColorText)
+    style.append(fontColorText)
+    style.append(borderColor)
+    style.append(borderSize)
     style.register(this.notebook)
   }
 
   initializeHelpPage () {
     const helpPage = new NotebookPage('Help')
-    helpPage.add(new HelpWidget())
+    helpPage.append(new HelpWidget())
     helpPage.register(this.notebook)
   }
 
@@ -83,9 +83,9 @@ class SettingsUI extends Widget {
     loggingToggleButton.bind(this.properties.LOGGING)
 
     const behaviorPage = new NotebookPage('Behavior')
-    behaviorPage.add(overviewToggleButton)
-    behaviorPage.add(showWindowSelectorToggleButton)
-    behaviorPage.add(loggingToggleButton)
+    behaviorPage.append(overviewToggleButton)
+    behaviorPage.append(showWindowSelectorToggleButton)
+    behaviorPage.append(loggingToggleButton)
     behaviorPage.register(this.notebook)
   }
 }
@@ -93,12 +93,13 @@ class SettingsUI extends Widget {
 class HelpWidget extends Widget {
   constructor (name, settings) {
     super(
-      new Gtk.VBox({
-        'margin-left': 10,
-        'margin-right': 10,
+      new Gtk.Box({
         spacing: 10
       })
     )
+    this.parent.set_margin_start(10)
+    this.parent.set_margin_end(10)
+    this.parent.set_orientation(Gtk.Orientation.VERTICAL)
     this.name = 'Help'
 
     const activationTitle = this.createTitle(`Activation`)
@@ -117,14 +118,14 @@ class HelpWidget extends Widget {
       `It is also possible to close a window in the same way, but while keeping SHIFT pressed.`
     )
 
-    this.parent.add(activationTitle)
-    this.parent.add(activationDescription)
+    this.parent.append(activationTitle)
+    this.parent.append(activationDescription)
 
-    this.parent.add(focusTitle)
-    this.parent.add(focusDescription)
+    this.parent.append(focusTitle)
+    this.parent.append(focusDescription)
 
-    this.parent.add(closeTitle)
-    this.parent.add(closeDescription)
+    this.parent.append(closeTitle)
+    this.parent.append(closeDescription)
   }
   createTitle (text) {
     const label = new Gtk.Label({
@@ -139,7 +140,7 @@ class HelpWidget extends Widget {
       label: text,
       halign: Gtk.Align.START
     })
-    label.set_line_wrap(true)
+    label.set_wrap(true)
     return label
   }
 }
@@ -161,6 +162,5 @@ function buildPrefsWidget() {
   const ui = new SettingsUI(logger, settings, PROPERTIES)
 
   ui.initialize()
-  ui.parent.show_all()
   return ui.parent
 }
