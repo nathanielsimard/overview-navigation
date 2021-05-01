@@ -162,6 +162,5 @@ function buildPrefsWidget() {
   const ui = new SettingsUI(logger, settings, PROPERTIES)
 
   ui.initialize()
-  // ui.parent.show_all()
   return ui.parent
 }
