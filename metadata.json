@@ -4,5 +4,5 @@
   "uuid": "overview-navigation@nathanielsimard.github.com",
   "settings-schema": "org.gnome.shell.extensions.overview-navigation",
   "url": "https://github.com/nathanielsimard/overview-navigation",
-  "shell-version": ["40"]
+  "shell-version": ["41"]
 }
