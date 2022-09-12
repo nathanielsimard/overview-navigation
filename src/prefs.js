@@ -38,9 +38,15 @@ class SettingsUI extends Widget {
       this.logger
     )
     const fontColorText = new ColorChooserWidget(
-      'Hint font color',
+      'Hint focusing font color',
       this.settings,
       this.properties.HINT_FONT_COLOR,
+      this.logger
+    )
+    const closingFontColorText = new ColorChooserWidget(
+      'Hint closing font color',
+      this.settings,
+      this.properties.HINT_CLOSING_FONT_COLOR,
       this.logger
     )
     const borderColor = new ColorChooserWidget(
@@ -58,6 +64,7 @@ class SettingsUI extends Widget {
 
     style.append(backgroundColorText)
     style.append(fontColorText)
+    style.append(closingFontColorText)
     style.append(borderColor)
     style.append(borderSize)
     style.register(this.notebook)
