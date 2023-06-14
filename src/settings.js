@@ -1,6 +1,6 @@
 const Extension = require('Extension')
 
-const PROPERTIES = {
+var PROPERTIES = {
   SHOW_OVERVIEW_WHEN_CHANGE_WORKSPACE_KEY: 'show-overview-when-change-workspace',
   SHOW_WINDOW_SELECTOR_WHEN_SHOW_OVERVIEW: 'show-window-selector-when-show-overview',
   LOGGING: 'logging',
@@ -109,4 +109,4 @@ if (!global.overviewNavigationTesting) {
   }
 }
 
-module.exports = { Settings }
+module.exports = { Settings, PROPERTIES }

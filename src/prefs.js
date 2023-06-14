@@ -161,19 +161,11 @@ function init() {
 /*eslint-disable */
 // Required by Gnome Shell
 function buildPrefsWidget() {
-  const { initialize } = require('./settings')
+  const { initialize, PROPERTIES } = require('./settings')
   const settings = initialize()
 
   const { PrefLogger } = require('./utils')
   const logger = new PrefLogger('SettingsWidget', settings)
-  let { PROPERTIES } = require('./settings')
-
-  // Bug from javascript imports ...
-  if (PROPERTIES === undefined) {
-    log('[Overview Navigation]-[ERROR] Importing PROPERTIES failed, retrying ...')
-    return buildPrefsWidget()
-  }
-
   const ui = new SettingsUI(logger, settings, PROPERTIES)
 
   ui.initialize()
