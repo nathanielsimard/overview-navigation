@@ -1,6 +1,6 @@
-const Clutter = require('gi/Clutter')
+import Clutter from 'gi://Clutter';
 
-var LOWER_CASE_KEY_SYMBOLS = {
+export var LOWER_CASE_KEY_SYMBOLS = {
   [Clutter.KEY_a]: 'a',
   [Clutter.KEY_b]: 'b',
   [Clutter.KEY_c]: 'c',
@@ -29,7 +29,7 @@ var LOWER_CASE_KEY_SYMBOLS = {
   [Clutter.KEY_z]: 'z'
 }
 
-var UPPER_CASE_KEY_SYMBOLS = {
+export var UPPER_CASE_KEY_SYMBOLS = {
   [Clutter.KEY_A]: 'a',
   [Clutter.KEY_B]: 'b',
   [Clutter.KEY_C]: 'c',
@@ -58,7 +58,7 @@ var UPPER_CASE_KEY_SYMBOLS = {
   [Clutter.KEY_Z]: 'z'
 }
 
-var NATURAL_ORDERING = {
+export var NATURAL_ORDERING = {
   0: 0,
   1: 18,
   2: 3,
@@ -85,10 +85,4 @@ var NATURAL_ORDERING = {
   23: 11,
   24: 14,
   25: 15
-}
-
-module.exports = {
-  LOWER_CASE_KEY_SYMBOLS,
-  UPPER_CASE_KEY_SYMBOLS,
-  NATURAL_ORDERING
 }

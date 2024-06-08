@@ -1,4 +1,4 @@
-var CustomWindowOverlaySubject = class CustomWindowOverlaySubject {
+export var CustomWindowOverlaySubject = class CustomWindowOverlaySubject {
   constructor (logger) {
     this.windows = []
     this.listeners = []
@@ -29,5 +29,3 @@ var CustomWindowOverlaySubject = class CustomWindowOverlaySubject {
     this.listeners = this.listeners.filter(l => l !== listener)
   }
 }
-
-module.exports = { CustomWindowOverlaySubject }

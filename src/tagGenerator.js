@@ -1,4 +1,4 @@
-var TagGenerator = class TagGenerator {
+export var TagGenerator = class TagGenerator {
   constructor (keySymbols, ordering = {}) {
     this.keySymbols = keySymbols
     this.ordering = ordering
@@ -54,4 +54,3 @@ var TagGenerator = class TagGenerator {
   }
 }
 
-module.exports = { TagGenerator }

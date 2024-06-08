@@ -1,4 +1,4 @@
-var CustomWindowOverlay = class CustomWindowOverlay {
+export var CustomWindowOverlay = class CustomWindowOverlay {
   constructor (logger, windowSelector, label, windowClone, metaWindow, padding, settings) {
     this.logger = logger
     this.windowSelector = windowSelector
@@ -44,8 +44,4 @@ var CustomWindowOverlay = class CustomWindowOverlay {
     this.logger.debug('Hiding tooltip ...')
     this.label.hide()
   }
-}
-
-module.exports = {
-  CustomWindowOverlay
 }

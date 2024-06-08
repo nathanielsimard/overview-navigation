@@ -1,4 +1,4 @@
-var SelectedWindow = class SelectedWindow {
+export var SelectedWindow = class SelectedWindow {
   constructor (window, updateLabelCallback, overview) {
     this.window = window
     this.updateLabelCallback = updateLabelCallback
@@ -29,10 +29,8 @@ var SelectedWindow = class SelectedWindow {
   }
 }
 
-var Factory = class Factory {
+export var Factory = class Factory {
   create (window, updateLabelCallback, overview) {
     return new SelectedWindow(window, updateLabelCallback, overview)
   }
 }
-
-module.exports = { Factory, SelectedWindow }

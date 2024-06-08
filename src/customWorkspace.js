@@ -1,5 +1,5 @@
 // The class that creates the CustomWindowOverlays.
-var CustomWorkspace = class CustomWorkspace {
+export var CustomWorkspace = class CustomWorkspace {
   constructor (logger, overlays, windowOverlayFactory, parent) {
     this.logger = logger
     this.overlays = overlays
@@ -22,5 +22,3 @@ var CustomWorkspace = class CustomWorkspace {
     this.overlays.addWindow(overlay)
   }
 }
-
-module.exports = { CustomWorkspace }

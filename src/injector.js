@@ -36,7 +36,7 @@ class Inject {
   }
 }
 
-var Injector = class Injector {
+export var Injector = class Injector {
   constructor (logger) {
     this.logger = logger
     this.injected = []
@@ -76,5 +76,3 @@ var Injector = class Injector {
       .filter(methodName => methodName !== 'constructor')
   }
 }
-
-module.exports = { Injector }

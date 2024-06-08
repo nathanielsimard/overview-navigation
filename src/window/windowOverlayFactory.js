@@ -1,7 +1,7 @@
-const { Label } = require('../components')
-const { CustomWindowOverlay } = require('../window/customWindowOverlay')
+import { Label } from '../components.js'
+import { CustomWindowOverlay } from '../window/customWindowOverlay.js'
 
-var WindowOverlayFactory = class WindowOverlayFactory {
+export var WindowOverlayFactory = class WindowOverlayFactory {
   constructor (windowSelector, logger, settings) {
     this.windowSelector = windowSelector
     this.logger = logger
@@ -22,5 +22,3 @@ var WindowOverlayFactory = class WindowOverlayFactory {
     )
   }
 }
-
-module.exports = { WindowOverlayFactory }

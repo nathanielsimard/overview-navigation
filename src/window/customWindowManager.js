@@ -1,4 +1,4 @@
-var CustomWindowManager = class CustomWindowManager {
+export var CustomWindowManager = class CustomWindowManager {
   constructor (search, overview, settings) {
     this.search = search
     this.overview = overview
@@ -14,5 +14,3 @@ var CustomWindowManager = class CustomWindowManager {
     this.overview.show()
   }
 }
-
-module.exports = { CustomWindowManager }

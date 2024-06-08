@@ -1,8 +1,8 @@
-const { St } = require('gi')
+import St from 'gi://St'
 
 var FOCUS_WINDOW_STYLE = 'extension-overview-navigation-window-tooltip'
 
-var Label = class Label {
+export var Label = class Label {
   constructor (settings, parent) {
     this.settings = settings
     this.gLabel = new St.Label({ })
@@ -46,8 +46,4 @@ var Label = class Label {
       border: ${this.settings.getBorderSize()}px solid ${this.settings.getBorderColor()};
     `)
   }
-}
-
-module.exports = {
-  Label
 }

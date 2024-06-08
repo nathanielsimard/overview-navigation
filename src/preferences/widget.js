@@ -1,7 +1,7 @@
-const Gtk = require('gi/Gtk')
-const Gdk = require('gi/Gdk')
+import Gtk from 'gi://Gtk'
+import Gdk from 'gi://Gdk'
 
-var Widget = class Widget {
+export var Widget = class Widget {
   constructor (parent) {
     this.parent = parent
   }
@@ -11,7 +11,7 @@ var Widget = class Widget {
   }
 }
 
-var TextBoxWidget = class TextBoxWidget extends Widget {
+export var TextBoxWidget = class TextBoxWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
@@ -47,7 +47,7 @@ var TextBoxWidget = class TextBoxWidget extends Widget {
   }
 }
 
-var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
+export var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
   constructor (name, settings) {
     super(
       new Gtk.Box({
@@ -72,7 +72,7 @@ var ToggleButtonWidget = class ToggleButtonWidget extends Widget {
   }
 }
 
-var ColorChooserWidget = class ColorChooserWidget extends Widget {
+export var ColorChooserWidget = class ColorChooserWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
@@ -110,7 +110,7 @@ var ColorChooserWidget = class ColorChooserWidget extends Widget {
   }
 }
 
-var NumberInputWidget = class NumberInputWidget extends Widget {
+export var NumberInputWidget = class NumberInputWidget extends Widget {
   constructor (name, settings, property, logger) {
     super(
       new Gtk.Box({
@@ -154,5 +154,3 @@ var NumberInputWidget = class NumberInputWidget extends Widget {
     this.settings.updateNumberProperty(this.property, value)
   }
 }
-
-module.exports = { TextBoxWidget, Widget, ToggleButtonWidget, ColorChooserWidget, NumberInputWidget }

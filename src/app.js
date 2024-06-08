@@ -1,27 +1,20 @@
-const { CustomWindowOverlaySubject } = require('./subject/customWindowOverlaySubject')
-const { Injector } = require('./injector')
-const { Logger } = require('./utils')
-const { TagGenerator } = require('./tagGenerator')
-const { NATURAL_ORDERING, LOWER_CASE_KEY_SYMBOLS, UPPER_CASE_KEY_SYMBOLS } = require('./keySymbols')
-const {
-  initializeWindowManager,
-  initializeWorkspaceView,
-  initializeWorkspace,
-  initializeSearch
-} = require('./bootstrap/customComponents')
+import { CustomWindowOverlaySubject } from './subject/customWindowOverlaySubject.js'
+import { Injector } from './injector.js'
+import { Logger } from './utils.js'
+import { TagGenerator } from './tagGenerator.js'
+import { NATURAL_ORDERING, LOWER_CASE_KEY_SYMBOLS, UPPER_CASE_KEY_SYMBOLS } from './keySymbols.js'
+import { initializeWindowManager, initializeWorkspaceView, initializeWorkspace, initializeSearch } from './bootstrap/customComponents.js'
 
-const { WindowOverlayFactory } = require('./window/windowOverlayFactory')
+import { WindowOverlayFactory } from './window/windowOverlayFactory.js'
 
-const Settings = require('./settings')
-const WindowSelector = require('./window/windowSelector')
+import { create } from './window/windowSelector.js'
 
-var Main = class Main {
-  constructor () {
+export var Main = class Main {
+  constructor (settings) {
     const keySymbols = { ...LOWER_CASE_KEY_SYMBOLS, ...UPPER_CASE_KEY_SYMBOLS }
-    const settings = Settings.initialize()
 
     const tagGenerator = new TagGenerator(keySymbols, NATURAL_ORDERING)
-    const windowSelector = WindowSelector.create(keySymbols, tagGenerator, new Logger('WindowSelector', settings))
+    const windowSelector = create(keySymbols, tagGenerator, new Logger('WindowSelector', settings))
     const windowOverlayFactory = new WindowOverlayFactory(
       windowSelector,
       new Logger('Window Overlay', settings),
@@ -54,5 +47,3 @@ var Main = class Main {
     this.search.enable()
   }
 }
-
-module.exports = { Main }

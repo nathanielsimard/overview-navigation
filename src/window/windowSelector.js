@@ -1,6 +1,6 @@
-const { MODE } = require('../mode')
+import { MODE }  from '../mode.js'
 
-var WindowSelector = class WindowSelector {
+export var WindowSelector = class WindowSelector {
   constructor (keySymbols, tagGenerator, logger, overview, selectedWindowFactory) {
     this.keySymbols = keySymbols
     this.tagGenerator = tagGenerator
@@ -90,15 +90,11 @@ var WindowSelector = class WindowSelector {
   }
 }
 
-if (!global.overviewNavigationTesting) {
-  /*eslint-disable */
-  const { overview } = require('ui/main')
-  const { Factory } = require('./selectedWindow')
+/*eslint-disable */
+import { overview } from 'resource:///org/gnome/shell/ui/main.js'
+import { Factory } from './selectedWindow.js'
 
-  function create(keySymbols, tagGenerator, logger) {
+export function create(keySymbols, tagGenerator, logger) {
     /* eslint-enable */
     return new WindowSelector(keySymbols, tagGenerator, logger, overview, new Factory())
-  }
 }
-
-module.exports = { WindowSelector }

@@ -1,22 +1,22 @@
-const Clutter = require('gi/Clutter')
+import Clutter from 'gi://Clutter'
 
-const { WorkspacesView } = require('ui/workspacesView')
-const { WindowManager } = require('ui/windowManager')
-const { Workspace } = require('ui/workspace')
-const { overview } = require('ui/main')
-const { Logger } = require('../utils')
-const { CustomWindowManager } = require('../window/customWindowManager')
-const { CustomWorkspaceView } = require('../customWorkspaceView')
-const { CustomWorkspace } = require('../customWorkspace')
-const { Search } = require('../search')
+import { WorkspacesView } from 'resource:///org/gnome/shell/ui/workspacesView.js'
+import { WindowManager } from 'resource:///org/gnome/shell/ui/windowManager.js'
+import { Workspace } from 'resource:///org/gnome/shell/ui/workspace.js'
+import { overview } from 'resource:///org/gnome/shell/ui/main.js'
+import { Logger } from '../utils.js'
+import { CustomWindowManager } from '../window/customWindowManager.js'
+import { CustomWorkspaceView } from '../customWorkspaceView.js'
+import { CustomWorkspace } from '../customWorkspace.js'
+import { Search } from '../search.js'
 
-var initializeWindowManager = (injector, search, settings) => {
+export var initializeWindowManager = (injector, search, settings) => {
   injector.inject(CustomWindowManager, WindowManager, parent => {
     return new CustomWindowManager(search, overview, settings)
   })
 }
 
-var initializeWorkspace = (injector, settings, overlays, windowOverlayFactory) => {
+export var initializeWorkspace = (injector, settings, overlays, windowOverlayFactory) => {
   const logger = new Logger('Custom Workspace', settings)
 
   injector.inject(CustomWorkspace, Workspace, parent => {
@@ -24,7 +24,7 @@ var initializeWorkspace = (injector, settings, overlays, windowOverlayFactory) =
   })
 }
 
-var initializeWorkspaceView = (injector, logger, search, windowSelector, settings, overlays) => {
+export var initializeWorkspaceView = (injector, logger, search, windowSelector, settings, overlays) => {
   logger.info('Initialize WorkspaceView')
   injector.inject(CustomWorkspaceView, WorkspacesView, parent => {
     var workspaceManager = global.workspace_manager
@@ -46,13 +46,6 @@ var initializeWorkspaceView = (injector, logger, search, windowSelector, setting
   })
 }
 
-var initializeSearch = (settings) => {
+export var initializeSearch = (settings) => {
   return new Search(overview, new Logger('Search', settings))
-}
-
-module.exports = {
-  initializeWindowManager,
-  initializeWorkspaceView,
-  initializeWorkspace,
-  initializeSearch
 }

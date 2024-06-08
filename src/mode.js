@@ -1,6 +1,4 @@
-var MODE = {
+export var MODE = {
   Closing: 'Closing',
   Focussing: 'Focussing'
 }
-
-module.exports = { MODE }

@@ -1,6 +1,6 @@
-const { MODE } = require('./mode')
+import { MODE } from './mode.js'
 
-var CustomWorkspaceView = class CustomWorkspaceView {
+export var CustomWorkspaceView = class CustomWorkspaceView {
   constructor (logger, search, windowSelector, stage, workspaces, workspaceManager, keys, settings, overlays) {
     this.logger = logger
     this.search = search
@@ -150,5 +150,3 @@ var CustomWorkspaceView = class CustomWorkspaceView {
     }
   }
 }
-
-module.exports = { CustomWorkspaceView }

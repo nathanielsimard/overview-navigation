@@ -1,4 +1,4 @@
-var Search = class Search {
+export var Search = class Search {
   constructor (overview, logger) {
     this.overview = overview
     this.logger = logger
@@ -20,5 +20,3 @@ var Search = class Search {
     this.overview._overview._controls._searchController._onTextChanged = this.originalOnTextChanged
   }
 }
-
-module.exports = { Search }
